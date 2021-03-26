@@ -1,8 +1,6 @@
 import 'dart:math';
 
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:animated_toggle_switch/src/utils.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 typedef IconBuilder<T> = Widget Function(T t, Size size, bool active);
@@ -25,8 +23,6 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
 
   /// The IconBuilder for all icons with the specified size.
   final AnimatedIconBuilder<T>? animatedIconBuilder;
-
-  //final TitleBuilder<T>? titleBuilder;
 
   /// Builder for the color of the indicator depending on the current value.
   final ColorBuilder<T>? colorBuilder;
@@ -402,6 +398,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
               builder: (c, color, child) => indicatorBuilder(indicatorSize, color as Color, borderRadius, child))),
       if (widget.animatedIconBuilder != null)
         Positioned(
+          right: 0.0,
+          left: 0.0,
           top: (widget.height - indicatorSize.height) / 2 - widget.borderWidth,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
