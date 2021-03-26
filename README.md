@@ -6,9 +6,13 @@
 [![pub points](https://badges.bar/animated_toggle_switch/pub%20points)](https://pub.dev/packages/animated_toggle_switch/score)
 <a href="https://github.com/SplashByte/animated_toggle_switch/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SplashByte/animated_toggle_switch.svg" alt="license"></a>
 
+[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/splashbyte)
+
 ### If you like this package, please leave a like there on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
 
 Simple and animated switch with multiple choices. It's an easy way if you don't want something like a DropdownMenu.
+
+![animated_toggle_switch](https://user-images.githubusercontent.com/43761463/112662645-360cb200-8e58-11eb-97a0-3ce10298f992.gif)
 
 ## Easy Usage
 
