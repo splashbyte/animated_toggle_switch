@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:animated_toggle_switch/src/utils.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 typedef IconBuilder<T> = Widget Function(T t, Size size, bool active);
@@ -134,8 +135,8 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.innerColor,
     this.indicatorColor,
     this.colorBuilder,
-    iconSize = const Size(25.0, 25.0),
-    selectedIconSize = const Size(45.0, 45.0),
+    iconSize = const Size(23.0, 23.0),
+    selectedIconSize = const Size(34.5, 34.5),
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
@@ -173,11 +174,12 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconOpacity = 0.5,
     this.indicatorType = IndicatorType.circle,
     this.borderRadius,
-    this.dif = 0.0,
+    dif = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
     this.borderColorBuilder,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
+        this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(iconBuilder, iconSize * (height + 2 * borderWidth), selectedIconSize * (height + 2 * borderWidth)),
         super(key: key);
 
@@ -215,11 +217,12 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconOpacity = 0.5,
     this.indicatorType = IndicatorType.circle,
     this.borderRadius,
-    this.dif = 0.0,
+    dif = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
     this.borderColorBuilder,
-  })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
+  })  : this.dif = dif * (height - 2 * borderWidth),
+        this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         super(key: key);
 
   /// Special version of [AnimatedToggleSwitch.byHeight].
@@ -246,9 +249,10 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconOpacity = 0.5,
     this.indicatorType = IndicatorType.circle,
     this.borderRadius,
-    this.dif = 0.0,
+    double dif = 0.0,
     this.borderColorBuilder,
   })  : this.iconAnimationCurve = Curves.linear,
+        this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.selectedIconOpacity = iconOpacity,
@@ -266,15 +270,15 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     IconBuilder<T>? iconBuilder,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
-    this.indicatorSize = const Size(48.0, double.infinity),
+    this.indicatorSize = const Size(46.0, double.infinity),
     this.onChanged,
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
     this.indicatorColor,
     this.colorBuilder,
-    double iconRadius = 12.5,
-    double selectedIconRadius = 12.5,
+    double iconRadius = 11.5,
+    double selectedIconRadius = 16.1,
     this.iconOpacity = 0.5,
     this.indicatorType = IndicatorType.circle,
     this.borderRadius,
@@ -370,7 +374,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
           ((widget.indicatorSize.width + dif));
     }
 
-    Size indicatorSize = Size(widget.indicatorSize.width, widget.indicatorSize.height.isInfinite ? widget.height : widget.indicatorSize.height);
+    Size indicatorSize =
+        Size(widget.indicatorSize.width, widget.indicatorSize.height.isInfinite ? widget.height - 2 * widget.borderWidth : widget.indicatorSize.height);
     if (widget.indicatorType == IndicatorType.circle) indicatorSize = Size.square(indicatorSize.longestSide);
 
     int indexFromPosition(double x) {

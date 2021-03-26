@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              AnimatedToggleSwitch<int>.rollingByHeight(
+              AnimatedToggleSwitch<int>.rolling(
                 current: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
