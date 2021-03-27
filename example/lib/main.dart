@@ -33,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int value = 0;
+  bool positive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +65,23 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
+                  'AnimatedToggleSwitch.dual:',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              AnimatedToggleSwitch<bool>.dual(
+                current: positive,
+                first: false,
+                second: true,
+                dif: 40.0,
+                onChanged: (b) => setState(() => positive = b),
+                colorBuilder: (b) => b ? Colors.red : Colors.green,
+                iconBuilder: (b, size, active) => b ? Icon(Icons.coronavirus_rounded) : Icon(Icons.tag_faces_rounded),
+                textBuilder: (b, size, active) => b ? Center(child: Text('Oh no...')) : Center(child: Text('Nice :)')),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
                   'AnimatedToggleSwitch.size with some custom settings:',
                   textAlign: TextAlign.center,
                 ),
@@ -74,6 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconOpacity: 0.2,
                 indicatorSize: Size.fromWidth(100),
                 indicatorType: IndicatorType.rectangle,
+                iconAnimationType: AnimationType.onHover,
+                indicatorAnimationType: AnimationType.onHover,
                 iconBuilder: (i, size, active) {
                   IconData data = Icons.access_time_rounded;
                   if (i.isEven) data = Icons.cancel;
