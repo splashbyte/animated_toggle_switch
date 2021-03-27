@@ -12,7 +12,7 @@
 
 Simple and animated switch with multiple choices. It's an easy way if you don't want to use something like a DropDownMenuButton.
 
-![animated_toggle_switch](https://user-images.githubusercontent.com/43761463/112662645-360cb200-8e58-11eb-97a0-3ce10298f992.gif)
+![example](https://user-images.githubusercontent.com/43761463/112705599-ebaf2380-8e9f-11eb-90d1-ea46509fdddd.gif)
 
 ## Easy Usage
 
@@ -53,7 +53,7 @@ AnimatedToggleSwitch<int>.size(
 )
 ```
 
-### Custom rolling Animation
+### Self-made rolling animation (with foregroundIndicatorIconBuilder)
 
 ```dart
 AnimatedToggleSwitch<int>.size(
