@@ -1,3 +1,7 @@
+## [0.1.3] - (2021-03-27)
+
+- Updated README.md
+
 ## [0.1.2] - (2021-03-27)
 
 - Added AnimatedToggleSwitch.dual
