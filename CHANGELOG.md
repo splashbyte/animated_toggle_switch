@@ -1,4 +1,4 @@
-## [0.1.4] - (2021-04-16)
+## [0.2.0] - (2021-05-21)
 
 - Minor Changes
 - Fixed FittingMode.preventHorizontalOverlapping
