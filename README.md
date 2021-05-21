@@ -12,6 +12,10 @@
 
 Simple and animated switch with multiple choices. It's an easy way if you don't want to use something like a DropDownMenuButton.
 
+### Example Usage
+![usage](https://user-images.githubusercontent.com/43761463/114942384-c1200d00-9e44-11eb-9904-3cb1d7296da4.gif)
+
+### Example
 ![example](https://user-images.githubusercontent.com/43761463/112705599-ebaf2380-8e9f-11eb-90d1-ea46509fdddd.gif)
 
 ## Easy Usage

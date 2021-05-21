@@ -1,3 +1,9 @@
+## [0.2.0] - (2021-05-21)
+
+- Minor Changes
+- Fixed FittingMode.preventHorizontalOverlapping
+- Improved Web support
+
 ## [0.1.3] - (2021-03-27)
 
 - Updated README.md
