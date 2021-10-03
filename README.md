@@ -3,6 +3,7 @@
 <a href="https://pub.dev/packages/animated_toggle_switch"><img src="https://img.shields.io/pub/v/animated_toggle_switch.svg?style=flat?logo=dart" alt="pub.dev"></a>
 <a href="https://github.com/SplashByte/animated_toggle_switch"><img src="https://img.shields.io/static/v1?label=platform&message=flutter&color=1ebbfd" alt="github"></a>
 [![likes](https://badges.bar/animated_toggle_switch/likes)](https://pub.dev/packages/animated_toggle_switch/score)
+[![popularity](https://badges.bar/animated_toggle_switch/popularity)](https://pub.dev/packages/animated_toggle_switch/score)
 [![pub points](https://badges.bar/animated_toggle_switch/pub%20points)](https://pub.dev/packages/animated_toggle_switch/score)
 <a href="https://github.com/SplashByte/animated_toggle_switch/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SplashByte/animated_toggle_switch.svg" alt="license"></a>
 

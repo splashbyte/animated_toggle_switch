@@ -566,12 +566,15 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
                 : []);
 
         bool Function(double) isPositionOverIndicator =
-            (dx) => position - max(indicatorSize.width / 2 + dif, 24.0) <= dx && dx <= (position + max(indicatorSize.width / 2 + dif, 24.0));
+            (dx) => position - max((indicatorSize.width + dif) / 2, 24.0) <= dx && dx <= (position + max((indicatorSize.width + dif) / 2, 24.0));
+
+        bool Function(double) isPositionExactlyOverIndicator =
+            (dx) => position - max(indicatorSize.width / 2, 24.0) <= dx && dx <= (position + max(indicatorSize.width / 2, 24.0));
 
         return MouseRegion(
           cursor: _animationInfo.moveMode == MoveMode.dragged ? SystemMouseCursors.grabbing : (hovering ? SystemMouseCursors.grab : SystemMouseCursors.click),
           onHover: (event) {
-            if (hovering == (hovering = isPositionOverIndicator(event.localPosition.dx))) return;
+            if (hovering == (hovering = isPositionExactlyOverIndicator(event.localPosition.dx))) return;
             setState(() {});
           },
           onExit: (event) => hovering = false,
