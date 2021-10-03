@@ -76,8 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 dif: 40.0,
                 onChanged: (b) => setState(() => positive = b),
                 colorBuilder: (b) => b ? Colors.red : Colors.green,
-                iconBuilder: (b, size, active) => b ? Icon(Icons.coronavirus_rounded) : Icon(Icons.tag_faces_rounded),
-                textBuilder: (b, size, active) => b ? Center(child: Text('Oh no...')) : Center(child: Text('Nice :)')),
+                iconBuilder: (b, size, active) => b
+                    ? Icon(Icons.coronavirus_rounded)
+                    : Icon(Icons.tag_faces_rounded),
+                textBuilder: (b, size, active) => b
+                    ? Center(child: Text('Oh no...'))
+                    : Center(child: Text('Nice :)')),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -151,15 +155,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Transform.rotate(
                       angle: 2.0 * pi * transitionValue,
                       child: Stack(children: [
-                        Opacity(opacity: 1 - transitionValue, child: iconBuilder(d.floor(), indicatorSize, true)),
-                        Opacity(opacity: transitionValue, child: iconBuilder(d.ceil(), indicatorSize, true))
+                        Opacity(
+                            opacity: 1 - transitionValue,
+                            child: iconBuilder(d.floor(), indicatorSize, true)),
+                        Opacity(
+                            opacity: transitionValue,
+                            child: iconBuilder(d.ceil(), indicatorSize, true))
                       ]));
                 },
                 selectedIconSize: Size.square(20),
                 iconSize: Size.square(20),
                 indicatorType: IndicatorType.rectangle,
                 iconBuilder: iconBuilder,
-                colorBuilder: (i) => i.isEven ? Colors.green : Colors.tealAccent,
+                colorBuilder: (i) =>
+                    i.isEven ? Colors.green : Colors.tealAccent,
                 onChanged: (i) => setState(() => value = i),
                 borderRadius: BorderRadius.circular(8.0),
                 borderColor: Colors.red,
