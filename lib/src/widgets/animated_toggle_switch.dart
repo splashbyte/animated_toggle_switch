@@ -539,18 +539,18 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
               Radius.circular(widget.height / 2),
             );
 
-        Color indicatorColor = widget.indicatorColor ?? theme.accentColor;
+        Color indicatorColor = widget.indicatorColor ?? theme.colorScheme.secondary;
 
         List<Widget> foregroundStack = <Widget>[
               Positioned(
                   top: (widget.height - indicatorSize.height) / 2 - widget.borderWidth,
                   left: position - indicatorSize.width / 2,
                   child: widget.indicatorAnimationType == AnimationType.onSelected
-                      ? TweenAnimationBuilder(
+                      ? TweenAnimationBuilder<Color?>(
                           child: widget.foregroundIndicatorIconBuilder?.call(positionValue, indicatorSize),
                           duration: widget.animationDuration,
                           tween: ColorTween(begin: widget.indicatorColor, end: widget.colorBuilder?.call(widget.current) ?? indicatorColor),
-                          builder: (c, color, child) => indicatorBuilder(indicatorSize, color as Color, borderRadius, child))
+                          builder: (c, color, child) => indicatorBuilder(indicatorSize, color!, borderRadius, child))
                       : indicatorBuilder(
                           indicatorSize,
                           Color.lerp(widget.colorBuilder?.call(widget.values[positionValue.floor()]) ?? indicatorColor,
@@ -595,18 +595,18 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
             onHorizontalDragEnd: (details) {
               _onDragEnd();
             },
-            child: TweenAnimationBuilder(
+            child: TweenAnimationBuilder<Color?>(
               child: Stack(children: widget.foregroundIndicatorIconBuilder == null ? foregroundStack : foregroundStack.reversed.toList()),
               duration: widget.animationDuration,
               tween: ColorTween(
-                  begin: widget.borderColorBuilder?.call(widget.current) ?? widget.borderColor ?? theme.accentColor,
-                  end: widget.borderColorBuilder?.call(widget.current) ?? widget.borderColor ?? theme.accentColor),
+                  begin: widget.borderColorBuilder?.call(widget.current) ?? widget.borderColor ?? theme.colorScheme.secondary,
+                  end: widget.borderColorBuilder?.call(widget.current) ?? widget.borderColor ?? theme.colorScheme.secondary),
               builder: (c, color, child) => Container(
                 width: width,
                 height: widget.height,
                 clipBehavior: Clip.hardEdge,
                 foregroundDecoration: BoxDecoration(
-                  border: Border.all(color: color as Color, width: widget.borderWidth),
+                  border: Border.all(color: color!, width: widget.borderWidth),
                   borderRadius: borderRadius,
                 ),
                 decoration: BoxDecoration(
