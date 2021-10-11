@@ -1,4 +1,4 @@
-## [0.2.1] - (2021-10-04)
+## [0.2.1] - (2021-10-03)
 
 - Migrates to Flutter 2.5
 - Minor changes/fixes
@@ -7,7 +7,7 @@
 
 - Minor Changes
 - Fixes FittingMode.preventHorizontalOverlapping
-- Improved Web support
+- Improves Web support
 
 ## [0.1.3] - (2021-03-27)
 
