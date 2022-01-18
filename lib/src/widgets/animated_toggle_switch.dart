@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:animated_toggle_switch/src/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 
 typedef IconBuilder<T> = Widget Function(T t, Size size, bool active);
@@ -380,7 +379,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
         : (T t, double value, bool active) => iconBuilder(
               t,
               active ? selectedIconSize : iconSize,
-              active,
+              false,
             );
   }
 
