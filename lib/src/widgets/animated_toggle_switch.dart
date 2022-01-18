@@ -113,6 +113,8 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
 
   final FittingMode fittingMode;
 
+  final BoxBorder? foregroundBorder;
+
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   const AnimatedToggleSwitch.custom({
     Key? key,
@@ -141,7 +143,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
   })  : this._iconsInStack = false,
         this.backgroundBuilder = null,
         super(key: key);
@@ -176,7 +178,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(iconBuilder, iconSize, selectedIconSize),
         this._iconsInStack = false,
         this.backgroundBuilder = null,
@@ -213,7 +215,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(iconBuilder, iconSize * (height + 2 * borderWidth), selectedIconSize * (height + 2 * borderWidth)),
@@ -262,7 +264,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconsInStack = false,
@@ -297,7 +299,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.borderColorBuilder,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -337,7 +339,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.borderColorBuilder,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
   })  : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
@@ -409,7 +411,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.borderColorBuilder,
     this.indicatorAnimationType = AnimationType.onHover,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    Function()? onTap,
+    Function()? onTap, this.foregroundBorder,
   })  : this.iconOpacity = 1.0,
         this.selectedIconOpacity = 1.0,
         this.values = [first, second],
@@ -730,17 +732,20 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
         decoration = BoxDecoration(
           shape: BoxShape.circle,
           color: color,
+          border: widget.foregroundBorder,
         );
         break;
       case IndicatorType.rectangle:
         decoration = BoxDecoration(
           color: color,
+          border: widget.foregroundBorder,
         );
         break;
       case IndicatorType.roundedRectangle:
         decoration = BoxDecoration(
           color: color,
           borderRadius: borderRadius,
+          border: widget.foregroundBorder,
         );
         break;
     }
