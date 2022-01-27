@@ -1,4 +1,8 @@
-## [0.2.1] - (2021-10-04)
+## [0.2.2] - (2022-01-27)
+
+- Minor changes/fixes
+
+## [0.2.1] - (2021-10-03)
 
 - Migrates to Flutter 2.5
 - Minor changes/fixes

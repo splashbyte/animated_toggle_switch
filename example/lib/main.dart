@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: DefaultTextStyle(
         style: theme.textTheme.headline6 ?? TextStyle(),
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -192,6 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 indicatorType: IndicatorType.circle,
                 indicatorSize: Size.fromWidth(1.5),
               ),
+              SizedBox(height: MediaQuery.of(context).padding.bottom),
             ],
           ),
         ), // This trailing comma makes auto-formatting nicer for build methods.
