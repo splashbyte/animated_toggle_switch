@@ -11,7 +11,7 @@
 
 - Minor Changes
 - Fixes FittingMode.preventHorizontalOverlapping
-- Improved Web support
+- Improves Web support
 
 ## [0.1.3] - (2021-03-27)
 

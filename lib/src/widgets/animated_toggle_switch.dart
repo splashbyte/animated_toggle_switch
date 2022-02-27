@@ -7,10 +7,12 @@ import 'package:flutter/scheduler.dart';
 typedef IconBuilder<T> = Widget Function(T t, Size size, bool active);
 
 /// A version of IconBuilder for writing a own Animation on the change of the selected item.
-typedef AnimatedIconBuilder<T> = Widget Function(T t, double value, bool active);
+typedef AnimatedIconBuilder<T> = Widget Function(
+    T t, double value, bool active);
 
 /// Own builder for the background of the switch. It has to return the Widgets which should be in the Stack with the indicator.
-typedef BackgroundBuilder = List<Widget> Function(Size size, Size indicatorSize, double dif, double positionValue);
+typedef BackgroundBuilder = List<Widget> Function(
+    Size size, Size indicatorSize, double dif, double positionValue);
 
 typedef ColorBuilder<T> = Color? Function(T t);
 
@@ -89,7 +91,8 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
   final double height;
 
   /// If null, the indicator is behind the icons. Otherwise an icon is in the indicator and is built using this Function.
-  final Widget Function(double value, Size size)? foregroundIndicatorIconBuilder;
+  final Widget Function(double value, Size size)?
+      foregroundIndicatorIconBuilder;
 
   /// Standard Indicator Color
   final Color? indicatorColor;
@@ -217,17 +220,25 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
-        animatedIconBuilder = _iconSizeBuilder<T>(iconBuilder, iconSize * (height + 2 * borderWidth), selectedIconSize * (height + 2 * borderWidth)),
+        animatedIconBuilder = _iconSizeBuilder<T>(
+            iconBuilder,
+            iconSize * (height + 2 * borderWidth),
+            selectedIconSize * (height + 2 * borderWidth)),
         this._iconsInStack = false,
         this.backgroundBuilder = null,
         super(key: key);
 
-  static AnimatedIconBuilder<T>? _iconSizeBuilder<T>(IconBuilder<T>? iconBuilder, Size iconSize, Size selectedIconSize) {
+  static AnimatedIconBuilder<T>? _iconSizeBuilder<T>(
+      IconBuilder<T>? iconBuilder, Size iconSize, Size selectedIconSize) {
     return iconBuilder == null
         ? null
         : (T t, double value, bool active) => iconBuilder(
               t,
-              Size(iconSize.width + (selectedIconSize.width - iconSize.width) * value, iconSize.height + (selectedIconSize.height - iconSize.height) * value),
+              Size(
+                  iconSize.width +
+                      (selectedIconSize.width - iconSize.width) * value,
+                  iconSize.height +
+                      (selectedIconSize.height - iconSize.height) * value),
               active,
             );
   }
@@ -306,9 +317,16 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
         this.selectedIconOpacity = iconOpacity,
         this.iconAnimationType = AnimationType.onSelected,
         this.foregroundIndicatorIconBuilder =
-            _rollingForegroundIndicatorIconBuilder(values, dif, iconBuilder, Size.square(selectedIconRadius * 2 * (height - 2 * borderWidth))),
+            _rollingForegroundIndicatorIconBuilder(
+                values,
+                dif,
+                iconBuilder,
+                Size.square(
+                    selectedIconRadius * 2 * (height - 2 * borderWidth))),
         animatedIconBuilder = _standardIconBuilder(
-            iconBuilder, Size.square(iconRadius * 2 * (height - 2 * borderWidth)), Size.square(iconRadius * 2 * (height - 2 * borderWidth))),
+            iconBuilder,
+            Size.square(iconRadius * 2 * (height - 2 * borderWidth)),
+            Size.square(iconRadius * 2 * (height - 2 * borderWidth))),
         this._iconsInStack = false,
         this.backgroundBuilder = null,
         super(key: key);
@@ -343,8 +361,11 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
         this.iconAnimationType = AnimationType.onSelected,
-        this.foregroundIndicatorIconBuilder = _rollingForegroundIndicatorIconBuilder(values, dif, iconBuilder, Size.square(selectedIconRadius * 2)),
-        this.animatedIconBuilder = _standardIconBuilder(iconBuilder, Size.square(iconRadius * 2), Size.square(iconRadius * 2)),
+        this.foregroundIndicatorIconBuilder =
+            _rollingForegroundIndicatorIconBuilder(
+                values, dif, iconBuilder, Size.square(selectedIconRadius * 2)),
+        this.animatedIconBuilder = _standardIconBuilder(iconBuilder,
+            Size.square(iconRadius * 2), Size.square(iconRadius * 2)),
         this._iconsInStack = false,
         this.backgroundBuilder = null,
         super(key: key);
@@ -352,8 +373,9 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
   @override
   _AnimatedToggleSwitchState createState() => _AnimatedToggleSwitchState<T>();
 
-  static Widget Function(double value, Size size) _rollingForegroundIndicatorIconBuilder<T>(
-      List<T> values, double dif, IconBuilder<T>? iconBuilder, Size iconSize) {
+  static Widget Function(double value, Size size)
+      _rollingForegroundIndicatorIconBuilder<T>(List<T> values, double dif,
+          IconBuilder<T>? iconBuilder, Size iconSize) {
     return (value, indicatorSize) {
       double distance = dif + indicatorSize.width;
       double angleDistance = distance / iconSize.longestSide * 2;
@@ -362,18 +384,24 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
         children: [
           Transform.rotate(
             angle: transitionValue * angleDistance,
-            child: Opacity(opacity: 1 - transitionValue, child: iconBuilder?.call(values[value.floor()], iconSize, true)),
+            child: Opacity(
+                opacity: 1 - transitionValue,
+                child:
+                    iconBuilder?.call(values[value.floor()], iconSize, true)),
           ),
           Transform.rotate(
             angle: (transitionValue - 1) * angleDistance,
-            child: Opacity(opacity: transitionValue, child: iconBuilder?.call(values[value.ceil()], iconSize, true)),
+            child: Opacity(
+                opacity: transitionValue,
+                child: iconBuilder?.call(values[value.ceil()], iconSize, true)),
           ),
         ],
       );
     };
   }
 
-  static AnimatedIconBuilder<T>? _standardIconBuilder<T>(IconBuilder<T>? iconBuilder, Size iconSize, Size selectedIconSize) {
+  static AnimatedIconBuilder<T>? _standardIconBuilder<T>(
+      IconBuilder<T>? iconBuilder, Size iconSize, Size selectedIconSize) {
     return iconBuilder == null
         ? null
         : (T t, double value, bool active) => iconBuilder(
@@ -416,17 +444,23 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
         this.values = [first, second],
         this.iconAnimationType = AnimationType.onHover,
         this.onTap = onTap ?? _dualOnTap(onChanged, [first, second], current),
-        this.foregroundIndicatorIconBuilder = _rollingForegroundIndicatorIconBuilder([first, second], dif, iconBuilder, Size.square(iconRadius * 2)),
-        this.animatedIconBuilder = _dualIconBuilder(textBuilder, Size.square(iconRadius * 2), [first, second], dif),
+        this.foregroundIndicatorIconBuilder =
+            _rollingForegroundIndicatorIconBuilder(
+                [first, second], dif, iconBuilder, Size.square(iconRadius * 2)),
+        this.animatedIconBuilder = _dualIconBuilder(
+            textBuilder, Size.square(iconRadius * 2), [first, second], dif),
         this._iconsInStack = true,
         this.backgroundBuilder = null,
         super(key: key);
 
-  static Function() _dualOnTap<T>(Function(T)? onChanged, List<T> values, T current) {
-    return () => onChanged?.call(values.firstWhere((element) => element != current));
+  static Function() _dualOnTap<T>(
+      Function(T)? onChanged, List<T> values, T current) {
+    return () =>
+        onChanged?.call(values.firstWhere((element) => element != current));
   }
 
-  static AnimatedIconBuilder<T>? _dualIconBuilder<T>(IconBuilder<T>? textBuilder, Size iconSize, List<T> values, double dif) {
+  static AnimatedIconBuilder<T>? _dualIconBuilder<T>(
+      IconBuilder<T>? textBuilder, Size iconSize, List<T> values, double dif) {
     return (T t, double value, bool active) {
       bool left = t == values[0];
       return Row(
@@ -436,7 +470,12 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
               : SizedBox(
                   width: 8.0 + dif,
                 ),
-          Opacity(opacity: 1 - value, child: textBuilder?.call(values.firstWhere((element) => element != t), iconSize, !active)),
+          Opacity(
+              opacity: 1 - value,
+              child: textBuilder?.call(
+                  values.firstWhere((element) => element != t),
+                  iconSize,
+                  !active)),
           left
               ? Spacer()
               : SizedBox(
@@ -447,9 +486,11 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     };
   }
 
-  static List<Positioned> Function(Size size, Size indicatorSize, double dif, double positionValue) buildBackgroundStack<T>(
-      List<T> values, IconBuilder<T> iconBuilder) {
-    return (Size size, Size indicatorSize, double dif, double positionValue) => List.generate(values.length, (index) => index).map((i) {
+  static List<Positioned> Function(
+          Size size, Size indicatorSize, double dif, double positionValue)
+      buildBackgroundStack<T>(List<T> values, IconBuilder<T> iconBuilder) {
+    return (Size size, Size indicatorSize, double dif, double positionValue) =>
+        List.generate(values.length, (index) => index).map((i) {
           double position = i * (indicatorSize.width + dif);
           T current = values[i];
           Size localSize = Size(2 * dif + indicatorSize.width, size.height);
@@ -463,7 +504,8 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
   }
 }
 
-class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with SingleTickerProviderStateMixin {
+class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late _AnimationInfo _animationInfo;
   late Animation _animation;
@@ -473,20 +515,23 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
   void initState() {
     super.initState();
 
-    _animationInfo = _AnimationInfo(widget.values.indexOf(widget.current).toDouble());
-    _controller = AnimationController(vsync: this, duration: widget.animationDuration)
-      ..addListener(() {
-        SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-          setState(() {});
-        });
-      })
-      ..addStatusListener((status) {
-        if (status != AnimationStatus.completed) return;
-        _animationInfo = _animationInfo.ended();
-        _controller.duration = widget.animationDuration;
-      });
+    _animationInfo =
+        _AnimationInfo(widget.values.indexOf(widget.current).toDouble());
+    _controller =
+        AnimationController(vsync: this, duration: widget.animationDuration)
+          ..addListener(() {
+            SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+              setState(() {});
+            });
+          })
+          ..addStatusListener((status) {
+            if (status != AnimationStatus.completed) return;
+            _animationInfo = _animationInfo.ended();
+            _controller.duration = widget.animationDuration;
+          });
 
-    _animation = CurvedAnimation(parent: _controller, curve: widget.animationCurve);
+    _animation =
+        CurvedAnimation(parent: _controller, curve: widget.animationCurve);
   }
 
   @override
@@ -499,35 +544,50 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
 
-    _animation = CurvedAnimation(parent: _controller, curve: widget.animationCurve);
-    if (_controller.isCompleted) _controller.duration = widget.animationDuration;
+    _animation =
+        CurvedAnimation(parent: _controller, curve: widget.animationCurve);
+    if (_controller.isCompleted)
+      _controller.duration = widget.animationDuration;
 
     double dif = widget.dif;
-    double innerWidth = widget.indicatorSize.width * widget.values.length + (widget.values.length - 1) * dif;
+    double innerWidth = widget.indicatorSize.width * widget.values.length +
+        (widget.values.length - 1) * dif;
     double width = innerWidth + 2 * widget.borderWidth;
 
-    Size indicatorSize =
-        Size(widget.indicatorSize.width, widget.indicatorSize.height.isInfinite ? widget.height - 2 * widget.borderWidth : widget.indicatorSize.height);
-    if (widget.indicatorType == IndicatorType.circle) indicatorSize = Size.square(indicatorSize.longestSide);
+    Size indicatorSize = Size(
+        widget.indicatorSize.width,
+        widget.indicatorSize.height.isInfinite
+            ? widget.height - 2 * widget.borderWidth
+            : widget.indicatorSize.height);
+    if (widget.indicatorType == IndicatorType.circle)
+      indicatorSize = Size.square(indicatorSize.longestSide);
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (widget.fittingMode == FittingMode.preventHorizontalOverlapping && width > constraints.maxWidth) {
-          double factor = (constraints.maxWidth - (2 * widget.borderWidth)) / innerWidth;
+        if (widget.fittingMode == FittingMode.preventHorizontalOverlapping &&
+            width > constraints.maxWidth) {
+          double factor =
+              (constraints.maxWidth - (2 * widget.borderWidth)) / innerWidth;
           dif *= factor;
           width = constraints.maxWidth;
           innerWidth = width - 2 * widget.borderWidth;
-          indicatorSize = Size(indicatorSize.width.isInfinite ? innerWidth / widget.values.length : factor * indicatorSize.width, indicatorSize.height);
+          indicatorSize = Size(
+              indicatorSize.width.isInfinite
+                  ? innerWidth / widget.values.length
+                  : factor * indicatorSize.width,
+              indicatorSize.height);
         }
 
         int index = widget.values.indexOf(widget.current);
 
         _animateTo(index);
         double positionValue = _animationInfo.valueAt(_animation.value);
-        double position = (indicatorSize.width + dif) * positionValue + indicatorSize.width / 2;
+        double position = (indicatorSize.width + dif) * positionValue +
+            indicatorSize.width / 2;
 
         double doubleFromPosition(double x) {
-          return (x.clamp(indicatorSize.width / 2 + widget.borderWidth, width - indicatorSize.width / 2 - widget.borderWidth) -
+          return (x.clamp(indicatorSize.width / 2 + widget.borderWidth,
+                      width - indicatorSize.width / 2 - widget.borderWidth) -
                   indicatorSize.width / 2 -
                   widget.borderWidth) /
               ((indicatorSize.width + dif));
@@ -546,42 +606,63 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
               Radius.circular(widget.height / 2),
             );
 
-        Color indicatorColor = widget.indicatorColor ?? theme.colorScheme.secondary;
+        Color indicatorColor =
+            widget.indicatorColor ?? theme.colorScheme.secondary;
 
         List<Widget> foregroundStack = <Widget>[
               Positioned(
-                  top: (widget.height - indicatorSize.height) / 2 - widget.borderWidth,
+                  top: (widget.height - indicatorSize.height) / 2 -
+                      widget.borderWidth,
                   left: position - indicatorSize.width / 2,
                   child: widget.indicatorAnimationType == AnimationType.onSelected
                       ? TweenAnimationBuilder<Color?>(
-                          child: widget.foregroundIndicatorIconBuilder?.call(positionValue, indicatorSize),
+                          child: widget.foregroundIndicatorIconBuilder
+                              ?.call(positionValue, indicatorSize),
                           duration: widget.animationDuration,
-                          tween: ColorTween(begin: widget.indicatorColor, end: widget.colorBuilder?.call(widget.current) ?? indicatorColor),
-                          builder: (c, color, child) => indicatorBuilder(indicatorSize, color!, borderRadius, child))
+                          tween: ColorTween(
+                              begin: widget.indicatorColor,
+                              end: widget.colorBuilder?.call(widget.current) ??
+                                  indicatorColor),
+                          builder: (c, color, child) => indicatorBuilder(
+                              indicatorSize, color!, borderRadius, child))
                       : indicatorBuilder(
                           indicatorSize,
-                          Color.lerp(widget.colorBuilder?.call(widget.values[positionValue.floor()]) ?? indicatorColor,
-                                  widget.colorBuilder?.call(widget.values[positionValue.ceil()]) ?? indicatorColor, positionValue - positionValue.floor()) ??
+                          Color.lerp(
+                                  widget.colorBuilder?.call(widget.values[positionValue.floor()]) ??
+                                      indicatorColor,
+                                  widget.colorBuilder?.call(widget.values[positionValue.ceil()]) ?? indicatorColor,
+                                  positionValue - positionValue.floor()) ??
                               indicatorColor,
                           borderRadius,
                           widget.foregroundIndicatorIconBuilder?.call(positionValue, indicatorSize))),
             ] +
             (widget.animatedIconBuilder != null
                 ? (widget._iconsInStack
-                    ? buildBackgroundStack(Size(width, widget.height - 2 * widget.borderWidth), indicatorSize, dif, positionValue)
+                    ? buildBackgroundStack(
+                        Size(width, widget.height - 2 * widget.borderWidth),
+                        indicatorSize,
+                        dif,
+                        positionValue)
                     : buildBackgroundRow(indicatorSize, positionValue))
                 : []);
 
-        bool Function(double) isPositionOverIndicator =
-            (dx) => position - max((indicatorSize.width + dif) / 2, 24.0) <= dx && dx <= (position + max((indicatorSize.width + dif) / 2, 24.0));
+        bool Function(double) isPositionOverIndicator = (dx) =>
+            position - max((indicatorSize.width + dif) / 2, 24.0) <= dx &&
+            dx <= (position + max((indicatorSize.width + dif) / 2, 24.0));
 
-        bool Function(double) isPositionExactlyOverIndicator =
-            (dx) => position - max(indicatorSize.width / 2, 24.0) <= dx && dx <= (position + max(indicatorSize.width / 2, 24.0));
+        bool Function(double) isPositionExactlyOverIndicator = (dx) =>
+            position - max(indicatorSize.width / 2, 24.0) <= dx &&
+            dx <= (position + max(indicatorSize.width / 2, 24.0));
 
         return MouseRegion(
-          cursor: _animationInfo.moveMode == MoveMode.dragged ? SystemMouseCursors.grabbing : (hovering ? SystemMouseCursors.grab : SystemMouseCursors.click),
+          cursor: _animationInfo.moveMode == MoveMode.dragged
+              ? SystemMouseCursors.grabbing
+              : (hovering ? SystemMouseCursors.grab : SystemMouseCursors.click),
           onHover: (event) {
-            if (hovering == (hovering = isPositionExactlyOverIndicator(event.localPosition.dx))) return;
+            if (hovering ==
+                (hovering =
+                    isPositionExactlyOverIndicator(event.localPosition.dx)))
+              return;
             setState(() {});
           },
           onExit: (event) => hovering = false,
@@ -603,11 +684,18 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
               _onDragEnd();
             },
             child: TweenAnimationBuilder<Color?>(
-              child: Stack(children: widget.foregroundIndicatorIconBuilder == null ? foregroundStack : foregroundStack.reversed.toList()),
+              child: Stack(
+                  children: widget.foregroundIndicatorIconBuilder == null
+                      ? foregroundStack
+                      : foregroundStack.reversed.toList()),
               duration: widget.animationDuration,
               tween: ColorTween(
-                  begin: widget.borderColorBuilder?.call(widget.current) ?? widget.borderColor ?? theme.colorScheme.secondary,
-                  end: widget.borderColorBuilder?.call(widget.current) ?? widget.borderColor ?? theme.colorScheme.secondary),
+                  begin: widget.borderColorBuilder?.call(widget.current) ??
+                      widget.borderColor ??
+                      theme.colorScheme.secondary,
+                  end: widget.borderColorBuilder?.call(widget.current) ??
+                      widget.borderColor ??
+                      theme.colorScheme.secondary),
               builder: (c, color, child) => Container(
                 width: width,
                 height: widget.height,
@@ -618,7 +706,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
                 ),
                 decoration: BoxDecoration(
                   color: widget.innerColor ?? theme.splashColor,
-                  border: Border.all(width: widget.borderWidth, color: Colors.transparent),
+                  border: Border.all(
+                      width: widget.borderWidth, color: Colors.transparent),
                   borderRadius: borderRadius,
                 ),
                 child: child,
@@ -630,7 +719,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
     );
   }
 
-  List<Positioned> buildBackgroundStack(Size size, Size indicatorSize, double dif, double positionValue) {
+  List<Positioned> buildBackgroundStack(
+      Size size, Size indicatorSize, double dif, double positionValue) {
     return List.generate(widget.values.length, (index) => index).map((i) {
       double position = i * (indicatorSize.width + dif);
       T current = widget.values[i];
@@ -638,7 +728,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
         left: position - dif,
         width: 2 * dif + indicatorSize.width,
         height: widget.height - widget.borderWidth * 2,
-        child: animatedOpacityIcon(animatedSizeIcon(current, positionValue), current == widget.current),
+        child: animatedOpacityIcon(animatedSizeIcon(current, positionValue),
+            current == widget.current),
       );
     }).toList();
   }
@@ -652,7 +743,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
               (e) => Container(
                 width: indicatorSize.width,
                 height: widget.height - 2 * widget.borderWidth,
-                child: animatedOpacityIcon(animatedSizeIcon(e, positionValue), e == widget.current),
+                child: animatedOpacityIcon(
+                    animatedSizeIcon(e, positionValue), e == widget.current),
               ),
             )
             .toList(),
@@ -666,7 +758,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
         return TweenAnimationBuilder(
           curve: widget.iconAnimationCurve,
           duration: widget.iconAnimationDuration ?? widget.animationDuration,
-          tween: Tween<double>(begin: 0.0, end: widget.current == e ? 1.0 : 0.0),
+          tween:
+              Tween<double>(begin: 0.0, end: widget.current == e ? 1.0 : 0.0),
           builder: (c, value, child) {
             value = value as double;
             return widget.animatedIconBuilder!(
@@ -702,8 +795,10 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
   }
 
   void _animateTo(int index) {
-    if (index.toDouble() != _animationInfo.end && _animationInfo.moveMode != MoveMode.dragged) {
-      _animationInfo = _animationInfo.toEnd(index.toDouble(), current: _animationInfo.valueAt(_animation.value));
+    if (index.toDouble() != _animationInfo.end &&
+        _animationInfo.moveMode != MoveMode.dragged) {
+      _animationInfo = _animationInfo.toEnd(index.toDouble(),
+          current: _animationInfo.valueAt(_animation.value));
       _controller.forward(from: 0.0);
     }
   }
@@ -730,7 +825,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>> with 
     _animateTo(index);
   }
 
-  Widget indicatorBuilder(Size size, Color color, BorderRadiusGeometry borderRadius, Widget? child) {
+  Widget indicatorBuilder(Size size, Color color,
+      BorderRadiusGeometry borderRadius, Widget? child) {
     BoxDecoration decoration;
     switch (widget.indicatorType) {
       case IndicatorType.circle:
@@ -772,15 +868,19 @@ class _AnimationInfo {
 
   _AnimationInfo(this.start, {this.moveMode = MoveMode.none}) : end = start;
 
-  _AnimationInfo.animating(this.start, this.end) : moveMode = MoveMode.animating;
+  _AnimationInfo.animating(this.start, this.end)
+      : moveMode = MoveMode.animating;
 
-  _AnimationInfo toEnd(double end, {double? current}) => _AnimationInfo.animating(current ?? start, end);
+  _AnimationInfo toEnd(double end, {double? current}) =>
+      _AnimationInfo.animating(current ?? start, end);
 
-  _AnimationInfo none({double? current}) => _AnimationInfo(current ?? start, moveMode: MoveMode.none);
+  _AnimationInfo none({double? current}) =>
+      _AnimationInfo(current ?? start, moveMode: MoveMode.none);
 
   _AnimationInfo ended() => _AnimationInfo(end);
 
-  _AnimationInfo dragged(double current) => _AnimationInfo(current, moveMode: MoveMode.dragged);
+  _AnimationInfo dragged(double current) =>
+      _AnimationInfo(current, moveMode: MoveMode.dragged);
 
   double valueAt(num position) => start + (end - start) * position;
 }
