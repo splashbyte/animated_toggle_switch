@@ -17,7 +17,21 @@ Simple and animated switch with multiple choices. It's an easy way if you don't 
 ![usage](https://user-images.githubusercontent.com/43761463/114942384-c1200d00-9e44-11eb-9904-3cb1d7296da4.gif)
 
 ### Example
-![example](https://user-images.githubusercontent.com/43761463/112705599-ebaf2380-8e9f-11eb-90d1-ea46509fdddd.gif)
+Standard AnimatedToggleSwitch.rolling()
+![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/155883140-77250e6a-dcce-4268-9444-7a745b875014.gif)
+Modified AnimatedToggleSwitch.rolling()  
+![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/155883156-95d49242-53fc-41fd-ba25-6e4cb8addb2f.gif)
+AnimatedToggleSwitch.dual()  
+![animated_toggle_switch_example_3](https://user-images.githubusercontent.com/43761463/155883162-c4b59c85-df8c-49c4-b620-6297a61b4076.gif)
+AnimatedToggleSwitch.size()  
+![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/155883167-ab8fa30f-6364-4ca3-acf3-288b7539aeeb.gif)
+Custom AnimatedToggleSwitch.size()  
+![animated_toggle_switch_example_5](https://user-images.githubusercontent.com/43761463/155883169-82448d84-3ddd-452e-abfd-df4446f961aa.gif)
+AnimatedToggleSwitch.size() with custom rolling animation  
+![animated_toggle_switch_example_6](https://user-images.githubusercontent.com/43761463/155883172-549c4d7a-5582-4213-ba2e-dfbeebd232be.gif)
+AnimatedToggleSwitch.rolling() with custom indicatorType  
+![animated_toggle_switch_example_7](https://user-images.githubusercontent.com/43761463/155883174-fec7a628-7708-4006-9843-2b3c9ec30a6b.gif)
+![animated_toggle_switch_example_8](https://user-images.githubusercontent.com/43761463/155883176-8445df3d-17ad-44d3-b7cc-a2ed9636739c.gif)
 
 ## Easy Usage
 
