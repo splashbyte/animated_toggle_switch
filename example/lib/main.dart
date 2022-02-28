@@ -65,6 +65,49 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
+                  'Customized AnimatedToggleSwitch.rolling:',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.rolling(
+                current: value,
+                values: [0, 1, 2, 3],
+                onChanged: (i) => setState(() => value = i),
+                iconBuilder: iconBuilder,
+                borderColor: Colors.transparent,
+                foregroundBoxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(0, 1.5),
+                  )
+                ],
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(0, 1.5),
+                  )
+                ],
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.rolling(
+                current: value,
+                values: [0, 1, 2, 3],
+                onChanged: (i) => setState(() => value = i),
+                iconBuilder: iconBuilder,
+                borderWidth: 4.5,
+                indicatorColor: Colors.purpleAccent,
+                innerColor: Colors.amber,
+                height: 55,
+                borderColor: Colors.transparent,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
                   'AnimatedToggleSwitch.dual:',
                   textAlign: TextAlign.center,
                 ),
@@ -95,7 +138,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: [0, 1, 2, 3],
                 iconOpacity: 0.2,
                 indicatorSize: Size.fromWidth(100),
-                indicatorType: IndicatorType.rectangle,
                 iconAnimationType: AnimationType.onHover,
                 indicatorAnimationType: AnimationType.onHover,
                 iconBuilder: (i, size, active) {
@@ -124,7 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: [0, 1, 2, 3],
                 iconOpacity: 0.2,
                 indicatorSize: Size.fromWidth(100),
-                indicatorType: IndicatorType.rectangle,
                 iconBuilder: (i, size, active) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -165,7 +206,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 selectedIconSize: Size.square(20),
                 iconSize: Size.square(20),
-                indicatorType: IndicatorType.rectangle,
                 iconBuilder: iconBuilder,
                 colorBuilder: (i) =>
                     i.isEven ? Colors.green : Colors.tealAccent,
@@ -186,7 +226,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: iconBuilder,
-                indicatorType: IndicatorType.roundedRectangle,
                 indicatorSize: Size.fromWidth(2),
               ),
               SizedBox(
@@ -198,10 +237,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: iconBuilder,
-                indicatorType: IndicatorType.circle,
                 indicatorSize: Size.fromWidth(1.5),
               ),
-              SizedBox(height: MediaQuery.of(context).padding.bottom),
+              SizedBox(height: MediaQuery.of(context).padding.bottom + 16.0),
             ],
           ),
         ), // This trailing comma makes auto-formatting nicer for build methods.
