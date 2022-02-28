@@ -17,22 +17,23 @@ For a slider with a similar look, you can check out [action_slider](https://pub.
 ### Example Usage
 ![usage](https://user-images.githubusercontent.com/43761463/114942384-c1200d00-9e44-11eb-9904-3cb1d7296da4.gif)
 
-### Example
-Standard AnimatedToggleSwitch.rolling()
-![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/155883140-77250e6a-dcce-4268-9444-7a745b875014.gif)
+### Examples
+Standard AnimatedToggleSwitch.rolling()  
+![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/156060603-2d8fa9d0-d546-4f13-bede-ff918e7eafab.gif)  
 Modified AnimatedToggleSwitch.rolling()  
-![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/155883156-95d49242-53fc-41fd-ba25-6e4cb8addb2f.gif)
+![animated_toggle_switch_example_9](https://user-images.githubusercontent.com/43761463/156061462-29ffcc5d-515f-4642-bd50-2f89d7aa4a6b.gif)  
+![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/156060740-09aebb5e-2204-4171-bcd0-5522352879d1.gif)  
 AnimatedToggleSwitch.dual()  
-![animated_toggle_switch_example_3](https://user-images.githubusercontent.com/43761463/155883162-c4b59c85-df8c-49c4-b620-6297a61b4076.gif)
+![animated_toggle_switch_example_3](https://user-images.githubusercontent.com/43761463/156060843-9dda0b45-b7c4-45e1-9aae-289ca0810104.gif)  
 AnimatedToggleSwitch.size()  
-![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/155883167-ab8fa30f-6364-4ca3-acf3-288b7539aeeb.gif)
+![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/156060925-ea3cfcf8-2a48-441f-89c7-c9d4b2b1e2e0.gif)  
 Custom AnimatedToggleSwitch.size()  
-![animated_toggle_switch_example_5](https://user-images.githubusercontent.com/43761463/155883169-82448d84-3ddd-452e-abfd-df4446f961aa.gif)
+![animated_toggle_switch_example_5](https://user-images.githubusercontent.com/43761463/156060966-9013d93a-b3ed-4ba8-94ab-3e07e5d1c279.gif)  
 AnimatedToggleSwitch.size() with custom rolling animation  
-![animated_toggle_switch_example_6](https://user-images.githubusercontent.com/43761463/155883172-549c4d7a-5582-4213-ba2e-dfbeebd232be.gif)
+![animated_toggle_switch_example_6](https://user-images.githubusercontent.com/43761463/156061043-3a7b222e-8b25-4f06-97d4-61d3f7d2f53b.gif)   
 AnimatedToggleSwitch.rolling() with custom indicatorType  
-![animated_toggle_switch_example_7](https://user-images.githubusercontent.com/43761463/155883174-fec7a628-7708-4006-9843-2b3c9ec30a6b.gif)
-![animated_toggle_switch_example_8](https://user-images.githubusercontent.com/43761463/155883176-8445df3d-17ad-44d3-b7cc-a2ed9636739c.gif)
+![animated_toggle_switch_example_7](https://user-images.githubusercontent.com/43761463/156061700-0dccec36-389e-487f-8b57-1d8ebd79df83.gif)  
+![animated_toggle_switch_example_8](https://user-images.githubusercontent.com/43761463/156061081-55e573fb-ce36-43f0-8cd7-95adb832aeba.gif)  
 
 ## Easy Usage
 
