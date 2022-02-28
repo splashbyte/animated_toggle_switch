@@ -11,7 +11,8 @@
 
 ### If you like this package, please leave a like there on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
 
-Simple and animated switch with multiple choices. It's an easy way if you don't want to use something like a DropDownMenuButton.
+Simple and animated switch with multiple choices. It's an easy way if you don't want to use something like a DropDownMenuButton.  
+For a slider with a similar look, you can check out [action_slider](https://pub.dev/packages/action_slider).
 
 ### Example Usage
 ![usage](https://user-images.githubusercontent.com/43761463/114942384-c1200d00-9e44-11eb-9904-3cb1d7296da4.gif)
