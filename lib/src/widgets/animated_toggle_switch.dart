@@ -16,8 +16,6 @@ typedef BackgroundBuilder = List<Widget> Function(
 
 typedef ColorBuilder<T> = Color? Function(T t);
 
-enum IndicatorType { circle, rectangle, roundedRectangle }
-
 enum AnimationType { onSelected, onHover }
 
 enum FittingMode { none, preventHorizontalOverlapping }
@@ -81,9 +79,6 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
   /// Please set [iconOpacity] and [selectedIconOpacity] to 1.0 for deactivating the AnimatedOpacity.
   final double selectedIconOpacity;
 
-  /// Defines the Shape of the indicator.
-  final IndicatorType indicatorType;
-
   /// Space between the "indicator rooms" of the adjacent icons.
   final double dif;
 
@@ -117,6 +112,12 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
 
   final BoxBorder? foregroundBorder;
 
+  /// Shadow for the indicator [Container].
+  final List<BoxShadow> foregroundBoxShadow;
+
+  /// Shadow for the [Container] in the background.
+  final List<BoxShadow> boxShadow;
+
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   const AnimatedToggleSwitch.custom({
     Key? key,
@@ -135,7 +136,6 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    this.indicatorType = IndicatorType.circle,
     this.borderRadius,
     this.dif = 0.0,
     this.foregroundIndicatorIconBuilder,
@@ -145,7 +145,10 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.foregroundBorder,
+    this.foregroundBoxShadow = const [],
+    this.boxShadow = const [],
   })  : this._iconsInStack = false,
         this.backgroundBuilder = null,
         super(key: key);
@@ -170,7 +173,6 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    this.indicatorType = IndicatorType.circle,
     this.borderRadius,
     this.dif = 0.0,
     this.foregroundIndicatorIconBuilder,
@@ -180,7 +182,10 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.foregroundBorder,
+    this.foregroundBoxShadow = const [],
+    this.boxShadow = const [],
   })  : animatedIconBuilder = _iconSizeBuilder<T>(iconBuilder, iconSize, selectedIconSize),
         this._iconsInStack = false,
         this.backgroundBuilder = null,
@@ -208,7 +213,6 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    this.indicatorType = IndicatorType.circle,
     this.borderRadius,
     dif = 0.0,
     this.foregroundIndicatorIconBuilder,
@@ -217,7 +221,10 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.foregroundBorder,
+    this.foregroundBoxShadow = const [],
+    this.boxShadow = const [],
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -265,7 +272,6 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    this.indicatorType = IndicatorType.circle,
     this.borderRadius,
     dif = 0.0,
     this.foregroundIndicatorIconBuilder,
@@ -274,7 +280,10 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.iconAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.foregroundBorder,
+    this.foregroundBoxShadow = const [],
+    this.boxShadow = const [],
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconsInStack = false,
@@ -303,13 +312,15 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     double iconRadius = 0.25,
     double selectedIconRadius = 0.35,
     this.iconOpacity = 0.5,
-    this.indicatorType = IndicatorType.circle,
     this.borderRadius,
     double dif = 0.0,
     this.borderColorBuilder,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.foregroundBorder,
+    this.foregroundBoxShadow = const [],
+    this.boxShadow = const [],
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -349,14 +360,16 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     double iconRadius = 11.5,
     double selectedIconRadius = 16.1,
     this.iconOpacity = 0.5,
-    this.indicatorType = IndicatorType.circle,
     this.borderRadius,
     this.dif = 0.0,
     this.height = 50.0,
     this.borderColorBuilder,
     this.indicatorAnimationType = AnimationType.onSelected,
     this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping, this.foregroundBorder,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.foregroundBorder,
+    this.foregroundBoxShadow = const [],
+    this.boxShadow = const [],
   })  : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
@@ -429,7 +442,6 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.indicatorColor,
     this.colorBuilder,
     double iconRadius = 16.1,
-    this.indicatorType = IndicatorType.circle,
     this.borderRadius,
     this.dif = 40.0,
     this.height = 50.0,
@@ -438,7 +450,10 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.borderColorBuilder,
     this.indicatorAnimationType = AnimationType.onHover,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    Function()? onTap, this.foregroundBorder,
+    Function()? onTap,
+    this.foregroundBorder,
+    this.foregroundBoxShadow = const [],
+    this.boxShadow = const [],
   })  : this.iconOpacity = 1.0,
         this.selectedIconOpacity = 1.0,
         this.values = [first, second],
@@ -508,7 +523,7 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late _AnimationInfo _animationInfo;
-  late Animation _animation;
+  late CurvedAnimation _animation;
   bool hovering = false;
 
   @override
@@ -527,7 +542,6 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
           ..addStatusListener((status) {
             if (status != AnimationStatus.completed) return;
             _animationInfo = _animationInfo.ended();
-            _controller.duration = widget.animationDuration;
           });
 
     _animation =
@@ -541,13 +555,20 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
   }
 
   @override
+  void didUpdateWidget(covariant AnimatedToggleSwitch<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller.duration = widget.animationDuration;
+    _animation.curve = widget.animationCurve;
+
+    if (oldWidget.current != widget.current) {
+      int index = widget.values.indexOf(widget.current);
+      _animateTo(index);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-
-    _animation =
-        CurvedAnimation(parent: _controller, curve: widget.animationCurve);
-    if (_controller.isCompleted)
-      _controller.duration = widget.animationDuration;
 
     double dif = widget.dif;
     double innerWidth = widget.indicatorSize.width * widget.values.length +
@@ -559,167 +580,170 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
         widget.indicatorSize.height.isInfinite
             ? widget.height - 2 * widget.borderWidth
             : widget.indicatorSize.height);
-    if (widget.indicatorType == IndicatorType.circle)
-      indicatorSize = Size.square(indicatorSize.longestSide);
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (widget.fittingMode == FittingMode.preventHorizontalOverlapping &&
-            width > constraints.maxWidth) {
-          double factor =
-              (constraints.maxWidth - (2 * widget.borderWidth)) / innerWidth;
-          dif *= factor;
-          width = constraints.maxWidth;
-          innerWidth = width - 2 * widget.borderWidth;
-          indicatorSize = Size(
-              indicatorSize.width.isInfinite
-                  ? innerWidth / widget.values.length
-                  : factor * indicatorSize.width,
-              indicatorSize.height);
-        }
+    return LayoutBuilder(builder: (context, constraints) {
+      if (widget.fittingMode == FittingMode.preventHorizontalOverlapping &&
+          width > constraints.maxWidth) {
+        double factor =
+            (constraints.maxWidth - (2 * widget.borderWidth)) / innerWidth;
+        dif *= factor;
+        width = constraints.maxWidth;
+        innerWidth = width - 2 * widget.borderWidth;
+        indicatorSize = Size(
+            indicatorSize.width.isInfinite
+                ? innerWidth / widget.values.length
+                : factor * indicatorSize.width,
+            indicatorSize.height);
+      }
 
-        int index = widget.values.indexOf(widget.current);
+      return AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          double positionValue = _animationInfo.valueAt(_animation.value);
+          double position = (indicatorSize.width + dif) * positionValue +
+              indicatorSize.width / 2;
 
-        _animateTo(index);
-        double positionValue = _animationInfo.valueAt(_animation.value);
-        double position = (indicatorSize.width + dif) * positionValue +
-            indicatorSize.width / 2;
+          double doubleFromPosition(double x) {
+            return (x.clamp(indicatorSize.width / 2 + widget.borderWidth,
+                        width - indicatorSize.width / 2 - widget.borderWidth) -
+                    indicatorSize.width / 2 -
+                    widget.borderWidth) /
+                ((indicatorSize.width + dif));
+          }
 
-        double doubleFromPosition(double x) {
-          return (x.clamp(indicatorSize.width / 2 + widget.borderWidth,
-                      width - indicatorSize.width / 2 - widget.borderWidth) -
-                  indicatorSize.width / 2 -
-                  widget.borderWidth) /
-              ((indicatorSize.width + dif));
-        }
+          int indexFromPosition(double x) {
+            return doubleFromPosition(x).round();
+          }
 
-        int indexFromPosition(double x) {
-          return doubleFromPosition(x).round();
-        }
+          T valueFromPosition(double x) {
+            return widget.values[indexFromPosition(x)];
+          }
 
-        T valueFromPosition(double x) {
-          return widget.values[indexFromPosition(x)];
-        }
+          BorderRadiusGeometry borderRadius = widget.borderRadius ??
+              BorderRadius.all(
+                Radius.circular(widget.height / 2),
+              );
 
-        BorderRadiusGeometry borderRadius = widget.borderRadius ??
-            BorderRadius.all(
-              Radius.circular(widget.height / 2),
-            );
+          Color indicatorColor =
+              widget.indicatorColor ?? theme.colorScheme.secondary;
 
-        Color indicatorColor =
-            widget.indicatorColor ?? theme.colorScheme.secondary;
-
-        List<Widget> foregroundStack = <Widget>[
-              Positioned(
-                  top: (widget.height - indicatorSize.height) / 2 -
-                      widget.borderWidth,
-                  left: position - indicatorSize.width / 2,
-                  child: widget.indicatorAnimationType == AnimationType.onSelected
-                      ? TweenAnimationBuilder<Color?>(
-                          child: widget.foregroundIndicatorIconBuilder
-                              ?.call(positionValue, indicatorSize),
-                          duration: widget.animationDuration,
-                          tween: ColorTween(
-                              begin: widget.indicatorColor,
-                              end: widget.colorBuilder?.call(widget.current) ??
-                                  indicatorColor),
-                          builder: (c, color, child) => indicatorBuilder(
-                              indicatorSize, color!, borderRadius, child))
-                      : indicatorBuilder(
+          List<Widget> foregroundStack = <Widget>[
+                Positioned(
+                    top: (widget.height - indicatorSize.height) / 2 -
+                        widget.borderWidth,
+                    left: position - indicatorSize.width / 2,
+                    child: widget.indicatorAnimationType == AnimationType.onSelected
+                        ? TweenAnimationBuilder<Color?>(
+                            child: widget.foregroundIndicatorIconBuilder
+                                ?.call(positionValue, indicatorSize),
+                            duration: widget.animationDuration,
+                            tween: ColorTween(
+                                begin: widget.indicatorColor,
+                                end: widget.colorBuilder?.call(widget.current) ??
+                                    indicatorColor),
+                            builder: (c, color, child) => _indicatorBuilder(
+                                indicatorSize, color!, borderRadius, child))
+                        : _indicatorBuilder(
+                            indicatorSize,
+                            Color.lerp(
+                                    widget.colorBuilder?.call(widget.values[positionValue.floor()]) ?? indicatorColor,
+                                    widget.colorBuilder?.call(widget.values[positionValue.ceil()]) ?? indicatorColor,
+                                    positionValue - positionValue.floor()) ??
+                                indicatorColor,
+                            borderRadius,
+                            widget.foregroundIndicatorIconBuilder?.call(positionValue, indicatorSize))),
+              ] +
+              (widget.animatedIconBuilder != null
+                  ? (widget._iconsInStack
+                      ? _buildBackgroundStack(
+                          Size(width, widget.height - 2 * widget.borderWidth),
                           indicatorSize,
-                          Color.lerp(
-                                  widget.colorBuilder?.call(widget.values[positionValue.floor()]) ??
-                                      indicatorColor,
-                                  widget.colorBuilder?.call(widget.values[positionValue.ceil()]) ?? indicatorColor,
-                                  positionValue - positionValue.floor()) ??
-                              indicatorColor,
-                          borderRadius,
-                          widget.foregroundIndicatorIconBuilder?.call(positionValue, indicatorSize))),
-            ] +
-            (widget.animatedIconBuilder != null
-                ? (widget._iconsInStack
-                    ? buildBackgroundStack(
-                        Size(width, widget.height - 2 * widget.borderWidth),
-                        indicatorSize,
-                        dif,
-                        positionValue)
-                    : buildBackgroundRow(indicatorSize, positionValue))
-                : []);
+                          dif,
+                          positionValue)
+                      : _buildBackgroundRow(indicatorSize, positionValue))
+                  : []);
 
-        bool Function(double) isPositionOverIndicator = (dx) =>
-            position - max((indicatorSize.width + dif) / 2, 24.0) <= dx &&
-            dx <= (position + max((indicatorSize.width + dif) / 2, 24.0));
+          bool Function(double) isPositionOverIndicator = (dx) =>
+              position - max((indicatorSize.width + dif) / 2, 24.0) <= dx &&
+              dx <= (position + max((indicatorSize.width + dif) / 2, 24.0));
 
-        bool Function(double) isPositionExactlyOverIndicator = (dx) =>
-            position - max(indicatorSize.width / 2, 24.0) <= dx &&
-            dx <= (position + max(indicatorSize.width / 2, 24.0));
+          bool Function(double) isPositionExactlyOverIndicator = (dx) =>
+              position - max(indicatorSize.width / 2, 24.0) <= dx &&
+              dx <= (position + max(indicatorSize.width / 2, 24.0));
 
-        return MouseRegion(
-          cursor: _animationInfo.moveMode == MoveMode.dragged
-              ? SystemMouseCursors.grabbing
-              : (hovering ? SystemMouseCursors.grab : SystemMouseCursors.click),
-          onHover: (event) {
-            if (hovering ==
-                (hovering =
-                    isPositionExactlyOverIndicator(event.localPosition.dx)))
-              return;
-            setState(() {});
-          },
-          onExit: (event) => hovering = false,
-          child: GestureDetector(
-            onTapUp: (details) {
-              widget.onTap?.call();
-              T newValue = valueFromPosition(details.localPosition.dx);
-              if (newValue == widget.current) return;
-              widget.onChanged?.call(newValue);
+          return MouseRegion(
+            cursor: _animationInfo.moveMode == MoveMode.dragged
+                ? SystemMouseCursors.grabbing
+                : (hovering
+                    ? SystemMouseCursors.grab
+                    : SystemMouseCursors.click),
+            onHover: (event) {
+              if (hovering ==
+                  (hovering =
+                      isPositionExactlyOverIndicator(event.localPosition.dx)))
+                return;
+              // TODO: Encapsulate for better efficiency
+              setState(() {});
             },
-            onHorizontalDragStart: (details) {
-              if (!isPositionOverIndicator(details.localPosition.dx)) return;
-              _onDragged(doubleFromPosition(details.localPosition.dx));
-            },
-            onHorizontalDragUpdate: (details) {
-              _onDragUpdate(doubleFromPosition(details.localPosition.dx));
-            },
-            onHorizontalDragEnd: (details) {
-              _onDragEnd();
-            },
-            child: TweenAnimationBuilder<Color?>(
-              child: Stack(
-                  children: widget.foregroundIndicatorIconBuilder == null
-                      ? foregroundStack
-                      : foregroundStack.reversed.toList()),
-              duration: widget.animationDuration,
-              tween: ColorTween(
+            onExit: (event) => hovering = false,
+            child: GestureDetector(
+              onTapUp: (details) {
+                widget.onTap?.call();
+                T newValue = valueFromPosition(details.localPosition.dx);
+                if (newValue == widget.current) return;
+                widget.onChanged?.call(newValue);
+              },
+              onHorizontalDragStart: (details) {
+                if (!isPositionOverIndicator(details.localPosition.dx)) return;
+                _onDragged(doubleFromPosition(details.localPosition.dx));
+              },
+              onHorizontalDragUpdate: (details) {
+                _onDragUpdate(doubleFromPosition(details.localPosition.dx));
+              },
+              onHorizontalDragEnd: (details) {
+                _onDragEnd();
+              },
+              child: TweenAnimationBuilder<Color?>(
+                child: Stack(
+                    children: widget.foregroundIndicatorIconBuilder == null
+                        ? foregroundStack
+                        : foregroundStack.reversed.toList()),
+                duration: widget.animationDuration,
+                tween: ColorTween(
                   begin: widget.borderColorBuilder?.call(widget.current) ??
                       widget.borderColor ??
                       theme.colorScheme.secondary,
                   end: widget.borderColorBuilder?.call(widget.current) ??
                       widget.borderColor ??
-                      theme.colorScheme.secondary),
-              builder: (c, color, child) => Container(
-                width: width,
-                height: widget.height,
-                clipBehavior: Clip.hardEdge,
-                foregroundDecoration: BoxDecoration(
-                  border: Border.all(color: color!, width: widget.borderWidth),
-                  borderRadius: borderRadius,
+                      theme.colorScheme.secondary,
                 ),
-                decoration: BoxDecoration(
-                  color: widget.innerColor ?? theme.splashColor,
-                  border: Border.all(
-                      width: widget.borderWidth, color: Colors.transparent),
-                  borderRadius: borderRadius,
+                builder: (c, color, child) => Container(
+                  width: width,
+                  height: widget.height,
+                  clipBehavior: Clip.hardEdge,
+                  foregroundDecoration: BoxDecoration(
+                    border:
+                        Border.all(color: color!, width: widget.borderWidth),
+                    borderRadius: borderRadius,
+                  ),
+                  decoration: BoxDecoration(
+                    color: widget.innerColor ?? theme.scaffoldBackgroundColor,
+                    border: Border.all(
+                        width: widget.borderWidth, color: Colors.transparent),
+                    borderRadius: borderRadius,
+                    boxShadow: widget.boxShadow,
+                  ),
+                  child: child,
                 ),
-                child: child,
               ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    });
   }
 
-  List<Positioned> buildBackgroundStack(
+  List<Positioned> _buildBackgroundStack(
       Size size, Size indicatorSize, double dif, double positionValue) {
     return List.generate(widget.values.length, (index) => index).map((i) {
       double position = i * (indicatorSize.width + dif);
@@ -728,23 +752,23 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
         left: position - dif,
         width: 2 * dif + indicatorSize.width,
         height: widget.height - widget.borderWidth * 2,
-        child: animatedOpacityIcon(animatedSizeIcon(current, positionValue),
+        child: _animatedOpacityIcon(_animatedSizeIcon(current, positionValue),
             current == widget.current),
       );
     }).toList();
   }
 
-  List<Widget> buildBackgroundRow(Size indicatorSize, double positionValue) {
+  List<Widget> _buildBackgroundRow(Size indicatorSize, double positionValue) {
     return [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: widget.values
             .map(
-              (e) => Container(
+              (e) => SizedBox(
                 width: indicatorSize.width,
                 height: widget.height - 2 * widget.borderWidth,
-                child: animatedOpacityIcon(
-                    animatedSizeIcon(e, positionValue), e == widget.current),
+                child: _animatedOpacityIcon(
+                    _animatedSizeIcon(e, positionValue), e == widget.current),
               ),
             )
             .toList(),
@@ -752,7 +776,7 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
     ];
   }
 
-  Widget animatedSizeIcon(T e, double position) {
+  Widget _animatedSizeIcon(T e, double position) {
     switch (widget.iconAnimationType) {
       case AnimationType.onSelected:
         return TweenAnimationBuilder(
@@ -784,7 +808,7 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
     }
   }
 
-  Widget animatedOpacityIcon(Widget icon, bool active) {
+  Widget _animatedOpacityIcon(Widget icon, bool active) {
     return widget.iconOpacity >= 1.0 && widget.selectedIconOpacity >= 1.0
         ? icon
         : AnimatedOpacity(
@@ -825,35 +849,17 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
     _animateTo(index);
   }
 
-  Widget indicatorBuilder(Size size, Color color,
+  Widget _indicatorBuilder(Size size, Color color,
       BorderRadiusGeometry borderRadius, Widget? child) {
-    BoxDecoration decoration;
-    switch (widget.indicatorType) {
-      case IndicatorType.circle:
-        decoration = BoxDecoration(
-          shape: BoxShape.circle,
-          color: color,
-          border: widget.foregroundBorder,
-        );
-        break;
-      case IndicatorType.rectangle:
-        decoration = BoxDecoration(
-          color: color,
-          border: widget.foregroundBorder,
-        );
-        break;
-      case IndicatorType.roundedRectangle:
-        decoration = BoxDecoration(
-          color: color,
-          borderRadius: borderRadius,
-          border: widget.foregroundBorder,
-        );
-        break;
-    }
     return Container(
       width: size.width,
       height: size.height,
-      decoration: decoration,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: borderRadius,
+        border: widget.foregroundBorder,
+        boxShadow: widget.foregroundBoxShadow,
+      ),
       child: Center(
         child: child,
       ),

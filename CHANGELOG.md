@@ -1,3 +1,13 @@
+## [0.2.3] - (2022-02-28)
+
+- BREAKING: Removes indicatorType
+- BREAKING: Changes default innerColor
+- Adds BoxShadow parameters
+
+## [0.2.2] - (2022-01-27)
+
+- Minor performance improvements
+
 ## [0.2.2] - (2022-01-27)
 
 - Minor changes/fixes
