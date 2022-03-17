@@ -104,6 +104,8 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
   /// Callback for tapping anywhere on the widget.
   final Function()? onTap;
 
+  final bool _iconsTappable;
+
   final bool _iconsInStack;
 
   final BackgroundBuilder? backgroundBuilder;
@@ -150,6 +152,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.foregroundBoxShadow = const [],
     this.boxShadow = const [],
   })  : this._iconsInStack = false,
+        this._iconsTappable = true,
         this.backgroundBuilder = null,
         super(key: key);
 
@@ -186,8 +189,10 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
     this.foregroundBorder,
     this.foregroundBoxShadow = const [],
     this.boxShadow = const [],
-  })  : animatedIconBuilder = _iconSizeBuilder<T>(iconBuilder, iconSize, selectedIconSize),
+  })  : animatedIconBuilder =
+            _iconSizeBuilder<T>(iconBuilder, iconSize, selectedIconSize),
         this._iconsInStack = false,
+        this._iconsTappable = true,
         this.backgroundBuilder = null,
         super(key: key);
 
@@ -232,6 +237,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
             iconSize * (height + 2 * borderWidth),
             selectedIconSize * (height + 2 * borderWidth)),
         this._iconsInStack = false,
+        this._iconsTappable = true,
         this.backgroundBuilder = null,
         super(key: key);
 
@@ -287,6 +293,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconsInStack = false,
+        this._iconsTappable = true,
         this.backgroundBuilder = null,
         super(key: key);
 
@@ -339,6 +346,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
             Size.square(iconRadius * 2 * (height - 2 * borderWidth)),
             Size.square(iconRadius * 2 * (height - 2 * borderWidth))),
         this._iconsInStack = false,
+        this._iconsTappable = true,
         this.backgroundBuilder = null,
         super(key: key);
 
@@ -380,6 +388,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
         this.animatedIconBuilder = _standardIconBuilder(iconBuilder,
             Size.square(iconRadius * 2), Size.square(iconRadius * 2)),
         this._iconsInStack = false,
+        this._iconsTappable = true,
         this.backgroundBuilder = null,
         super(key: key);
 
@@ -465,6 +474,7 @@ class AnimatedToggleSwitch<T> extends StatefulWidget {
         this.animatedIconBuilder = _dualIconBuilder(
             textBuilder, Size.square(iconRadius * 2), [first, second], dif),
         this._iconsInStack = true,
+        this._iconsTappable = false,
         this.backgroundBuilder = null,
         super(key: key);
 
@@ -690,7 +700,8 @@ class _AnimatedToggleSwitchState<T> extends State<AnimatedToggleSwitch<T>>
               onTapUp: (details) {
                 widget.onTap?.call();
                 T newValue = valueFromPosition(details.localPosition.dx);
-                if (newValue == widget.current) return;
+                if (newValue == widget.current || !widget._iconsTappable)
+                  return;
                 widget.onChanged?.call(newValue);
               },
               onHorizontalDragStart: (details) {
