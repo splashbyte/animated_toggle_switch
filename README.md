@@ -47,10 +47,25 @@ AnimatedToggleSwitch<int>.rolling(
   values: [0, 1, 2, 3],
   onChanged: (i) => setState(() => value = i),
   iconBuilder: iconBuilder,
+  ... // many more parameters available
 )
 ```
 
-### Custom with Size Animation
+### Fully customizable toggle switch with CustomAnimatedToggleSwitch
+
+```dart
+CustomAnimatedToggleSwitch<int>(
+  current: value,
+  values: [0, 1, 2, 3],
+  wrapperBuilder: ..., // the builder for the wrapper around the whole switch
+  iconBuilder: ..., // the builder for the icons
+  foregroundIndicatorBuilder: ..., // a builder for an indicator in front of the icons
+  backgroundIndicatorBuilder: ..., // a builder for an indicator behind the icons
+  ... // many more parameters available
+)
+```
+
+### Custom with size animation
 
 ```dart
 AnimatedToggleSwitch<int>.size(
@@ -59,14 +74,12 @@ AnimatedToggleSwitch<int>.size(
   iconOpacity: 0.2,
   indicatorSize: Size.fromWidth(100),
   indicatorType: IndicatorType.rectangle,
-  iconBuilder: (i, size, active) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('$i'),
-        iconBuilder(i, size, active),
-      ],
-    );
+  iconBuilder: (context, local, global) {
+    IconData data = Icons.access_time_rounded;
+    if (local.value.isEven) data = Icons.cancel;
+    return Container(
+      child: Icon(data, size: min(local.iconSize.width, local.iconSize.height),
+    ));
   },
   borderColor: value.isEven ? Colors.blue : Colors.red,
   colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
@@ -78,26 +91,31 @@ AnimatedToggleSwitch<int>.size(
 
 ```dart
 AnimatedToggleSwitch<int>.size(
-  current: value,
+  value: value,
   values: [0, 1, 2, 3],
   iconOpacity: 1.0,
   indicatorSize: Size.fromWidth(25),
-  foregroundIndicatorIconBuilder: (d, indicatorSize) {
-    double transitionValue = d - d.floorToDouble();
+  foregroundIndicatorIconBuilder: (context, global) {
+    double pos = global.position;
+    double transitionValue = pos - pos.floorToDouble();
     return Transform.rotate(
-        angle: 2.0 * pi * transitionValue,
-        child: Stack(children: [
-          Opacity(opacity: 1 - transitionValue, child: iconBuilder(d.floor(), indicatorSize, true)),
-          Opacity(opacity: transitionValue, child: iconBuilder(d.ceil(), indicatorSize, true))
-        ]));
+      angle: 2.0 * pi * transitionValue,
+      child: Stack(children: [
+        Opacity(
+          opacity: 1 - transitionValue,
+          child: iconBuilder(pos.floor(), global.indicatorSize)),
+        Opacity(
+          opacity: transitionValue,
+          child: iconBuilder(pos.ceil(), global.indicatorSize))
+      ]),
+    );
   },
   selectedIconSize: Size.square(20),
   iconSize: Size.square(20),
-  indicatorType: IndicatorType.rectangle,
-  iconBuilder: iconBuilder,
+  iconBuilder: sizeIconBuilder,
   colorBuilder: (i) => i.isEven ? Colors.green : Colors.tealAccent,
   onChanged: (i) => setState(() => value = i),
   borderRadius: BorderRadius.circular(8.0),
   borderColor: Colors.red,
-)
+),
 ```
