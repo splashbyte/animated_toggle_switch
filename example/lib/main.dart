@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,10 +56,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<int>.rolling(
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -71,10 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
                 borderColor: Colors.transparent,
                 foregroundBoxShadow: const [
                   BoxShadow(
@@ -95,14 +94,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
                 indicatorColor: Colors.purpleAccent,
                 innerColor: Colors.amber,
                 height: 55,
+                dif: 20.0,
                 borderColor: Colors.transparent,
               ),
               Padding(
@@ -113,16 +113,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<bool>.dual(
-                current: positive,
+                value: positive,
                 first: false,
                 second: true,
                 dif: 40.0,
                 onChanged: (b) => setState(() => positive = b),
                 colorBuilder: (b) => b ? Colors.red : Colors.green,
-                iconBuilder: (b, size, active) => b
+                iconBuilder: (context, local, global) => local.value
                     ? Icon(Icons.coronavirus_rounded)
                     : Icon(Icons.tag_faces_rounded),
-                textBuilder: (b, size, active) => b
+                textBuilder: (context, local, global) => local.value
                     ? Center(child: Text('Oh no...'))
                     : Center(child: Text('Nice :)')),
               ),
@@ -134,19 +134,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 iconOpacity: 0.2,
                 indicatorSize: Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
-                indicatorAnimationType: AnimationType.onHover,
-                iconBuilder: (i, size, active) {
+                animationType: AnimationType.onHover,
+                iconBuilder: (context, local, global) {
                   IconData data = Icons.access_time_rounded;
-                  if (i.isEven) data = Icons.cancel;
+                  if (local.value.isEven) data = Icons.cancel;
                   return Container(
                       child: Icon(
                     data,
-                    size: min(size.width, size.height),
+                    size: min(local.iconSize.width, local.iconSize.height),
                   ));
                 },
                 borderWidth: 0.0,
@@ -162,16 +162,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 iconOpacity: 0.2,
                 indicatorSize: Size.fromWidth(100),
-                iconBuilder: (i, size, active) {
+                iconBuilder: (context, local, global) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('$i'),
-                      alternativeIconBuilder(i, size, active),
+                      Text('${local.value}'),
+                      alternativeIconBuilder(context, local, global),
                     ],
                   );
                 },
@@ -187,26 +187,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 iconOpacity: 1.0,
                 indicatorSize: Size.fromWidth(25),
-                foregroundIndicatorIconBuilder: (d, indicatorSize) {
-                  double transitionValue = d - d.floorToDouble();
+                foregroundIndicatorIconBuilder: (context, global) {
+                  double pos = global.position;
+                  double transitionValue = pos - pos.floorToDouble();
                   return Transform.rotate(
                       angle: 2.0 * pi * transitionValue,
                       child: Stack(children: [
                         Opacity(
                             opacity: 1 - transitionValue,
-                            child: iconBuilder(d.floor(), indicatorSize, true)),
+                            child:
+                                iconBuilder(pos.floor(), global.indicatorSize)),
                         Opacity(
                             opacity: transitionValue,
-                            child: iconBuilder(d.ceil(), indicatorSize, true))
+                            child:
+                                iconBuilder(pos.ceil(), global.indicatorSize))
                       ]));
                 },
                 selectedIconSize: Size.square(20),
                 iconSize: Size.square(20),
-                iconBuilder: iconBuilder,
+                iconBuilder: sizeIconBuilder,
                 colorBuilder: (i) =>
                     i.isEven ? Colors.green : Colors.tealAccent,
                 onChanged: (i) => setState(() => value = i),
@@ -222,10 +225,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
                 indicatorSize: Size.fromWidth(2),
               ),
               SizedBox(
@@ -233,11 +236,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
-                current: value,
+                value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
-                indicatorSize: Size.fromWidth(1.5),
+                iconBuilder: rollingIconBuilder,
+                borderRadius: BorderRadius.circular(75.0),
+                indicatorSize: Size(1.5, 1.5),
               ),
               SizedBox(height: MediaQuery.of(context).padding.bottom + 16.0),
             ],
@@ -247,18 +251,29 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget iconBuilder(int i, Size size, bool active) {
+  Widget iconBuilder(int value, Size iconSize) {
     IconData data = Icons.access_time_rounded;
-    if (i.isEven) data = Icons.cancel;
+    if (value.isEven) data = Icons.cancel;
     return Icon(
       data,
-      size: size.shortestSide,
+      size: iconSize.shortestSide,
     );
   }
 
-  Widget alternativeIconBuilder(int i, Size size, bool active) {
+  Widget sizeIconBuilder(BuildContext context, SizeProperties<int> local,
+      GlobalToggleProperties<int> global) {
+    return iconBuilder(local.value, local.iconSize);
+  }
+
+  Widget rollingIconBuilder(BuildContext context, RollingProperties<int> local,
+      GlobalToggleProperties<int> global) {
+    return iconBuilder(local.value, local.iconSize);
+  }
+
+  Widget alternativeIconBuilder(BuildContext context, SizeProperties<int> local,
+      GlobalToggleProperties<int> global) {
     IconData data = Icons.access_time_rounded;
-    switch (i) {
+    switch (local.value) {
       case 0:
         data = Icons.ac_unit_outlined;
         break;
@@ -274,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return Icon(
       data,
-      size: size.shortestSide,
+      size: local.iconSize.shortestSide,
     );
   }
 }
