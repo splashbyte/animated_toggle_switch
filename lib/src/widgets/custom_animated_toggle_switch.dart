@@ -18,9 +18,7 @@ typedef CustomWrapperBuilder<T> = Widget Function(
 
 enum FittingMode { none, preventHorizontalOverlapping }
 
-enum IconArrangement{
-  row, overlap
-}
+enum IconArrangement { row, overlap }
 
 class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
@@ -166,11 +164,8 @@ class _CustomAnimatedToggleSwitchState<T>
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-
     double dif = widget.dif;
 
-    //return widget.wrapperBuilder(context, ToggleProperties(), child);
     return SizedBox(
       height: widget.height,
       child: AnimatedBuilder(
@@ -270,9 +265,10 @@ class _CustomAnimatedToggleSwitchState<T>
                       ),
                     Stack(
                         clipBehavior: Clip.none,
-                        children: widget.iconArrangement == IconArrangement.overlap
-                            ? _buildBackgroundStack(context, properties)
-                            : _buildBackgroundRow(context, properties)),
+                        children:
+                            widget.iconArrangement == IconArrangement.overlap
+                                ? _buildBackgroundStack(context, properties)
+                                : _buildBackgroundRow(context, properties)),
                     if (widget.foregroundIndicatorBuilder != null)
                       _Indicator(
                         height: height,
@@ -445,7 +441,8 @@ class _Indicator extends StatelessWidget {
   }
 }
 
-TextDirection _textDirectionOf(BuildContext context) => Directionality.maybeOf(context) ?? TextDirection.ltr;
+TextDirection _textDirectionOf(BuildContext context) =>
+    Directionality.maybeOf(context) ?? TextDirection.ltr;
 
 class _AnimationInfo {
   final double start;

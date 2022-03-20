@@ -26,11 +26,11 @@ class _HoverRegionState extends State<HoverRegion> {
 
   @override
   Widget build(BuildContext context) {
-    if(_position != null) _updateHovering(_position!, rebuild: false);
+    if (_position != null) _updateHovering(_position!, rebuild: false);
     return MouseRegion(
       opaque: false,
-      cursor: widget.cursor ??
-          (_hovering ? widget.hoverCursor : MouseCursor.defer),
+      cursor:
+          widget.cursor ?? (_hovering ? widget.hoverCursor : MouseCursor.defer),
       onHover: (e) => _updateHovering(e.localPosition),
       onEnter: (e) => _updateHovering(e.localPosition),
       onExit: (e) => _setHovering(false),
@@ -46,7 +46,7 @@ class _HoverRegionState extends State<HoverRegion> {
   void _setHovering(bool hovering, {bool rebuild = true}) {
     if (hovering == _hovering) return;
     _hovering = hovering;
-    if(rebuild) setState(() {});
+    if (rebuild) setState(() {});
   }
 }
 
