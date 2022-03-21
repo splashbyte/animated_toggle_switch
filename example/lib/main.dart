@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
                 borderColor: Colors.transparent,
                 foregroundBoxShadow: const [
                   BoxShadow(
@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
                 indicatorColor: Colors.purpleAccent,
                 innerColor: Colors.amber,
@@ -219,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'AnimatedToggleSwitch.rollingByHeight with custom indicatorSize and indicatorType:',
+                  'AnimatedToggleSwitch.rollingByHeight with custom indicatorSize and borderRadius:',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -228,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
                 indicatorSize: Size.fromWidth(2),
               ),
               SizedBox(
@@ -239,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 value: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
-                iconBuilder: iconBuilder,
+                iconBuilder: rollingIconBuilder,
                 borderRadius: BorderRadius.circular(75.0),
                 indicatorSize: Size(1.5, 1.5),
               ),
@@ -252,6 +252,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget iconBuilder(int value, Size iconSize) {
+    return rollingIconBuilder(value, iconSize, false);
+  }
+
+  Widget rollingIconBuilder(int value, Size iconSize, bool foreground) {
     IconData data = Icons.access_time_rounded;
     if (value.isEven) data = Icons.cancel;
     return Icon(
@@ -261,11 +265,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget sizeIconBuilder(BuildContext context, SizeProperties<int> local,
-      GlobalToggleProperties<int> global) {
-    return iconBuilder(local.value, local.iconSize);
-  }
-
-  Widget rollingIconBuilder(BuildContext context, RollingProperties<int> local,
       GlobalToggleProperties<int> global) {
     return iconBuilder(local.value, local.iconSize);
   }

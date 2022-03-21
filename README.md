@@ -31,7 +31,7 @@ Custom AnimatedToggleSwitch.size()
 ![animated_toggle_switch_example_5](https://user-images.githubusercontent.com/43761463/156060966-9013d93a-b3ed-4ba8-94ab-3e07e5d1c279.gif)  
 AnimatedToggleSwitch.size() with custom rolling animation  
 ![animated_toggle_switch_example_6](https://user-images.githubusercontent.com/43761463/156061043-3a7b222e-8b25-4f06-97d4-61d3f7d2f53b.gif)   
-AnimatedToggleSwitch.rolling() with custom indicatorType  
+AnimatedToggleSwitch.rolling() with custom indicatorSize and borderRadius  
 ![animated_toggle_switch_example_7](https://user-images.githubusercontent.com/43761463/156061700-0dccec36-389e-487f-8b57-1d8ebd79df83.gif)  
 ![animated_toggle_switch_example_8](https://user-images.githubusercontent.com/43761463/156061081-55e573fb-ce36-43f0-8cd7-95adb832aeba.gif)  
 

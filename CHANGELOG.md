@@ -1,3 +1,7 @@
+## 0.3.0-beta.3 (2022-03-20)
+
+- BREAKING: Changes parameters of `SimpleRollingIconBuilder`
+
 ## 0.3.0-beta.2 (2022-03-20)
 
 - Minor fix
