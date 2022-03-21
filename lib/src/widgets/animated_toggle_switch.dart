@@ -341,8 +341,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Special version of [AnimatedToggleSwitch.customByHeight].
   ///
-  /// It is not recommended to use [indicatorSize] and [selectedIconSize]
-  /// but use the foreground argument of [iconBuilder] to determine which size to use.
+  /// It is not recommended to use [iconRadius] and [selectedIconRadius]
+  /// but to use the [foreground] argument of [iconBuilder] to determine which size to use.
   /// If you still want to get the sizes in the builder, you have to use the [customIconBuilder] instead of [iconBuilder].
   ///
   /// All size values ([indicatorWidth], [indicatorSize], [selectedIconSize]) are relative to the specified height.
@@ -403,8 +403,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Defining a rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
   ///
-  /// It is not recommended to use [indicatorSize] and [selectedIconSize]
-  /// but use the foreground argument of [iconBuilder] to determine which size to use.
+  /// It is not recommended to use [iconRadius] and [selectedIconRadius]
+  /// but to use the [foreground] argument of [iconBuilder] to determine which size to use.
   /// If you still want to get the sizes in the builder, you have to use the [customIconBuilder] instead of [iconBuilder].
   ///
   /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
