@@ -4,17 +4,17 @@ import 'package:animated_toggle_switch/src/widgets/drag_region.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-/// Own builder for icons in the switch.
-typedef CustomIconBuilder<T> = Widget Function(
-    BuildContext, LocalToggleProperties<T>, DetailedGlobalToggleProperties<T>);
+/// Custom builder for icons in the switch.
+typedef CustomIconBuilder<T> = Widget Function(BuildContext context,
+    LocalToggleProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
-/// Own builder for the indicator of the switch.
+/// Custom builder for the indicator of the switch.
 typedef CustomIndicatorBuilder<T> = Widget Function(
-    BuildContext, DetailedGlobalToggleProperties<T>);
+    BuildContext context, DetailedGlobalToggleProperties<T> global);
 
-/// Own builder for the wrapper of the switch.
+/// Custom builder for the wrapper of the switch.
 typedef CustomWrapperBuilder<T> = Widget Function(
-    BuildContext, GlobalToggleProperties<T>, Widget toggleSwitch);
+    BuildContext conext, GlobalToggleProperties<T> local, Widget child);
 
 enum FittingMode { none, preventHorizontalOverlapping }
 

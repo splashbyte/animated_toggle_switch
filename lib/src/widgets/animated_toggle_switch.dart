@@ -4,30 +4,29 @@ import 'package:flutter/material.dart';
 
 import 'custom_animated_toggle_switch.dart';
 
-typedef SizeIconBuilder<T> = Widget Function(
-    BuildContext, SizeProperties<T>, DetailedGlobalToggleProperties<T>);
+typedef SizeIconBuilder<T> = Widget Function(BuildContext context,
+    SizeProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
 typedef SimpleSizeIconBuilder<T> = Widget Function(T value, Size size);
 
 typedef SimpleIconBuilder<T> = Widget Function(T value);
 
-typedef RollingIconBuilder<T> = Widget Function(
-    BuildContext, RollingProperties<T>, DetailedGlobalToggleProperties<T>);
+typedef RollingIconBuilder<T> = Widget Function(BuildContext context,
+    RollingProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
-typedef SimpleRollingIconBuilder<T> = Widget Function(T value, Size size);
+typedef SimpleRollingIconBuilder<T> = Widget Function(
+    T value, Size size, bool foreground);
 
 /// A version of IconBuilder for writing a own Animation on the change of the selected item.
-typedef AnimatedIconBuilder<T> = Widget Function(BuildContext,
-    AnimatedToggleProperties<T>, DetailedGlobalToggleProperties<T> properties);
+typedef AnimatedIconBuilder<T> = Widget Function(
+    BuildContext context,
+    AnimatedToggleProperties<T> local,
+    DetailedGlobalToggleProperties<T> global);
 
-typedef IconBuilder<T> = Widget Function(BuildContext, LocalToggleProperties<T>,
-    DetailedGlobalToggleProperties<T> properties);
+typedef IconBuilder<T> = Widget Function(BuildContext context,
+    LocalToggleProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
-/// Own builder for the background of the switch. It has to return the Widgets which should be in the Stack with the indicator.
-typedef BackgroundBuilder = List<Widget> Function(
-    Size size, Size indicatorSize, double dif, double positionValue);
-
-typedef ColorBuilder<T> = Color? Function(T t);
+typedef ColorBuilder<T> = Color? Function(T value);
 
 enum AnimationType { onSelected, onHover }
 
@@ -432,7 +431,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       Size iconSize) {
     assert(iconBuilder == null || customIconBuilder == null);
     if (customIconBuilder == null && iconBuilder != null)
-      customIconBuilder = (c, l, g) => iconBuilder(l.value, l.iconSize);
+      customIconBuilder =
+          (c, l, g) => iconBuilder(l.value, l.iconSize, l.foreground);
     return (context, global) {
       if (customIconBuilder == null) return SizedBox();
       double distance = global.dif + global.indicatorSize.width;
@@ -483,7 +483,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       Size selectedIconSize) {
     assert(iconBuilder == null || customIconBuilder == null);
     if (customIconBuilder == null && iconBuilder != null)
-      customIconBuilder = (c, l, g) => iconBuilder(l.value, l.iconSize);
+      customIconBuilder =
+          (c, l, g) => iconBuilder(l.value, l.iconSize, l.foreground);
     return customIconBuilder == null
         ? null
         : (t, local, global) => customIconBuilder!(
@@ -538,7 +539,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         this.foregroundIndicatorIconBuilder =
             _rollingForegroundIndicatorIconBuilder(
                 [first, second],
-                iconBuilder == null ? null : (v, s) => iconBuilder(v),
+                iconBuilder == null ? null : (v, s, f) => iconBuilder(v),
                 customIconBuilder,
                 Size.square(iconRadius * 2)),
         this.animatedIconBuilder = _dualIconBuilder(
