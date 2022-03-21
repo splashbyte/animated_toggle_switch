@@ -13,6 +13,8 @@
 
 Simple and animated switch with multiple choices. It's an easy way if you don't want to use something like a `DropDownMenuButton`.  
 `LTR` and `RTL` are both supported.  
+Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom version. This ensures that you can get started easily and still customize a lot if necessary.
+
 For a slider with a similar look, you can check out [action_slider](https://pub.dev/packages/action_slider).
 
 ### Example Usage
