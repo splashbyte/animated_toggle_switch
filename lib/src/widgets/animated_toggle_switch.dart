@@ -698,7 +698,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     double pos = properties.position;
     return indicatorAnimationType == AnimationType.onSelected
         ? TweenAnimationBuilder<Color?>(
-        child: foregroundIndicatorIconBuilder?.call(context, properties),
+            child: foregroundIndicatorIconBuilder?.call(context, properties),
             duration: animationDuration,
             tween: ColorTween(
                 begin: indicatorColor,

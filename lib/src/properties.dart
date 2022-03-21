@@ -30,7 +30,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required double previousPosition,
     required TextDirection textDirection,
   }) : super(
-    position: position,
+          position: position,
           current: value,
           previous: previousValue,
           previousPosition: previousPosition,
@@ -61,9 +61,9 @@ class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
     required int index,
     required this.animationValue,
   }) : super(
-    value: value,
-    index: index,
-  );
+          value: value,
+          index: index,
+        );
 
   AnimatedToggleProperties<T> copyWith({T? value, int? index}) {
     return AnimatedToggleProperties(
@@ -82,11 +82,11 @@ class RollingProperties<T> extends LocalToggleProperties<T> {
     required bool foreground,
     required LocalToggleProperties<T> properties,
   }) : this(
-    iconSize: iconSize,
-    foreground: foreground,
-    value: properties.value,
-    index: properties.index,
-  );
+          iconSize: iconSize,
+          foreground: foreground,
+          value: properties.value,
+          index: properties.index,
+        );
 
   const RollingProperties({
     required this.iconSize,
@@ -94,9 +94,9 @@ class RollingProperties<T> extends LocalToggleProperties<T> {
     required T value,
     required int index,
   }) : super(
-    value: value,
-    index: index,
-  );
+          value: value,
+          index: index,
+        );
 }
 
 class SizeProperties<T> extends AnimatedToggleProperties<T> {
@@ -106,11 +106,11 @@ class SizeProperties<T> extends AnimatedToggleProperties<T> {
     required Size iconSize,
     required AnimatedToggleProperties<T> properties,
   }) : this(
-    iconSize: iconSize,
-    value: properties.value,
-    index: properties.index,
-    animationValue: properties.animationValue,
-  );
+          iconSize: iconSize,
+          value: properties.value,
+          index: properties.index,
+          animationValue: properties.animationValue,
+        );
 
   const SizeProperties({
     required this.iconSize,
@@ -118,8 +118,8 @@ class SizeProperties<T> extends AnimatedToggleProperties<T> {
     required int index,
     required double animationValue,
   }) : super(
-    value: value,
-    index: index,
-    animationValue: animationValue,
-  );
+          value: value,
+          index: index,
+          animationValue: animationValue,
+        );
 }
