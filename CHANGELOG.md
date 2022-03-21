@@ -1,3 +1,7 @@
+## 0.3.0-beta.2 (2022-03-20)
+
+- Minor fix
+
 ## 0.3.0-beta.1 (2022-03-20)
 
 - BREAKING: Most constructors of `AnimatedToggleSwitch` have a standard and a more customizable parameter for each of their builders now
