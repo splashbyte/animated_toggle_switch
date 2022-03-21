@@ -167,7 +167,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Provides an [AnimatedToggleSwitch] with the standard size animation of the icons.
   ///
-  /// Exactly one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
   AnimatedToggleSwitch.size({
     Key? key,
     required this.value,
@@ -210,7 +210,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// All size values ([indicatorWidth], [iconSize], [selectedIconSize]) are relative to the specified height.
   /// (So an [indicatorWidth] of 1.0 means equality of [height] - 2*[borderWidth] and [indicatorWidth])
   ///
-  /// Exactly one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
   AnimatedToggleSwitch.sizeByHeight({
     Key? key,
     this.height = 50.0,
@@ -260,10 +260,10 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       SizeIconBuilder<T>? customIconBuilder,
       Size iconSize,
       Size selectedIconSize) {
-    assert((iconBuilder == null) ^ (customIconBuilder == null));
-    if (customIconBuilder == null)
-      customIconBuilder = (c, l, g) => iconBuilder!(l.value, l.iconSize);
-    return iconBuilder == null
+    assert(iconBuilder == null || customIconBuilder == null);
+    if (customIconBuilder == null && iconBuilder != null)
+      customIconBuilder = (c, l, g) => iconBuilder(l.value, l.iconSize);
+    return customIconBuilder == null
         ? null
         : (context, local, global) => customIconBuilder!(
               context,
@@ -327,7 +327,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// All size values ([indicatorWidth], [indicatorSize], [selectedIconSize]) are relative to the specified height.
   /// (So an [indicatorWidth] of 1.0 means equality of [height] - 2*[borderWidth] and [indicatorWidth])
   ///
-  /// Exactly one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
   AnimatedToggleSwitch.rollingByHeight({
     Key? key,
     this.height = 50.0,
@@ -380,7 +380,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Defining a rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
   ///
-  /// Exactly one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
   AnimatedToggleSwitch.rolling({
     Key? key,
     required this.value,
@@ -430,10 +430,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       SimpleRollingIconBuilder<T>? iconBuilder,
       RollingIconBuilder<T>? customIconBuilder,
       Size iconSize) {
-    assert((iconBuilder == null) ^ (customIconBuilder == null));
-    if (customIconBuilder == null)
-      customIconBuilder = (c, l, g) => iconBuilder!(l.value, l.iconSize);
+    assert(iconBuilder == null || customIconBuilder == null);
+    if (customIconBuilder == null && iconBuilder != null)
+      customIconBuilder = (c, l, g) => iconBuilder(l.value, l.iconSize);
     return (context, global) {
+      if (customIconBuilder == null) return SizedBox();
       double distance = global.dif + global.indicatorSize.width;
       double angleDistance = distance / iconSize.longestSide * 2;
       final pos = global.position;
@@ -445,7 +446,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
             angle: transitionValue * angleDistance,
             child: Opacity(
                 opacity: 1 - transitionValue,
-                child: customIconBuilder!(
+                child: customIconBuilder(
                     context,
                     RollingProperties(
                       iconSize: iconSize,
@@ -480,10 +481,10 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       RollingIconBuilder<T>? customIconBuilder,
       Size iconSize,
       Size selectedIconSize) {
-    assert((iconBuilder == null) ^ (customIconBuilder == null));
-    if (customIconBuilder == null)
-      customIconBuilder = (c, l, g) => iconBuilder!(l.value, l.iconSize);
-    return iconBuilder == null
+    assert(iconBuilder == null || customIconBuilder == null);
+    if (customIconBuilder == null && iconBuilder != null)
+      customIconBuilder = (c, l, g) => iconBuilder(l.value, l.iconSize);
+    return customIconBuilder == null
         ? null
         : (t, local, global) => customIconBuilder!(
               t,
@@ -495,7 +496,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Defining an rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
   ///
-  /// Exactly one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
   /// Maximum one builder of [textBuilder] and [customTextBuilder] must be provided.
   AnimatedToggleSwitch.dual({
     Key? key,
