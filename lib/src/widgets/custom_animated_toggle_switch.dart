@@ -18,7 +18,18 @@ typedef CustomWrapperBuilder<T> = Widget Function(
 
 enum FittingMode { none, preventHorizontalOverlapping }
 
-enum IconArrangement { row, overlap }
+enum IconArrangement {
+  /// Indicates that the icons should be in a row.
+  ///
+  /// This is the default setting.
+  row,
+
+  /// Indicates that the icons should overlap.
+  /// Normally you don't need this setting unless you want the icons to overlap.
+  /// This is used for example with [AnimatedToggleSwitch.dual],
+  /// because the texts partially overlap here.
+  overlap
+}
 
 class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
@@ -61,9 +72,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final bool iconsTappable;
 
   /// Indicates if the icons should overlap.
-  /// Normally you don't need this setting unless you want the icons to overlap.
-  /// This is used for example with [AnimatedToggleSwitch.dual],
-  /// because the texts partially overlap here.
+  ///
+  /// Defaults to [IconArrangement.row] because it fits the most use cases.
   final IconArrangement iconArrangement;
 
   final FittingMode fittingMode;
@@ -77,8 +87,10 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// A padding between wrapper and icons/indicator.
   final double minTouchTargetSize;
 
+  /// The duration for the animation to the thumb when the user starts dragging.
   final Duration dragStartDuration;
 
+  /// The curve for the animation to the thumb when the user starts dragging.
   final Curve dragStartCurve;
 
   const CustomAnimatedToggleSwitch({

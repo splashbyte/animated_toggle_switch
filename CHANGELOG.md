@@ -1,9 +1,15 @@
+## 0.3.0-beta.1 (2022-03-20)
+
+- BREAKING: Most constructors of `AnimatedToggleSwitch` have a standard and a more customizable parameter for each of their builders now
+- BREAKING: Renames `animationType` back to `indicatorAnimationType`
+
 ## 0.3.0-beta.0 (2022-03-19)
 
 - BREAKING: Changes parameters of all builders for more customizability and flexibility
 - BREAKING: Renames `AnimatedToggleSwitch.byHeight` to `AnimatedToggleSwitch.customByHeight`
 - BREAKING: Renames `current` to `value`
 - BREAKING: Renames `indicatorAnimationType` to `animationType`
+- BREAKING: Adds default `textMargin` to `AnimatedToggleSwitch.dual`
 - Introduces `CustomAnimatedToggleSwitch` for maximum customizability
 - Adds animation when dragging the switch
 - Adds `minTouchTargetSize`, `dragStartDuration` and `dragStartCurve` to `AnimatedToggleSwitch`
