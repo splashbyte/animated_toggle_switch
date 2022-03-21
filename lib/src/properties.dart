@@ -60,10 +60,10 @@ class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
           index: index,
         );
 
-  AnimatedToggleProperties<T> copyWith({T? value}) {
+  AnimatedToggleProperties<T> copyWith({T? value, int? index}) {
     return AnimatedToggleProperties(
         value: value ?? this.value,
-        index: index,
+        index: index ?? this.index,
         animationValue: animationValue);
   }
 }

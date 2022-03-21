@@ -74,7 +74,7 @@ AnimatedToggleSwitch<int>.size(
   iconOpacity: 0.2,
   indicatorSize: Size.fromWidth(100),
   indicatorType: IndicatorType.rectangle,
-  iconBuilder: (context, local, global) {
+  customIconBuilder: (context, local, global) {
     IconData data = Icons.access_time_rounded;
     if (local.value.isEven) data = Icons.cancel;
     return Container(
