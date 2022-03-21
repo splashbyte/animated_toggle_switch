@@ -1,26 +1,14 @@
-## 0.3.0-beta.3 (2022-03-20)
+## 0.3.0 (2022-03-21)
 
-- BREAKING: Changes parameters of `SimpleRollingIconBuilder`
-
-## 0.3.0-beta.2 (2022-03-20)
-
-- Minor fix
-
-## 0.3.0-beta.1 (2022-03-20)
-
-- BREAKING: Most constructors of `AnimatedToggleSwitch` have a standard and a more customizable parameter for each of their builders now
-- BREAKING: Renames `animationType` back to `indicatorAnimationType`
-
-## 0.3.0-beta.0 (2022-03-19)
-
-- BREAKING: Changes parameters of all builders for more customizability and flexibility
-- BREAKING: Renames `AnimatedToggleSwitch.byHeight` to `AnimatedToggleSwitch.customByHeight`
-- BREAKING: Renames `current` to `value`
-- BREAKING: Renames `indicatorAnimationType` to `animationType`
-- BREAKING: Adds default `textMargin` to `AnimatedToggleSwitch.dual`
 - Introduces `CustomAnimatedToggleSwitch` for maximum customizability
+- Most constructors of `AnimatedToggleSwitch` have a standard and a more customizable parameter for their builders now
+- Full support of `TextDirection.rtl`
 - Adds animation when dragging the switch
-- Adds `minTouchTargetSize`, `dragStartDuration` and `dragStartCurve` to `AnimatedToggleSwitch`
+- Adds `minTouchTargetSize`, `dragStartDuration`, `dragStartCurve` and `textDirection` to `AnimatedToggleSwitch`
+- BREAKING: `TextDirection` is taken from `BuildContext` by default now!!!
+- BREAKING: Changes parameters and names of some builders
+- BREAKING: Renames `AnimatedToggleSwitch.byHeight` to `AnimatedToggleSwitch.customByHeight`
+- BREAKING: Adds default `textMargin` to `AnimatedToggleSwitch.dual`
 - Fixes #9
 
 ## 0.2.3 (2022-02-28)

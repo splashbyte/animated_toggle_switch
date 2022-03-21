@@ -11,7 +11,8 @@
 
 ### If you like this package, please leave a like there on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
 
-Simple and animated switch with multiple choices. It's an easy way if you don't want to use something like a DropDownMenuButton.  
+Simple and animated switch with multiple choices. It's an easy way if you don't want to use something like a `DropDownMenuButton`.  
+It supports `LTR` and `RTL`.  
 For a slider with a similar look, you can check out [action_slider](https://pub.dev/packages/action_slider).
 
 ### Example Usage
@@ -73,13 +74,10 @@ AnimatedToggleSwitch<int>.size(
   values: [0, 1, 2, 3],
   iconOpacity: 0.2,
   indicatorSize: Size.fromWidth(100),
-  indicatorType: IndicatorType.rectangle,
-  customIconBuilder: (context, local, global) {
+  customIconBuilder: (value, size) {
     IconData data = Icons.access_time_rounded;
-    if (local.value.isEven) data = Icons.cancel;
-    return Container(
-      child: Icon(data, size: min(local.iconSize.width, local.iconSize.height),
-    ));
+    if (value.isEven) data = Icons.cancel;
+    return Icon(data, size: min(size.width, size.height));
   },
   borderColor: value.isEven ? Colors.blue : Colors.red,
   colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
@@ -112,7 +110,7 @@ AnimatedToggleSwitch<int>.size(
   },
   selectedIconSize: Size.square(20),
   iconSize: Size.square(20),
-  iconBuilder: sizeIconBuilder,
+  iconBuilder: iconBuilder,
   colorBuilder: (i) => i.isEven ? Colors.green : Colors.tealAccent,
   onChanged: (i) => setState(() => value = i),
   borderRadius: BorderRadius.circular(8.0),
