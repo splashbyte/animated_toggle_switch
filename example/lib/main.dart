@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<int>.rolling(
-                value: value,
+                current: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
-                value: value,
+                current: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
-                value: value,
+                current: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<bool>.dual(
-                value: positive,
+                current: positive,
                 first: false,
                 second: true,
                 dif: 40.0,
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
-                value: value,
+                current: value,
                 values: [0, 1, 2, 3],
                 iconOpacity: 0.2,
                 indicatorSize: Size.fromWidth(100),
@@ -143,11 +143,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconBuilder: (value, size) {
                   IconData data = Icons.access_time_rounded;
                   if (value.isEven) data = Icons.cancel;
-                  return Container(
-                      child: Icon(
+                  return Icon(
                     data,
                     size: min(size.width, size.height),
-                  ));
+                  );
                 },
                 borderWidth: 0.0,
                 borderColor: Colors.transparent,
@@ -157,12 +156,13 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'AnimatedToggleSwitch.size with a more custom icon',
+                  'AnimatedToggleSwitch.size with a more custom icon and a custom TextDirection:',
                   textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
-                value: value,
+                textDirection: TextDirection.rtl,
+                current: value,
                 values: [0, 1, 2, 3],
                 iconOpacity: 0.2,
                 indicatorSize: Size.fromWidth(100),
@@ -187,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
-                value: value,
+                current: value,
                 values: [0, 1, 2, 3],
                 iconOpacity: 1.0,
                 indicatorSize: Size.fromWidth(25),
@@ -225,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
-                value: value,
+                current: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
@@ -236,7 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
-                value: value,
+                current: value,
                 values: [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,

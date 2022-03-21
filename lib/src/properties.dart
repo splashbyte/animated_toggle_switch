@@ -1,16 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
 class GlobalToggleProperties<T> {
   final double position;
-  final T value;
-  final T? previousValue;
+  final T current;
+  final T? previous;
   final double previousPosition;
+  final TextDirection textDirection;
 
   const GlobalToggleProperties({
     required this.position,
-    required this.value,
-    required this.previousValue,
+    required this.current,
+    required this.previous,
     required this.previousPosition,
+    required this.textDirection,
   });
 }
 
@@ -25,11 +28,13 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required T value,
     required T? previousValue,
     required double previousPosition,
+    required TextDirection textDirection,
   }) : super(
           position: position,
-          value: value,
-          previousValue: previousValue,
+          current: value,
+          previous: previousValue,
           previousPosition: previousPosition,
+          textDirection: textDirection,
         );
 }
 
