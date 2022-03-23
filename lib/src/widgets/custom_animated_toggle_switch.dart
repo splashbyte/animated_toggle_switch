@@ -357,7 +357,8 @@ class _CustomAnimatedToggleSwitchState<T>
                 },
               ),
             );
-            return widget.wrapperBuilder?.call(context, properties, child) ?? child;
+            return widget.wrapperBuilder?.call(context, properties, child) ??
+                child;
           }),
     );
   }

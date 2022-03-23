@@ -1,8 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:animated_toggle_switch/src/properties.dart';
 import 'package:flutter/material.dart';
-
-import 'custom_animated_toggle_switch.dart';
 
 typedef SizeIconBuilder<T> = Widget Function(BuildContext context,
     SizeProperties<T> local, DetailedGlobalToggleProperties<T> global);
