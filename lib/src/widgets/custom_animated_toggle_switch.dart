@@ -42,7 +42,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final List<T> values;
 
   /// The IconBuilder for all icons with the specified size.
-  final CustomWrapperBuilder<T> wrapperBuilder;
+  final CustomWrapperBuilder<T>? wrapperBuilder;
 
   /// The IconBuilder for all icons with the specified size.
   final CustomIconBuilder<T> iconBuilder;
@@ -113,7 +113,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.dif = 0.0,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    required this.wrapperBuilder,
+    this.wrapperBuilder,
     this.foregroundIndicatorBuilder,
     this.backgroundIndicatorBuilder,
     this.height = 50.0,
@@ -357,7 +357,7 @@ class _CustomAnimatedToggleSwitchState<T>
                 },
               ),
             );
-            return widget.wrapperBuilder(context, properties, child);
+            return widget.wrapperBuilder?.call(context, properties, child) ?? child;
           }),
     );
   }

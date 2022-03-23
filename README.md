@@ -68,7 +68,7 @@ CustomAnimatedToggleSwitch<int>(
 )
 ```
 
-### Custom with size animation
+### `AnimatedToggleSwitch.size` with some settings
 
 ```dart
 AnimatedToggleSwitch<int>.size(
@@ -76,7 +76,7 @@ AnimatedToggleSwitch<int>.size(
   values: [0, 1, 2, 3],
   iconOpacity: 0.2,
   indicatorSize: Size.fromWidth(100),
-  customIconBuilder: (value, size) {
+  iconBuilder: (value, size) {
     IconData data = Icons.access_time_rounded;
     if (value.isEven) data = Icons.cancel;
     return Icon(data, size: min(size.width, size.height));

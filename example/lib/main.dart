@@ -129,6 +129,13 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
+                  'AnimatedToggleSwitch.dual:',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
                   'AnimatedToggleSwitch.size with some custom settings:',
                   textAlign: TextAlign.center,
                 ),
