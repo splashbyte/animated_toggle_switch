@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
               ),
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
                 borderColor: Colors.transparent,
@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
@@ -116,7 +116,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: positive,
                 first: false,
                 second: true,
-                dif: 40.0,
+                dif: 50.0,
+                borderColor: Colors.transparent,
+                borderWidth: 5.0,
+                height: 55,
+                animationOffset: const Offset(20.0, 0),
+                clipAnimation: true,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(0, 1.5),
+                  ),
+                ],
                 onChanged: (b) => setState(() => positive = b),
                 colorBuilder: (b) => b ? Colors.red : Colors.green,
                 iconBuilder: (value) => value
@@ -129,9 +142,63 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'AnimatedToggleSwitch.dual:',
+                  'You can make any other switch with CustomAnimatedToggleSwitch:',
                   textAlign: TextAlign.center,
                 ),
+              ),
+              CustomAnimatedToggleSwitch<bool>(
+                current: positive,
+                values: [false, true],
+                dif: 0.0,
+                indicatorSize: Size.square(30.0),
+                animationDuration: const Duration(milliseconds: 200),
+                animationCurve: Curves.linear,
+                onChanged: (b) => setState(() => positive = b),
+                iconBuilder: (context, local, global) {
+                  return const SizedBox();
+                },
+                defaultCursor: SystemMouseCursors.click,
+                onTap: () => setState(() => positive = !positive),
+                iconsTappable: false,
+                wrapperBuilder: (context, global, child) {
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                          left: 10.0,
+                          right: 10.0,
+                          height: 20.0,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Color.lerp(Colors.black26,
+                                  theme.backgroundColor, global.position),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(50.0)),
+                            ),
+                          )),
+                      child,
+                    ],
+                  );
+                },
+                foregroundIndicatorBuilder: (context, global) {
+                  return SizedBox.fromSize(
+                    size: global.indicatorSize,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Color.lerp(
+                            Colors.white, theme.primaryColor, global.position),
+                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Colors.black38,
+                              spreadRadius: 0.05,
+                              blurRadius: 1.1,
+                              offset: Offset(0.0, 0.8))
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -142,9 +209,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.size(
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 iconOpacity: 0.2,
-                indicatorSize: Size.fromWidth(100),
+                indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
                 indicatorAnimationType: AnimationType.onHover,
                 iconBuilder: (value, size) {
@@ -163,16 +230,16 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'AnimatedToggleSwitch.size with a more custom icon and a custom TextDirection:',
+                  'AnimatedToggleSwitch.size with a more custom icon and TextDirection.rtl:',
                   textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
                 textDirection: TextDirection.rtl,
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 iconOpacity: 0.2,
-                indicatorSize: Size.fromWidth(100),
+                indicatorSize: const Size.fromWidth(100),
                 customIconBuilder: (context, local, global) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -195,9 +262,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.size(
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 iconOpacity: 1.0,
-                indicatorSize: Size.fromWidth(25),
+                indicatorSize: const Size.fromWidth(25),
                 foregroundIndicatorIconBuilder: (context, global) {
                   double pos = global.position;
                   double transitionValue = pos - pos.floorToDouble();
@@ -214,13 +281,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                 iconBuilder(pos.ceil(), global.indicatorSize))
                       ]));
                 },
-                selectedIconSize: Size.square(20),
-                iconSize: Size.square(20),
+                selectedIconSize: const Size.square(20),
+                iconSize: const Size.square(20),
                 iconBuilder: iconBuilder,
                 colorBuilder: (i) =>
                     i.isEven ? Colors.green : Colors.tealAccent,
                 onChanged: (i) => setState(() => value = i),
                 borderRadius: BorderRadius.circular(8.0),
+                indicatorBorderRadius: BorderRadius.zero,
                 borderColor: Colors.red,
               ),
               Padding(
@@ -233,10 +301,10 @@ class _MyHomePageState extends State<MyHomePage> {
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
-                indicatorSize: Size.fromWidth(2),
+                indicatorSize: const Size.fromWidth(2),
               ),
               SizedBox(
                 height: 16.0,
@@ -244,11 +312,11 @@ class _MyHomePageState extends State<MyHomePage> {
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
                 current: value,
-                values: [0, 1, 2, 3],
+                values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
                 borderRadius: BorderRadius.circular(75.0),
-                indicatorSize: Size(1.5, 1.5),
+                indicatorSize: const Size.square(1.5),
               ),
               SizedBox(height: MediaQuery.of(context).padding.bottom + 16.0),
             ],
