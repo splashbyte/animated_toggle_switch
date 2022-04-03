@@ -1,3 +1,4 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
@@ -7,6 +8,7 @@ class GlobalToggleProperties<T> {
   final T? previous;
   final double previousPosition;
   final TextDirection textDirection;
+  final ToggleMode mode;
 
   const GlobalToggleProperties({
     required this.position,
@@ -14,6 +16,7 @@ class GlobalToggleProperties<T> {
     required this.previous,
     required this.previousPosition,
     required this.textDirection,
+    required this.mode,
   });
 }
 
@@ -29,12 +32,14 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required T? previousValue,
     required double previousPosition,
     required TextDirection textDirection,
+    required ToggleMode mode,
   }) : super(
           position: position,
           current: value,
           previous: previousValue,
           previousPosition: previousPosition,
           textDirection: textDirection,
+          mode: mode,
         );
 }
 

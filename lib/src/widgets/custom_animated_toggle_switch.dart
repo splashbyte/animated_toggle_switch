@@ -1,8 +1,7 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:animated_toggle_switch/src/utils.dart';
 import 'package:animated_toggle_switch/src/widgets/drag_region.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 /// Custom builder for icons in the switch.
 typedef CustomIconBuilder<T> = Widget Function(BuildContext context,
@@ -77,6 +76,9 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// Defaults to [IconArrangement.row] because it fits the most use cases.
   final IconArrangement iconArrangement;
 
+  /// The [FittingMode] of the switch.
+  ///
+  /// Change this only if you don't want the switch to adjust when the constraints are too small.
   final FittingMode fittingMode;
 
   /// The height of the whole switch including wrapper.
@@ -98,8 +100,11 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
 
   /// The direction in which the icons are arranged.
   ///
-  /// If null, the [TextDirection] is taken from the [BuildContext].
+  /// If set to null, the [TextDirection] is taken from the [BuildContext].
   final TextDirection? textDirection;
+
+  /// [MouseCursor] to show when not hovering an indicator.
+  final MouseCursor? defaultCursor;
 
   const CustomAnimatedToggleSwitch({
     Key? key,
@@ -124,6 +129,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.dragStartDuration = const Duration(milliseconds: 200),
     this.dragStartCurve = Curves.easeInOutCirc,
     this.textDirection,
+    this.defaultCursor,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         super(key: key);
@@ -139,7 +145,6 @@ class _CustomAnimatedToggleSwitchState<T>
   late final AnimationController _controller;
   late _AnimationInfo _animationInfo;
   late CurvedAnimation _animation;
-  Offset? _lastTapDownOffset;
 
   @override
   void initState() {
@@ -149,14 +154,9 @@ class _CustomAnimatedToggleSwitchState<T>
         _AnimationInfo(widget.values.indexOf(widget.current).toDouble());
     _controller =
         AnimationController(vsync: this, duration: widget.animationDuration)
-          ..addListener(() {
-            SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-              setState(() {});
-            });
-          })
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed &&
-                _animationInfo.moveMode != MoveMode.dragged) {
+                _animationInfo.toggleMode != ToggleMode.dragged) {
               _animationInfo = _animationInfo.ended();
             }
           });
@@ -174,10 +174,13 @@ class _CustomAnimatedToggleSwitchState<T>
   @override
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.current != widget.current) {
-      int index = widget.values.indexOf(widget.current);
-      _animateTo(index);
-    }
+    _checkValuePosition();
+  }
+
+  void _checkValuePosition() {
+    if (_animationInfo.toggleMode == ToggleMode.dragged) return;
+    int index = widget.values.indexOf(widget.current);
+    if (index != _animationInfo.end) _animateTo(index);
   }
 
   @override
@@ -201,6 +204,7 @@ class _CustomAnimatedToggleSwitchState<T>
                   : null,
               previousPosition: _animationInfo.start,
               textDirection: textDirection,
+              mode: _animationInfo.toggleMode,
             );
             Widget child = Padding(
               padding: widget.padding,
@@ -260,6 +264,7 @@ class _CustomAnimatedToggleSwitchState<T>
                             : null,
                     previousPosition: _animationInfo.start,
                     textDirection: textDirection,
+                    mode: _animationInfo.toggleMode,
                   );
 
                   double doubleFromPosition(double x) {
@@ -283,28 +288,23 @@ class _CustomAnimatedToggleSwitchState<T>
                   List<Widget> stack = <Widget>[
                     if (widget.backgroundIndicatorBuilder != null)
                       _Indicator(
-                        textDirection: _textDirectionOf(context),
+                        textDirection: textDirection,
                         height: height,
                         indicatorSize: indicatorSize,
                         dragDif: dragDif,
-                        animationInfo: _animationInfo,
                         position: position,
                         child: widget.backgroundIndicatorBuilder!(
                             context, properties),
                       ),
-                    Stack(
-                        clipBehavior: Clip.none,
-                        children:
-                            widget.iconArrangement == IconArrangement.overlap
-                                ? _buildBackgroundStack(context, properties)
-                                : _buildBackgroundRow(context, properties)),
+                    ...(widget.iconArrangement == IconArrangement.overlap
+                        ? _buildBackgroundStack(context, properties)
+                        : _buildBackgroundRow(context, properties)),
                     if (widget.foregroundIndicatorBuilder != null)
                       _Indicator(
-                        textDirection: _textDirectionOf(context),
+                        textDirection: textDirection,
                         height: height,
                         indicatorSize: indicatorSize,
                         dragDif: dragDif,
-                        animationInfo: _animationInfo,
                         position: position,
                         child: widget.foregroundIndicatorBuilder!(
                             context, properties),
@@ -318,22 +318,25 @@ class _CustomAnimatedToggleSwitchState<T>
                     // to make sure that GestureDetector and MouseRegion match.
                     // TODO: one widget for DragRegion and GestureDetector to avoid redundancy
                     child: DragRegion(
-                      dragging: _animationInfo.moveMode == MoveMode.dragged,
-                      hoverCheck: (offset) => isHoveringIndicator(offset),
+                      dragging: _animationInfo.toggleMode == ToggleMode.dragged,
+                      hoverCheck: isHoveringIndicator,
+                      defaultCursor: widget.defaultCursor ??
+                          (widget.iconsTappable
+                              ? SystemMouseCursors.click
+                              : MouseCursor.defer),
                       child: GestureDetector(
+                        dragStartBehavior: DragStartBehavior.down,
                         onTapUp: (details) {
                           widget.onTap?.call();
+                          if (!widget.iconsTappable) return;
                           T newValue =
                               valueFromPosition(details.localPosition.dx);
-                          if (newValue == widget.current ||
-                              !widget.iconsTappable) return;
+                          if (newValue == widget.current) return;
                           widget.onChanged?.call(newValue);
                         },
-                        onTapDown: (details) =>
-                            _lastTapDownOffset = details.localPosition,
                         onHorizontalDragStart: (details) {
-                          if (_lastTapDownOffset == null ||
-                              !isHoveringIndicator(_lastTapDownOffset!)) return;
+                          if (!isHoveringIndicator(details.localPosition))
+                            return;
                           _onDragged(
                               doubleFromPosition(details.localPosition.dx),
                               positionValue);
@@ -348,7 +351,7 @@ class _CustomAnimatedToggleSwitchState<T>
                         // DecoratedBox for gesture detection
                         child: DecoratedBox(
                             position: DecorationPosition.background,
-                            decoration: BoxDecoration(),
+                            decoration: const BoxDecoration(),
                             child: Stack(
                                 clipBehavior: Clip.none, children: stack)),
                       ),
@@ -405,12 +408,13 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _animateTo(int index, {double? current}) {
     if (index.toDouble() != _animationInfo.end &&
-        _animationInfo.moveMode != MoveMode.dragged) {
+        _animationInfo.toggleMode != ToggleMode.dragged) {
       _animationInfo = _animationInfo.toEnd(index.toDouble(),
           current: current ?? _animationInfo.valueAt(_animation.value));
       _controller.duration = widget.animationDuration;
       _animation.curve = widget.animationCurve;
       _controller.forward(from: 0.0);
+      _animateTo(index);
     }
   }
 
@@ -422,19 +426,19 @@ class _CustomAnimatedToggleSwitchState<T>
   }
 
   void _onDragUpdate(double indexPosition) {
-    if (_animationInfo.moveMode != MoveMode.dragged) return;
+    if (_animationInfo.toggleMode != ToggleMode.dragged) return;
     setState(() {
       _animationInfo = _animationInfo.dragged(indexPosition);
     });
   }
 
   void _onDragEnd() {
-    if (_animationInfo.moveMode != MoveMode.dragged) return;
+    if (_animationInfo.toggleMode != ToggleMode.dragged) return;
     int index = _animationInfo.end.round();
     T newValue = widget.values[index];
     if (widget.current != newValue) widget.onChanged?.call(newValue);
     _animationInfo = _animationInfo.none(current: _animationInfo.end);
-    _animateTo(index, current: _animationInfo.end);
+    _checkValuePosition();
   }
 
   TextDirection _textDirectionOf(BuildContext context) =>
@@ -448,7 +452,6 @@ class _Indicator extends StatelessWidget {
   final Size indicatorSize;
   final double position;
   final double dragDif;
-  final _AnimationInfo animationInfo;
   final Widget child;
   final TextDirection textDirection;
 
@@ -458,7 +461,6 @@ class _Indicator extends StatelessWidget {
     required this.indicatorSize,
     required this.position,
     required this.dragDif,
-    required this.animationInfo,
     required this.child,
     required this.textDirection,
   }) : super(key: key);
@@ -484,22 +486,22 @@ class _Indicator extends StatelessWidget {
 class _AnimationInfo {
   final double start;
   final double end;
-  final MoveMode moveMode;
+  final ToggleMode toggleMode;
 
-  const _AnimationInfo(this.start, {this.moveMode = MoveMode.none})
+  const _AnimationInfo(this.start, {this.toggleMode = ToggleMode.none})
       : end = start;
 
   const _AnimationInfo._internal(this.start, this.end,
-      {this.moveMode = MoveMode.none});
+      {this.toggleMode = ToggleMode.none});
 
   const _AnimationInfo.animating(this.start, this.end)
-      : moveMode = MoveMode.animating;
+      : toggleMode = ToggleMode.animating;
 
   _AnimationInfo toEnd(double end, {double? current}) =>
       _AnimationInfo.animating(current ?? start, end);
 
   _AnimationInfo none({double? current}) =>
-      _AnimationInfo(current ?? start, moveMode: MoveMode.none);
+      _AnimationInfo(current ?? start, toggleMode: ToggleMode.none);
 
   _AnimationInfo ended() => _AnimationInfo(end);
 
@@ -507,7 +509,7 @@ class _AnimationInfo {
       _AnimationInfo._internal(
         pos ?? start,
         current,
-        moveMode: MoveMode.dragged,
+        toggleMode: ToggleMode.dragged,
       );
 
   double valueAt(num position) => start + (end - start) * position;

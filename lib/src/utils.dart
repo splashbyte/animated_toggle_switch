@@ -1,1 +1,1 @@
-enum MoveMode { animating, dragged, none }
+enum ToggleMode { animating, dragged, none }
