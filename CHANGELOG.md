@@ -3,8 +3,7 @@
 - Minor fixes and performance improvements
 - Adds `indicatorBorderRadius` to `AnimatedToggleSwitch`
 - Adds `animationOffset`, `clipAnimation` and `opacityAnimation` to `AnimatedToggleSwitch.dual`
-- BREAKING: Sets default values of `animationOffset`, `clipAnimation` and `opacityAnimation`
-  in `AnimatedToggleSwitch.dual`
+- BREAKING: Sets default values of `animationOffset`, `clipAnimation` and `opacityAnimation` in `AnimatedToggleSwitch.dual`
 - BREAKING: Renames `foregroundBorder` to `indicatorBorder`
 
 ## 0.3.1 (2022-03-23)
