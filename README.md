@@ -21,14 +21,14 @@ For a slider with a similar look, you can check out [action_slider](https://pub.
 ![usage](https://user-images.githubusercontent.com/43761463/114942384-c1200d00-9e44-11eb-9904-3cb1d7296da4.gif)
 
 ### Examples
+`AnimatedToggleSwitch.dual()`  
+![animated_toggle_switch_example_dual](https://user-images.githubusercontent.com/43761463/161432631-e6dd3d16-7b64-410b-a9fa-c956d3442598.gif)  
 Standard `AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/161432579-9fe81c57-6463-45c3-a48f-75db666a3a22.gif)  
 Modified `AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/161432589-d76f61f6-cb97-42e2-b1fd-8c5203a965fa.gif)  
 ![animated_toggle_switch_example_3](https://user-images.githubusercontent.com/43761463/161432610-e8e4014a-34f1-4cbc-876b-2ab6ef856484.gif)   
-`AnimatedToggleSwitch.dual()`  
-![animated_toggle_switch_example_dual](https://user-images.githubusercontent.com/43761463/161432631-e6dd3d16-7b64-410b-a9fa-c956d3442598.gif)  
-`You can build any other switch with CustomAnimatedToggleSwitch()`  
+You can build any other switch with `CustomAnimatedToggleSwitch()`  
 ![animated_toggle_switch_example_custom_1](https://user-images.githubusercontent.com/43761463/161433015-c3ec634a-38da-463d-a06e-4ae0b29f77ed.gif)  
 `AnimatedToggleSwitch.size()`  
 ![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/156060925-ea3cfcf8-2a48-441f-89c7-c9d4b2b1e2e0.gif)  
