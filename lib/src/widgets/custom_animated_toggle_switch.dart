@@ -434,7 +434,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _onDragEnd() {
     if (_animationInfo.toggleMode != ToggleMode.dragged) return;
-    int index = _animationInfo.end.round();
+    int index = _animationInfo.end.round().clamp(0, widget.values.length-1);
     T newValue = widget.values[index];
     if (widget.current != newValue) widget.onChanged?.call(newValue);
     _animationInfo = _animationInfo.none(current: _animationInfo.end);
