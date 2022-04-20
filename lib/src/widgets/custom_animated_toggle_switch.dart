@@ -232,6 +232,10 @@ class _CustomAnimatedToggleSwitchState<T>
                             ? width / widget.values.length
                             : factor * indicatorSize.width,
                         indicatorSize.height);
+                  } else if (constraints.minWidth > width) {
+                    dif += (constraints.minWidth - width) /
+                        (widget.values.length - 1);
+                    width = constraints.minWidth;
                   }
 
                   double dragDif =
@@ -470,14 +474,12 @@ class _Indicator extends StatelessWidget {
     return Positioned.directional(
       textDirection: textDirection,
       top: (height - indicatorSize.height) / 2,
-      start: position - (indicatorSize.width + dragDif) / 2,
-      width: indicatorSize.width + dragDif,
+      start: position - indicatorSize.width / 2,
+      width: indicatorSize.width,
       height: indicatorSize.height,
-      child: Center(
-        child: SizedBox(
-          width: indicatorSize.width,
-          child: child,
-        ),
+      child: SizedBox(
+        width: indicatorSize.width,
+        child: child,
       ),
     );
   }

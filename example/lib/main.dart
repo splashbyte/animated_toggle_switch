@@ -47,7 +47,39 @@ class _MyHomePageState extends State<MyHomePage> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'AnimatedToggleSwitch.dual:',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              AnimatedToggleSwitch<bool>.dual(
+                current: positive,
+                first: false,
+                second: true,
+                dif: 50.0,
+                borderColor: Colors.transparent,
+                borderWidth: 5.0,
+                height: 55,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(0, 1.5),
+                  ),
+                ],
+                onChanged: (b) => setState(() => positive = b),
+                colorBuilder: (b) => b ? Colors.red : Colors.green,
+                iconBuilder: (value) => value
+                    ? Icon(Icons.coronavirus_rounded)
+                    : Icon(Icons.tag_faces_rounded),
+                textBuilder: (value) => value
+                    ? Center(child: Text('Oh no...'))
+                    : Center(child: Text('Nice :)')),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -104,40 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 55,
                 dif: 20.0,
                 borderColor: Colors.transparent,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'AnimatedToggleSwitch.dual:',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              AnimatedToggleSwitch<bool>.dual(
-                current: positive,
-                first: false,
-                second: true,
-                dif: 50.0,
-                borderColor: Colors.transparent,
-                borderWidth: 5.0,
-                height: 55,
-                animationOffset: const Offset(20.0, 0),
-                clipAnimation: true,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  ),
-                ],
-                onChanged: (b) => setState(() => positive = b),
-                colorBuilder: (b) => b ? Colors.red : Colors.green,
-                iconBuilder: (value) => value
-                    ? Icon(Icons.coronavirus_rounded)
-                    : Icon(Icons.tag_faces_rounded),
-                textBuilder: (value) => value
-                    ? Center(child: Text('Oh no...'))
-                    : Center(child: Text('Nice :)')),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
