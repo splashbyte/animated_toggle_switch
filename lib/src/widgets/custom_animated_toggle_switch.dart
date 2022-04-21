@@ -211,6 +211,11 @@ class _CustomAnimatedToggleSwitchState<T>
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   double height = constraints.maxHeight;
+                  assert(
+                      constraints.maxWidth.isFinite ||
+                          widget.indicatorSize.width.isFinite,
+                      "With unbound width constraints "
+                      "the width of the indicator can't be infinite");
                   Size indicatorSize = Size(
                       widget.indicatorSize.width.isInfinite
                           ? (constraints.maxWidth -
@@ -227,6 +232,7 @@ class _CustomAnimatedToggleSwitchState<T>
                       width > constraints.maxWidth) {
                     double factor = constraints.maxWidth / width;
                     dif *= factor;
+                    width = constraints.maxWidth;
                     indicatorSize = Size(
                         indicatorSize.width.isInfinite
                             ? width / widget.values.length

@@ -1,7 +1,11 @@
+## 0.5.1 (2022-04-21)
+
+- Fixes #20
+
 ## 0.5.0 (2022-04-20)
 
 - Minor performance improvement
-- Fixes problems with tight constraints (#20)
+- Fixes problems with tight constraints
 - BREAKING: Changes default values of `animationOffset` and `clipAnimation` in `AnimatedToggleSwitch.dual`
 
 ## 0.4.0 (2022-04-03)
