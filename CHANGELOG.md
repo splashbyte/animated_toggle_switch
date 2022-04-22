@@ -1,3 +1,10 @@
+## 0.5.2 (2022-04-22)
+- Minor performance improvement
+- Minor fixes
+- Improves code documentation
+- Adds `dragCursor` and `draggingCursor` to `CustomAnimatedToggleSwitch`
+- Adds `iconsTappable`, `defaultCursor`, `dragCursor` and `draggingCursor` to `AnimatedToggleSwitch`
+
 ## 0.5.1 (2022-04-21)
 
 - Fixes #20
