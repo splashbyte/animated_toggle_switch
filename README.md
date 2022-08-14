@@ -1,11 +1,11 @@
 # AnimatedToggleSwitch
 
-<a href="https://pub.dev/packages/animated_toggle_switch"><img src="https://img.shields.io/pub/v/animated_toggle_switch.svg?style=flat?logo=dart" alt="pub.dev"></a>
-<a href="https://github.com/SplashByte/animated_toggle_switch"><img src="https://img.shields.io/static/v1?label=platform&message=flutter&color=1ebbfd" alt="github"></a>
-[![likes](https://badges.bar/animated_toggle_switch/likes)](https://pub.dev/packages/animated_toggle_switch/score)
-[![popularity](https://badges.bar/animated_toggle_switch/popularity)](https://pub.dev/packages/animated_toggle_switch/score)
-[![pub points](https://badges.bar/animated_toggle_switch/pub%20points)](https://pub.dev/packages/animated_toggle_switch/score)
-<a href="https://github.com/SplashByte/animated_toggle_switch/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SplashByte/animated_toggle_switch.svg" alt="license"></a>
+[![pub.dev](https://img.shields.io/pub/v/animated_toggle_switch.svg?style=flat?logo=dart)](https://pub.dev/packages/animated_toggle_switch)
+[![github](https://img.shields.io/static/v1?label=platform&message=flutter&color=1ebbfd)](https://github.com/SplashByte/animated_toggle_switch)
+[![likes](https://img.shields.io/pub/likes/animated_toggle_switch)](https://pub.dev/packages/animated_toggle_switch/score)
+[![popularity](https://img.shields.io/pub/popularity/animated_toggle_switch)](https://pub.dev/packages/animated_toggle_switch/score)
+[![pub points](https://img.shields.io/pub/points/animated_toggle_switch)](https://pub.dev/packages/animated_toggle_switch/score)
+[![license](https://img.shields.io/github/license/SplashByte/animated_toggle_switch.svg)](https://github.com/SplashByte/animated_toggle_switch/blob/main/LICENSE)
 
 [![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/splashbyte)
 
