@@ -79,6 +79,9 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Color of the background.
   final Color? innerColor;
 
+  // Color builder for background
+  final ColorBuilder<T>? innerColorBuilder;
+
   /// Opacity for the icons.
   ///
   /// Please set [iconOpacity] and [selectedIconOpacity] to 1.0 for deactivating the AnimatedOpacity.
@@ -169,6 +172,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
+    this.innerColorBuilder,
     this.indicatorColor,
     this.colorBuilder,
     this.iconAnimationCurve = Curves.easeOutBack,
@@ -213,6 +217,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
+    this.innerColorBuilder,
     this.indicatorColor,
     this.colorBuilder,
     iconSize = const Size(23.0, 23.0),
@@ -263,6 +268,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
+    this.innerColorBuilder,
     this.indicatorColor,
     this.colorBuilder,
     iconSize = const Size(0.5, 0.5),
@@ -343,6 +349,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
+    this.innerColorBuilder,
     this.indicatorColor,
     this.colorBuilder,
     this.iconAnimationCurve = Curves.easeOutBack,
@@ -396,6 +403,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
+    this.innerColorBuilder,
     this.indicatorColor,
     this.colorBuilder,
     double iconRadius = 0.25,
@@ -458,6 +466,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
+    this.innerColorBuilder,
     this.indicatorColor,
     this.colorBuilder,
     double iconRadius = 11.5,
@@ -589,6 +598,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderWidth = 2,
     this.borderColor,
     this.innerColor,
+    this.innerColorBuilder,
     this.indicatorColor,
     this.colorBuilder,
     double iconRadius = 16.1,
@@ -734,31 +744,37 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         iconBuilder: (context, local, global) => _animatedOpacityIcon(
             _animatedSizeIcon(context, local, global), local.value == current),
         padding: EdgeInsets.all(borderWidth),
-        wrapperBuilder: (context, properties, child) =>
-            TweenAnimationBuilder<Color?>(
-              duration: animationDuration,
-              tween: ColorTween(
-                begin: borderColorBuilder?.call(current) ??
-                    borderColor ??
-                    theme.colorScheme.secondary,
-                end: borderColorBuilder?.call(current) ??
-                    borderColor ??
-                    theme.colorScheme.secondary,
+        wrapperBuilder: (context, properties, child) {
+          double pos = properties.position;
+          Color? innerColorCalculated = Color.lerp(
+              innerColorBuilder?.call(values[pos.floor()]) ?? innerColor,
+              innerColorBuilder?.call(values[pos.ceil()]) ?? innerColor,
+              pos - pos.floor());
+          return TweenAnimationBuilder<Color?>(
+            duration: animationDuration,
+            tween: ColorTween(
+              begin: borderColorBuilder?.call(current) ??
+                  borderColor ??
+                  theme.colorScheme.secondary,
+              end: borderColorBuilder?.call(current) ??
+                  borderColor ??
+                  theme.colorScheme.secondary,
+            ),
+            builder: (c, color, _) => Container(
+              clipBehavior: Clip.hardEdge,
+              foregroundDecoration: BoxDecoration(
+                border: Border.all(color: color!, width: borderWidth),
+                borderRadius: borderRadius,
               ),
-              builder: (c, color, _) => Container(
-                clipBehavior: Clip.hardEdge,
-                foregroundDecoration: BoxDecoration(
-                  border: Border.all(color: color!, width: borderWidth),
-                  borderRadius: borderRadius,
-                ),
-                decoration: BoxDecoration(
-                  color: innerColor ?? theme.scaffoldBackgroundColor,
-                  borderRadius: borderRadius,
-                  boxShadow: boxShadow,
-                ),
-                child: child,
+              decoration: BoxDecoration(
+                color: innerColorCalculated ?? theme.scaffoldBackgroundColor,
+                borderRadius: borderRadius,
+                boxShadow: boxShadow,
               ),
-            ));
+              child: child,
+            ),
+          );
+        });
   }
 
   Widget _indicatorBuilder(

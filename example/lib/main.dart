@@ -132,7 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
                 indicatorColor: Colors.purpleAccent,
-                innerColor: Colors.amber,
+                //innerColor: Colors.amber,
+                innerColorBuilder: colorBuilder,
                 height: 55,
                 dif: 20.0,
                 borderColor: Colors.transparent,
@@ -322,6 +323,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
+  }
+
+  Color? colorBuilder(int value) {
+    return [
+      Colors.deepOrange,
+      Colors.deepPurple,
+      Colors.red,
+      Colors.blue
+    ][value];
   }
 
   Widget iconBuilder(int value, Size iconSize) {
