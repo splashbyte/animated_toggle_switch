@@ -504,55 +504,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         this._iconArrangement = IconArrangement.row,
         super(key: key);
 
-  static CustomIndicatorBuilder<T> _movingForegroundIndicatorIconBuilder<T>(
-      List<T> values,
-      SimpleRollingIconBuilder<T>? iconBuilder,
-      RollingIconBuilder<T>? customIconBuilder,
-      Size iconSize) {
-    assert(iconBuilder == null || customIconBuilder == null);
-    if (customIconBuilder == null && iconBuilder != null)
-      customIconBuilder =
-          (c, l, g) => iconBuilder(l.value, l.iconSize, l.foreground);
-    return (context, global) {
-      if (customIconBuilder == null) return SizedBox();
-      double distance = global.dif + global.indicatorSize.width;
-      double angleDistance = distance /
-          iconSize.longestSide *
-          2 *
-          (global.textDirection == TextDirection.rtl ? -1.0 : 1.0);
-      final pos = global.position;
-      int first = pos.floor();
-      double transitionValue = pos - first;
-      return Stack(
-        children: [
-          Opacity(
-              opacity: 1 - transitionValue,
-              child: customIconBuilder(
-                  context,
-                  RollingProperties(
-                    iconSize: iconSize,
-                    foreground: true,
-                    value: values[first],
-                    index: first,
-                  ),
-                  global)),
-          if (first != pos)
-            Opacity(
-                opacity: transitionValue,
-                child: customIconBuilder(
-                    context,
-                    RollingProperties(
-                      iconSize: iconSize,
-                      foreground: true,
-                      value: values[pos.ceil()],
-                      index: first,
-                    ),
-                    global)),
-        ],
-      );
-    };
-  }
-
   static CustomIndicatorBuilder<T> _rollingForegroundIndicatorIconBuilder<T>(
       List<T> values,
       SimpleRollingIconBuilder<T>? iconBuilder,
@@ -704,74 +655,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     return () =>
         onChanged?.call(values.firstWhere((element) => element != current));
   }
-
-  AnimatedToggleSwitch.dualMoving({
-    Key? key,
-    required this.current,
-    required T first,
-    required T second,
-    SimpleIconBuilder<T>? iconBuilder,
-    IconBuilder<T>? customIconBuilder,
-    SimpleIconBuilder<T>? textBuilder,
-    AnimatedIconBuilder<T>? customTextBuilder,
-    this.animationDuration = const Duration(milliseconds: 500),
-    this.animationCurve = Curves.easeInOutCirc,
-    this.indicatorSize = const Size(46.0, double.infinity),
-    this.onChanged,
-    this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.innerColorBuilder,
-    this.indicatorColor,
-    this.colorBuilder,
-    double iconRadius = 16.1,
-    this.borderRadius,
-    this.dif = 40.0,
-    this.height = 50.0,
-    this.iconAnimationDuration = const Duration(milliseconds: 500),
-    this.iconAnimationCurve = Curves.easeInOut,
-    this.borderColorBuilder,
-    this.indicatorAnimationType = AnimationType.onHover,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    Function()? onTap,
-    this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
-    this.boxShadow = const [],
-    this.minTouchTargetSize = 48.0,
-    this.textDirection,
-    this.indicatorBorderRadius,
-    this.defaultCursor = SystemMouseCursors.click,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    EdgeInsetsGeometry textMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    Offset animationOffset = const Offset(20.0, 0),
-    bool clipAnimation = true,
-    bool opacityAnimation = true,
-  })  : assert(clipAnimation || opacityAnimation),
-        this.iconOpacity = 1.0,
-        this.selectedIconOpacity = 1.0,
-        this.values = [first, second],
-        this.iconAnimationType = AnimationType.onHover,
-        this.iconsTappable = false,
-        this.onTap = onTap ?? _dualOnTap(onChanged, [first, second], current),
-        this.foregroundIndicatorIconBuilder =
-            _movingForegroundIndicatorIconBuilder(
-                [first, second],
-                iconBuilder == null ? null : (v, s, f) => iconBuilder(v),
-                customIconBuilder,
-                Size.square(iconRadius * 2)),
-        this.animatedIconBuilder = _dualIconBuilder(
-          textBuilder,
-          customTextBuilder,
-          Size.square(iconRadius * 2),
-          [first, second],
-          textMargin,
-          animationOffset,
-          clipAnimation,
-          opacityAnimation,
-        ),
-        this._iconArrangement = IconArrangement.overlap,
-        super(key: key);
 
   static AnimatedIconBuilder<T>? _dualIconBuilder<T>(
     SimpleIconBuilder<T>? textBuilder,
