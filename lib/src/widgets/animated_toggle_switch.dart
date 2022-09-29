@@ -522,7 +522,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           (global.textDirection == TextDirection.rtl ? -1.0 : 1.0);
       final pos = global.position;
       int first = pos.floor();
-      double transitionValue = pos - first;
+      double transitionValue =
+          Interval(0, 1, curve: Curves.easeInOutExpo).transform(pos - first);
       return Stack(
         children: [
           Transform.rotate(
