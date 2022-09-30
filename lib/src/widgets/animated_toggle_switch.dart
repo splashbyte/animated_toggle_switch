@@ -522,14 +522,15 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           (global.textDirection == TextDirection.rtl ? -1.0 : 1.0);
       final pos = global.position;
       int first = pos.floor();
-      double transitionValue =
-          Interval(0, 1, curve: Curves.easeInOutExpo).transform(pos - first);
+      double transitionValue = pos - first;
+      double transitionOpacityValue =
+          Interval(0, 1, curve: Curves.easeInOutExpo).transform(transitionValue);
       return Stack(
         children: [
           Transform.rotate(
             angle: transitionValue * angleDistance,
             child: Opacity(
-                opacity: 1 - transitionValue,
+                opacity: 1 - transitionOpacityValue,
                 child: customIconBuilder(
                     context,
                     RollingProperties(
@@ -544,7 +545,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
             Transform.rotate(
               angle: (transitionValue - 1) * angleDistance,
               child: Opacity(
-                  opacity: transitionValue,
+                  opacity: transitionOpacityValue,
                   child: customIconBuilder(
                       context,
                       RollingProperties(
