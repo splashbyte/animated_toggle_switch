@@ -79,7 +79,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Color of the background.
   final Color? innerColor;
 
-  // Color builder for background
+  /// A builder for the [Color] of the background. Can be used alternatively to [innerColor].
   final ColorBuilder<T>? innerColorBuilder;
 
   /// Opacity for the icons.
@@ -104,7 +104,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Standard Indicator Color
   final Color? indicatorColor;
 
-  /// A builder for the Color of the Border. Can be used alternatively to [borderColor].
+  /// A builder for the [Color] of the [Border]. Can be used alternatively to [borderColor].
   final ColorBuilder<T>? borderColorBuilder;
 
   /// Which iconAnimationType for the [animatedIconBuilder] should be taken?
@@ -425,6 +425,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    Curve opacityTransitionCurve = Curves.linear,
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -433,11 +434,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         this.iconAnimationType = AnimationType.onSelected,
         this.foregroundIndicatorIconBuilder =
             _rollingForegroundIndicatorIconBuilder<T>(
-                values,
-                iconBuilder,
-                customIconBuilder,
-                Size.square(
-                    selectedIconRadius * 2 * (height - 2 * borderWidth))),
+          values,
+          iconBuilder,
+          customIconBuilder,
+          Size.square(selectedIconRadius * 2 * (height - 2 * borderWidth)),
+          opacityTransitionCurve,
+        ),
         animatedIconBuilder = _standardIconBuilder(
             iconBuilder,
             customIconBuilder,
@@ -489,13 +491,20 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
-  })  : this.iconAnimationCurve = Curves.linear,
+    Curve opacityTransitionCurve = Curves.linear,
+  })
+      : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
         this.iconAnimationType = AnimationType.onSelected,
         this.foregroundIndicatorIconBuilder =
-            _rollingForegroundIndicatorIconBuilder<T>(values, iconBuilder,
-                customIconBuilder, Size.square(selectedIconRadius * 2)),
+            _rollingForegroundIndicatorIconBuilder<T>(
+          values,
+          iconBuilder,
+          customIconBuilder,
+          Size.square(selectedIconRadius * 2),
+          opacityTransitionCurve,
+        ),
         this.animatedIconBuilder = _standardIconBuilder(
             iconBuilder,
             customIconBuilder,
@@ -508,7 +517,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       List<T> values,
       SimpleRollingIconBuilder<T>? iconBuilder,
       RollingIconBuilder<T>? customIconBuilder,
-      Size iconSize) {
+      Size iconSize,
+      Curve opacityTransitionCurve) {
     assert(iconBuilder == null || customIconBuilder == null);
     if (customIconBuilder == null && iconBuilder != null)
       customIconBuilder =
@@ -524,7 +534,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       int first = pos.floor();
       double transitionValue = pos - first;
       double transitionOpacityValue =
-          Interval(0, 1, curve: Curves.easeInOutExpo).transform(transitionValue);
+          opacityTransitionCurve.transform(transitionValue);
       return Stack(
         children: [
           Transform.rotate(
@@ -626,6 +636,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     Offset animationOffset = const Offset(20.0, 0),
     bool clipAnimation = true,
     bool opacityAnimation = true,
+    Curve opacityTransitionCurve = Curves.linear,
   })  : assert(clipAnimation || opacityAnimation),
         this.iconOpacity = 1.0,
         this.selectedIconOpacity = 1.0,
@@ -635,10 +646,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         this.onTap = onTap ?? _dualOnTap(onChanged, [first, second], current),
         this.foregroundIndicatorIconBuilder =
             _rollingForegroundIndicatorIconBuilder(
-                [first, second],
-                iconBuilder == null ? null : (v, s, f) => iconBuilder(v),
-                customIconBuilder,
-                Size.square(iconRadius * 2)),
+          [first, second],
+          iconBuilder == null ? null : (v, s, f) => iconBuilder(v),
+          customIconBuilder,
+          Size.square(iconRadius * 2),
+          opacityTransitionCurve,
+        ),
         this.animatedIconBuilder = _dualIconBuilder(
           textBuilder,
           customTextBuilder,
@@ -747,32 +760,39 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
             _animatedSizeIcon(context, local, global), local.value == current),
         padding: EdgeInsets.all(borderWidth),
         wrapperBuilder: (context, properties, child) {
-          double pos = properties.position;
-          Color? innerColorCalculated = Color.lerp(
-              innerColorBuilder?.call(values[pos.floor()]) ?? innerColor,
-              innerColorBuilder?.call(values[pos.ceil()]) ?? innerColor,
-              pos - pos.floor());
+          final currentBorderColor = borderColorBuilder?.call(current) ??
+              borderColor ??
+              theme.colorScheme.secondary;
+          final currentInnerColor = innerColorBuilder?.call(current) ??
+              innerColor ??
+              theme.scaffoldBackgroundColor;
           return TweenAnimationBuilder<Color?>(
             duration: animationDuration,
             tween: ColorTween(
-              begin: borderColorBuilder?.call(current) ??
-                  borderColor ??
-                  theme.colorScheme.secondary,
-              end: borderColorBuilder?.call(current) ??
-                  borderColor ??
-                  theme.colorScheme.secondary,
+              begin: currentBorderColor,
+              end: currentBorderColor,
             ),
-            builder: (c, color, _) => Container(
-              clipBehavior: Clip.hardEdge,
-              foregroundDecoration: BoxDecoration(
+            child: TweenAnimationBuilder<Color?>(
+                duration: animationDuration,
+                tween: ColorTween(
+                  begin: currentInnerColor,
+                  end: currentInnerColor,
+                ),
+                builder: (c, color, _) => Container(
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: borderRadius,
+                        boxShadow: boxShadow,
+                      ),
+                      clipBehavior: Clip.hardEdge,
+                      child: child,
+                    )),
+            builder: (c, color, child) => DecoratedBox(
+              decoration: BoxDecoration(
                 border: Border.all(color: color!, width: borderWidth),
                 borderRadius: borderRadius,
               ),
-              decoration: BoxDecoration(
-                color: innerColorCalculated ?? theme.scaffoldBackgroundColor,
-                borderRadius: borderRadius,
-                boxShadow: boxShadow,
-              ),
+              position: DecorationPosition.foreground,
               child: child,
             ),
           );

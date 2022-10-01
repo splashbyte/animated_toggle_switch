@@ -57,33 +57,30 @@ class _MyHomePageState extends State<MyHomePage> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: AnimatedToggleSwitch<bool>.dual(
-                    current: positive,
-                    first: false,
-                    second: true,
-                    dif: 50.0,
-                    borderColor: Colors.transparent,
-                    borderWidth: 5.0,
-                    height: 55,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(0, 1.5),
-                      ),
-                    ],
-                    onChanged: (b) => setState(() => positive = b),
-                    colorBuilder: (b) => b ? Colors.red : Colors.green,
-                    iconBuilder: (value) => value
-                        ? Icon(Icons.coronavirus_rounded)
-                        : Icon(Icons.tag_faces_rounded),
-                    textBuilder: (value) => value
-                        ? Center(child: Text('Oh no...'))
-                        : Center(child: Text('Nice :)')),
-                  ),
+                AnimatedToggleSwitch<bool>.dual(
+                  current: positive,
+                  first: false,
+                  second: true,
+                  dif: 50.0,
+                  borderColor: Colors.transparent,
+                  borderWidth: 5.0,
+                  height: 55,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                  onChanged: (b) => setState(() => positive = b),
+                  colorBuilder: (b) => b ? Colors.red : Colors.green,
+                  iconBuilder: (value) => value
+                      ? Icon(Icons.coronavirus_rounded)
+                      : Icon(Icons.tag_faces_rounded),
+                  textBuilder: (value) => value
+                      ? Center(child: Text('Oh no...'))
+                      : Center(child: Text('Nice :)')),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -137,8 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   iconBuilder: rollingIconBuilder,
                   borderWidth: 4.5,
                   indicatorColor: Colors.purpleAccent,
-                  //innerColor: Colors.amber,
-                  innerColorBuilder: colorBuilder,
+                  opacityTransitionCurve: Curves.easeInOutExpo,
+                  innerColorBuilder: innerColorBuilder,
                   height: 55,
                   dif: 20.0,
                   borderColor: Colors.transparent,
@@ -331,8 +328,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Color? colorBuilder(int value) {
-    return [
+  Color? innerColorBuilder(int value) {
+    return const [
       Colors.deepOrange,
       Colors.deepPurple,
       Colors.red,
