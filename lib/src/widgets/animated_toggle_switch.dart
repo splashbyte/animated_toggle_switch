@@ -1,4 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 typedef SizeIconBuilder<T> = Widget Function(BuildContext context,
@@ -13,6 +14,9 @@ typedef RollingIconBuilder<T> = Widget Function(BuildContext context,
 
 typedef SimpleRollingIconBuilder<T> = Widget Function(
     T value, Size size, bool foreground);
+
+typedef LoadingIconBuilder<T> = Widget Function(
+    BuildContext context, DetailedGlobalToggleProperties<T> global);
 
 /// A version of IconBuilder for writing a own Animation on the change of the selected item.
 typedef AnimatedIconBuilder<T> = Widget Function(
@@ -95,7 +99,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Total height of the widget.
   final double height;
 
-  /// If null, the indicator is behind the icons. Otherwise an icon is in the indicator and is built using this Function.
+  /// If null, the indicator is behind the icons. Otherwise an icon is in the indicator and is built using this function.
   final CustomIndicatorBuilder<T>? foregroundIndicatorIconBuilder;
 
   /// Standard Indicator Color
@@ -127,6 +131,9 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// [MouseCursor] to show when hovering the indicators.
   final MouseCursor dragCursor;
 
+  /// [MouseCursor] to show during loading.
+  final MouseCursor loadingCursor;
+
   /// The [FittingMode] of the switch.
   ///
   /// Change this only if you don't want the switch to adjust when the constraints are too small.
@@ -153,6 +160,25 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   ///
   /// If null, the [TextDirection] is taken from the [BuildContext].
   final TextDirection? textDirection;
+
+  /// A builder for the loading icon.
+  final LoadingIconBuilder<T> loadingIconBuilder;
+
+  /// Indicates if the switch is currently loading.
+  ///
+  /// If set to [null], the switch is loading automatically when a [Future] is
+  /// returned by [onChanged] or [onTap].
+  final bool? loading;
+
+  /// Duration of the loading animation.
+  ///
+  /// Defaults to [animationDuration].
+  final Duration? loadingAnimationDuration;
+
+  /// Curve of the loading animation.
+  ///
+  /// Defaults to [animationCurve].
+  final Curve? loadingAnimationCurve;
 
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   ///
@@ -194,6 +220,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    this.loadingCursor = MouseCursor.defer,
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
   })  : this._iconArrangement = IconArrangement.row,
         super(key: key);
 
@@ -240,6 +271,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    this.loadingCursor = MouseCursor.defer,
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconSize, selectedIconSize),
         this._iconArrangement = IconArrangement.row,
@@ -289,6 +325,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    this.loadingCursor = MouseCursor.defer,
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -367,6 +408,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    this.loadingCursor = MouseCursor.defer,
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconArrangement = IconArrangement.row,
@@ -417,6 +463,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    this.loadingCursor = MouseCursor.defer,
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -480,6 +531,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    this.loadingCursor = MouseCursor.defer,
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
   })  : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
@@ -610,10 +666,15 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.defaultCursor = SystemMouseCursors.click,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
+    this.loadingCursor = MouseCursor.defer,
     EdgeInsetsGeometry textMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     Offset animationOffset = const Offset(20.0, 0),
     bool clipAnimation = true,
     bool opacityAnimation = true,
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
   })  : assert(clipAnimation || opacityAnimation),
         this.iconOpacity = 1.0,
         this.selectedIconOpacity = 1.0,
@@ -696,6 +757,10 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     };
   }
 
+  static Widget _defaultLoadingIconBuilder(
+          BuildContext context, dynamic properties) =>
+      const _MyLoading();
+
   // END OF CONSTRUCTOR SECTION
 
   @override
@@ -721,8 +786,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         defaultCursor: defaultCursor,
         dragCursor: dragCursor,
         draggingCursor: draggingCursor,
+        loadingCursor: loadingCursor,
         minTouchTargetSize: minTouchTargetSize,
         textDirection: textDirection,
+        loading: loading,
+        loadingAnimationCurve: loadingAnimationCurve,
+        loadingAnimationDuration: loadingAnimationDuration,
         backgroundIndicatorBuilder: foregroundIndicatorIconBuilder != null
             ? null
             : (context, properties) => _indicatorBuilder(context, properties,
@@ -775,18 +844,27 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
             duration: animationDuration,
             tween: ColorTween(begin: currentColor, end: currentColor),
             builder: (c, color, child) => _customIndicatorBuilder(
-                properties.indicatorSize, color!, borderRadius, child));
+                context, color!, borderRadius, child, properties));
       case AnimationType.onHover:
         return _customIndicatorBuilder(
-            properties.indicatorSize,
-            Color.lerp(
-                    colorBuilder?.call(values[pos.floor()]) ?? indicatorColor,
-                    colorBuilder?.call(values[pos.ceil()]) ?? indicatorColor,
-                    pos - pos.floor()) ??
-                indicatorColor,
-            borderRadius,
-            foregroundIndicatorIconBuilder?.call(context, properties));
+          context,
+          Color.lerp(
+                  colorBuilder?.call(values[pos.floor()]) ?? indicatorColor,
+                  colorBuilder?.call(values[pos.ceil()]) ?? indicatorColor,
+                  pos - pos.floor()) ??
+              indicatorColor,
+          borderRadius,
+          foregroundIndicatorIconBuilder?.call(context, properties),
+          properties,
+        );
     }
+  }
+
+  Widget _animatedIcon(BuildContext context, AnimatedToggleProperties<T> local,
+      DetailedGlobalToggleProperties<T> global) {
+    return Opacity(
+        opacity: 1.0 - global.loadingAnimationValue,
+        child: animatedIconBuilder!(context, local, global));
   }
 
   Widget _animatedSizeIcon(BuildContext context, LocalToggleProperties<T> local,
@@ -801,7 +879,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           tween:
               Tween<double>(begin: currentTweenValue, end: currentTweenValue),
           builder: (c, value, child) {
-            return animatedIconBuilder!(
+            return _animatedIcon(
               c,
               AnimatedToggleProperties.fromLocal(
                   animationValue: value as double, properties: local),
@@ -817,7 +895,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           animationValue = 1 - localPosition;
         else if (values[global.position.ceil()] == local.value)
           animationValue = localPosition;
-        return animatedIconBuilder!(
+        return _animatedIcon(
           context,
           AnimatedToggleProperties.fromLocal(
               animationValue: animationValue, properties: local),
@@ -836,19 +914,34 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           );
   }
 
-  Widget _customIndicatorBuilder(Size size, Color color,
-      BorderRadiusGeometry borderRadius, Widget? child) {
+  Widget _customIndicatorBuilder(
+      BuildContext context,
+      Color color,
+      BorderRadiusGeometry borderRadius,
+      Widget? child,
+      DetailedGlobalToggleProperties<T> global) {
+    final loadingValue = global.loadingAnimationValue;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: borderRadius,
-        border: indicatorBorder,
-        boxShadow: foregroundBoxShadow,
-      ),
-      child: Center(
-        child: child,
-      ),
-    );
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: borderRadius,
+          border: indicatorBorder,
+          boxShadow: foregroundBoxShadow,
+        ),
+        child: Center(
+          child: Stack(
+            fit: StackFit.passthrough,
+            alignment: Alignment.center,
+            children: [
+              if (loadingValue < 1.0)
+                Opacity(opacity: 1.0 - loadingValue, child: child),
+              if (loadingValue > 0.0)
+                Opacity(
+                    opacity: loadingValue,
+                    child: loadingIconBuilder(context, global)),
+            ],
+          ),
+        ));
   }
 }
 
@@ -889,4 +982,19 @@ class _WidgetWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return child;
   }
+}
+
+class _MyLoading extends StatelessWidget {
+  const _MyLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme.of(context).platform.apple
+        ? CupertinoActivityIndicator()
+        : CircularProgressIndicator();
+  }
+}
+
+extension _XTargetPlatform on TargetPlatform {
+  bool get apple => this == TargetPlatform.iOS || this == TargetPlatform.macOS;
 }

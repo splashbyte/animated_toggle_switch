@@ -31,6 +31,10 @@ class GlobalToggleProperties<T> {
   /// The current [ToggleMode] of the switch.
   final ToggleMode mode;
 
+  /// Indicates the progress of the loading animation.
+  /// [0] means 'not loading' and [1] means 'loading'.
+  final double loadingAnimationValue;
+
   const GlobalToggleProperties({
     required this.position,
     required this.current,
@@ -39,6 +43,7 @@ class GlobalToggleProperties<T> {
     required this.previousPosition,
     required this.textDirection,
     required this.mode,
+    required this.loadingAnimationValue,
   });
 }
 
@@ -60,23 +65,15 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required this.dif,
     required this.indicatorSize,
     required this.switchSize,
-    required double position,
-    // TODO: Rename to current (small breaking change)
-    required T value,
-    required T? previousValue,
-    required List<T> values,
-    required double previousPosition,
-    required TextDirection textDirection,
-    required ToggleMode mode,
-  }) : super(
-          position: position,
-          current: value,
-          previous: previousValue,
-          values: values,
-          previousPosition: previousPosition,
-          textDirection: textDirection,
-          mode: mode,
-        );
+    required super.position,
+    required super.current,
+    required super.previous,
+    required super.values,
+    required super.previousPosition,
+    required super.textDirection,
+    required super.mode,
+    required super.loadingAnimationValue,
+  });
 }
 
 class LocalToggleProperties<T> {
@@ -105,13 +102,10 @@ class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
   }) : super(value: properties.value, index: properties.index);
 
   const AnimatedToggleProperties({
-    required T value,
-    required int index,
+    required super.value,
+    required super.index,
     required this.animationValue,
-  }) : super(
-          value: value,
-          index: index,
-        );
+  });
 
   AnimatedToggleProperties<T> copyWith({T? value, int? index}) {
     return AnimatedToggleProperties(
@@ -145,12 +139,9 @@ class RollingProperties<T> extends LocalToggleProperties<T> {
   const RollingProperties({
     required this.iconSize,
     required this.foreground,
-    required T value,
-    required int index,
-  }) : super(
-          value: value,
-          index: index,
-        );
+    required super.value,
+    required super.index,
+  });
 }
 
 class SizeProperties<T> extends AnimatedToggleProperties<T> {
@@ -169,12 +160,8 @@ class SizeProperties<T> extends AnimatedToggleProperties<T> {
 
   const SizeProperties({
     required this.iconSize,
-    required T value,
-    required int index,
-    required double animationValue,
-  }) : super(
-          value: value,
-          index: index,
-          animationValue: animationValue,
-        );
+    required super.value,
+    required super.index,
+    required super.animationValue,
+  });
 }
