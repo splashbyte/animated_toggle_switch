@@ -1,4 +1,4 @@
-## 0.5.2 (2022-04-22)
+## 0.6.0 (2022-12-05)
 - fixes README
 - BREAKING: Increases minimum SDK to 2.17
 - BREAKING: Renames `value` to `current` and `previousValue` to `previous` in `DetailedGlobalToggleProperties`

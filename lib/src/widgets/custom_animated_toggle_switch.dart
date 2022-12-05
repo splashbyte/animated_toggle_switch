@@ -231,6 +231,7 @@ class _CustomAnimatedToggleSwitchState<T>
   }
 
   void _onTap() {
+    if (_animationInfo.loading) return;
     var result = widget.onTap?.call();
     if (result is Future && widget.loading == null) {
       _loading(true);
@@ -239,8 +240,12 @@ class _CustomAnimatedToggleSwitchState<T>
   }
 
   void _loading(bool b) {
-    if (b != _animationInfo.loading)
-      setState(() => _animationInfo = _animationInfo.setLoading(b));
+    if (b == _animationInfo.loading) return;
+    if(_animationInfo.toggleMode == ToggleMode.dragged) {
+      _animationInfo = _animationInfo.none();
+      _checkValuePosition();
+    }
+    setState(() => _animationInfo = _animationInfo.setLoading(b));
   }
 
   /// Checks if the current value has a different position than the indicator
@@ -569,8 +574,8 @@ class _CustomAnimatedToggleSwitchState<T>
     if (_animationInfo.toggleMode != ToggleMode.dragged) return;
     int index = _animationInfo.end.round();
     T newValue = widget.values[index];
-    if (widget.current != newValue) _onChanged(newValue);
     _animationInfo = _animationInfo.none(current: _animationInfo.end);
+    if (widget.current != newValue) _onChanged(newValue);
     _checkValuePosition();
   }
 
