@@ -33,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int value = 0;
   bool positive = false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     offset: Offset(0, 1.5),
                   ),
                 ],
-                onChanged: (b) => setState(() => positive = b),
+                onChanged: (b) {
+                  setState(() => positive = b);
+                  return Future.delayed(Duration(seconds: 2));
+                },
                 colorBuilder: (b) => b ? Colors.red : Colors.green,
                 iconBuilder: (value) => value
                     ? Icon(Icons.coronavirus_rounded)
@@ -90,7 +94,10 @@ class _MyHomePageState extends State<MyHomePage> {
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
                 values: const [0, 1, 2, 3],
-                onChanged: (i) => setState(() => value = i),
+                onChanged: (i) {
+                  setState(() => value = i);
+                  return Future.delayed(Duration(seconds: 3));
+                },
                 iconBuilder: rollingIconBuilder,
               ),
               Padding(
@@ -104,7 +111,13 @@ class _MyHomePageState extends State<MyHomePage> {
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
                 values: const [0, 1, 2, 3],
-                onChanged: (i) => setState(() => value = i),
+                onChanged: (i) {
+                  setState(() {
+                    value = i;
+                    loading = true;
+                  });
+                  return Future.delayed(Duration(seconds: 3)).then((_) => setState(()=>loading = false));
+                },
                 iconBuilder: rollingIconBuilder,
                 borderColor: Colors.transparent,
                 foregroundBoxShadow: const [
@@ -136,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 55,
                 dif: 20.0,
                 borderColor: Colors.transparent,
+                loading: loading,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -223,7 +237,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderWidth: 0.0,
                 borderColor: Colors.transparent,
                 colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
-                onChanged: (i) => setState(() => value = i),
+                onChanged: (i) {
+                  setState(() => value = i);
+                  return Future.delayed(Duration(seconds: 3));
+                },
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
