@@ -320,9 +320,15 @@ class _CustomAnimatedToggleSwitchState<T>
                     double height = constraints.maxHeight;
                     assert(
                         constraints.maxWidth.isFinite ||
-                            widget.indicatorSize.width.isFinite,
+                            (widget.indicatorSize.width.isFinite &&
+                                dif.isFinite),
                         "With unbound width constraints "
-                        "the width of the indicator can't be infinite");
+                        "the width of the indicator and the dif "
+                        "can't be infinite");
+                    assert(
+                        widget.indicatorSize.width.isFinite || dif.isFinite,
+                        "The width of the indicator "
+                        "or the dif must be finite.");
 
                     // Recalculates the indicatorSize if its width or height is
                     // infinite.
@@ -335,6 +341,13 @@ class _CustomAnimatedToggleSwitchState<T>
                         widget.indicatorSize.height.isInfinite
                             ? height
                             : widget.indicatorSize.height);
+
+                    if (dif.isInfinite) {
+                      dif = (constraints.maxWidth -
+                              widget.indicatorSize.width *
+                                  widget.values.length) /
+                          (widget.values.length - 1);
+                    }
 
                     // Calculates the required width of the widget.
                     double width = indicatorSize.width * widget.values.length +
