@@ -23,9 +23,13 @@ For a slider with a similar look, you can check out [action_slider](https://pub.
 ### Examples
 `AnimatedToggleSwitch.dual()`  
 ![animated_toggle_switch_example_dual](https://user-images.githubusercontent.com/43761463/161432631-e6dd3d16-7b64-410b-a9fa-c956d3442598.gif)  
+`AnimatedToggleSwitch.dual()` with loading animation  
+![animated_toggle_switch_example_dual_loading](https://user-images.githubusercontent.com/43761463/209120973-1d4d4fdc-3274-4747-9f6e-9523a75830e7.gif)  
 
-Standard `AnimatedToggleSwitch.rolling()`  
+`AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/161432579-9fe81c57-6463-45c3-a48f-75db666a3a22.gif)  
+`AnimatedToggleSwitch.rolling()` with loading animation  
+![animated_toggle_switch_example_rolling_loading](https://user-images.githubusercontent.com/43761463/209121057-2ff2bfc3-063e-4704-a981-f5cc5f54720a.gif)  
 
 Modified `AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/161432589-d76f61f6-cb97-42e2-b1fd-8c5203a965fa.gif)  
@@ -36,10 +40,11 @@ You can build any other switch with `CustomAnimatedToggleSwitch()`
 ![animated_toggle_switch_example_custom_1](https://user-images.githubusercontent.com/43761463/161433015-c3ec634a-38da-463d-a06e-4ae0b29f77ed.gif)  
 
 `AnimatedToggleSwitch.size()`  
-![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/156060925-ea3cfcf8-2a48-441f-89c7-c9d4b2b1e2e0.gif)  
-
-Custom `AnimatedToggleSwitch.size()`  
 ![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/161432714-435d8369-7e54-432a-8b9b-6b55a0764f4a.gif)  
+`AnimatedToggleSwitch.size()` with loading animation  
+![animated_toggle_switch_example_size_loading](https://user-images.githubusercontent.com/43761463/209121115-ed0f634b-0ec4-46b5-b030-21dbdde8cf07.gif)  
+
+Modified `AnimatedToggleSwitch.size()`  
 ![animated_toggle_switch_example_5](https://user-images.githubusercontent.com/43761463/161432720-1d5fa49e-6d20-401a-9a90-a6df88873266.gif)  
 
 `AnimatedToggleSwitch.size()` with custom rolling animation  
