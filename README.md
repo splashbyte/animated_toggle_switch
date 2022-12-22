@@ -71,7 +71,7 @@ AnimatedToggleSwitch<int>.rolling(
 ```
 
 ### Simple rolling animation with loading
-To use the loading animation, you simply have to return a future in `onChanged` or `onTap`.
+To use the loading animation, you simply have to return a `Future` in `onChanged` or `onTap`.
 You can alternatively control the loading manually with the `loading` parameter.  
 Hence, to disable the loading animation, `loading: false` must be set.
 
@@ -79,9 +79,9 @@ Hence, to disable the loading animation, `loading: false` must be set.
 AnimatedToggleSwitch<int>.rolling(
   current: value,
   values: [0, 1, 2, 3],
-  onChanged: (i) {
+  onChanged: (i) async {
     setState(() => value = i);
-    return Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 3));
   },
   loading: false, // for deactivating loading animation
   iconBuilder: iconBuilder,
