@@ -1,3 +1,6 @@
+## 0.6.1 (2022-12-22)
+- adds examples for loading animation to README
+
 ## 0.6.0 (2022-12-22)
 - fixes README
 - fixes #28
