@@ -27,7 +27,9 @@ Standard `AnimatedToggleSwitch.rolling()`
 ![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/161432579-9fe81c57-6463-45c3-a48f-75db666a3a22.gif)  
 Modified `AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/161432589-d76f61f6-cb97-42e2-b1fd-8c5203a965fa.gif)  
-![animated_toggle_switch_example_3](https://user-images.githubusercontent.com/43761463/161432610-e8e4014a-34f1-4cbc-876b-2ab6ef856484.gif)   
+![animated_toggle_switch_example_3](https://user-images.githubusercontent.com/43761463/161432610-e8e4014a-34f1-4cbc-876b-2ab6ef856484.gif)  
+![animated_toggle_switch_example_gradient](https://user-images.githubusercontent.com/43761463/209117203-90a41ddc-db1c-41be-8375-5304317d1352.gif)
+
 You can build any other switch with `CustomAnimatedToggleSwitch()`  
 ![animated_toggle_switch_example_custom_1](https://user-images.githubusercontent.com/43761463/161433015-c3ec634a-38da-463d-a06e-4ae0b29f77ed.gif)  
 `AnimatedToggleSwitch.size()`  
