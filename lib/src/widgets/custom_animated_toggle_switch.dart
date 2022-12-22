@@ -32,6 +32,10 @@ enum IconArrangement {
   overlap
 }
 
+/// With this widget you can implement your own switches with nice animations.
+///
+/// For pre-made switches, please use the constructors of [AnimatedToggleSwitch]
+/// instead.
 class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
@@ -241,7 +245,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _loading(bool b) {
     if (b == _animationInfo.loading) return;
-    if(_animationInfo.toggleMode == ToggleMode.dragged) {
+    if (_animationInfo.toggleMode == ToggleMode.dragged) {
       _animationInfo = _animationInfo.none();
       _checkValuePosition();
     }
@@ -660,35 +664,6 @@ class _WidgetPart extends StatelessWidget {
       ),
     );
   }
-}
-
-class _WidgetPartClipper extends CustomClipper<Rect> {
-  final double width, height;
-  final double left;
-
-  _WidgetPartClipper(
-      {this.width = double.infinity,
-      this.height = double.infinity,
-      required this.left});
-
-  @override
-  Rect getClip(Size size) => Rect.fromLTWH(left, 0, width, height);
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Rect> oldClipper) =>
-      oldClipper != this;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is _WidgetPartClipper &&
-          runtimeType == other.runtimeType &&
-          width == other.width &&
-          height == other.height &&
-          left == other.left;
-
-  @override
-  int get hashCode => width.hashCode ^ height.hashCode ^ left.hashCode;
 }
 
 /// A class for holding the current state of [_CustomAnimatedToggleSwitchState].

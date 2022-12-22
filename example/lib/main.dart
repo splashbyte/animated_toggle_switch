@@ -116,7 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     value = i;
                     loading = true;
                   });
-                  return Future.delayed(Duration(seconds: 3)).then((_) => setState(()=>loading = false));
+                  return Future.delayed(Duration(seconds: 3))
+                      .then((_) => setState(() => loading = false));
                 },
                 iconBuilder: rollingIconBuilder,
                 borderColor: Colors.transparent,
@@ -144,7 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
-                indicatorColor: Colors.purpleAccent,
+                indicatorColor: Colors.white,
+                innerGradient:
+                    const LinearGradient(colors: [Colors.red, Colors.blue]),
                 innerColor: Colors.amber,
                 height: 55,
                 dif: 20.0,

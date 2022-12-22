@@ -1,8 +1,11 @@
-## 0.6.0 (2022-12-05)
+## 0.6.0 (2022-12-22)
 - fixes README
+- fixes #28
 - BREAKING: Increases minimum SDK to 2.17
 - BREAKING: Renames `value` to `current` and `previousValue` to `previous` in `DetailedGlobalToggleProperties`
 - BREAKING Feature: Adds loading animation to all switches. You can disable it by setting `loading` to false.
+- Adds `innerGradient` to `AnimatedToggleSwitch`
+- Adds `transitionType` to `AnimatedToggleSwitch.rolling`, `AnimatedToggleSwitch.rollingByHeight` and `AnimatedToggleSwitch.dual`
 
 ## 0.5.2 (2022-04-22)
 - Minor performance improvement

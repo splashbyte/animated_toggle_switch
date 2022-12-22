@@ -29,8 +29,35 @@ typedef IconBuilder<T> = Widget Function(BuildContext context,
 
 typedef ColorBuilder<T> = Color? Function(T value);
 
-enum AnimationType { onSelected, onHover }
+/// Specifies when an icon should be highlighted.
+enum AnimationType {
+  /// Starts an animation if an item is selected.
+  onSelected,
 
+  /// Start an animation if an item is hovered by the indicator.
+  onHover,
+}
+
+/// Different types of transitions for the foreground indicator.
+///
+/// Currently this enum is used only for deactivating the rolling animation in
+/// some constructors.
+enum ForegroundIndicatorTransitionType {
+  /// Fades between the different icons.
+  fading,
+
+  /// Fades between the different icons and shows a rolling animation
+  /// additionally.
+  rolling,
+}
+
+/// A class with different constructors of different switches.
+/// The constructors have sensible default values for their parameters,
+/// but can also be customized.
+///
+/// If you want to implement a completely custom switch,
+/// you should use [CustomAnimatedToggleSwitch], which is used by
+/// [AnimatedToggleSwitch] in the background.
 class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
@@ -82,6 +109,9 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Color of the background.
   final Color? innerColor;
+
+  /// Gradient of the background. Overwrites [innerColor] if not null.
+  final Gradient? innerGradient;
 
   /// Opacity for the icons.
   ///
@@ -225,6 +255,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    this.innerGradient,
   })  : this._iconArrangement = IconArrangement.row,
         super(key: key);
 
@@ -276,6 +307,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    this.innerGradient,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconSize, selectedIconSize),
         this._iconArrangement = IconArrangement.row,
@@ -330,6 +362,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    this.innerGradient,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -413,6 +446,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    this.innerGradient,
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconArrangement = IconArrangement.row,
@@ -468,6 +502,9 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    ForegroundIndicatorTransitionType transitionType =
+        ForegroundIndicatorTransitionType.rolling,
+    this.innerGradient,
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -480,7 +517,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
                 iconBuilder,
                 customIconBuilder,
                 Size.square(
-                    selectedIconRadius * 2 * (height - 2 * borderWidth))),
+                    selectedIconRadius * 2 * (height - 2 * borderWidth)),
+                transitionType),
         animatedIconBuilder = _standardIconBuilder(
             iconBuilder,
             customIconBuilder,
@@ -536,13 +574,20 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    ForegroundIndicatorTransitionType transitionType =
+        ForegroundIndicatorTransitionType.rolling,
+    this.innerGradient,
   })  : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
         this.iconAnimationType = AnimationType.onSelected,
         this.foregroundIndicatorIconBuilder =
-            _rollingForegroundIndicatorIconBuilder<T>(values, iconBuilder,
-                customIconBuilder, Size.square(selectedIconRadius * 2)),
+            _rollingForegroundIndicatorIconBuilder<T>(
+                values,
+                iconBuilder,
+                customIconBuilder,
+                Size.square(selectedIconRadius * 2),
+                transitionType),
         this.animatedIconBuilder = _standardIconBuilder(
             iconBuilder,
             customIconBuilder,
@@ -555,7 +600,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       List<T> values,
       SimpleRollingIconBuilder<T>? iconBuilder,
       RollingIconBuilder<T>? customIconBuilder,
-      Size iconSize) {
+      Size iconSize,
+      ForegroundIndicatorTransitionType transitionType) {
     assert(iconBuilder == null || customIconBuilder == null);
     if (customIconBuilder == null && iconBuilder != null)
       customIconBuilder =
@@ -563,10 +609,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     return (context, global) {
       if (customIconBuilder == null) return SizedBox();
       double distance = global.dif + global.indicatorSize.width;
-      double angleDistance = distance /
-          iconSize.longestSide *
-          2 *
-          (global.textDirection == TextDirection.rtl ? -1.0 : 1.0);
+      double angleDistance =
+          transitionType == ForegroundIndicatorTransitionType.rolling
+              ? distance /
+                  iconSize.longestSide *
+                  2 *
+                  (global.textDirection == TextDirection.rtl ? -1.0 : 1.0)
+              : 0.0;
       final pos = global.position;
       int first = pos.floor();
       double transitionValue = pos - first;
@@ -675,6 +724,9 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    ForegroundIndicatorTransitionType transitionType =
+        ForegroundIndicatorTransitionType.rolling,
+    this.innerGradient,
   })  : assert(clipAnimation || opacityAnimation),
         this.iconOpacity = 1.0,
         this.selectedIconOpacity = 1.0,
@@ -687,7 +739,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
                 [first, second],
                 iconBuilder == null ? null : (v, s, f) => iconBuilder(v),
                 customIconBuilder,
-                Size.square(iconRadius * 2)),
+                Size.square(iconRadius * 2),
+                transitionType),
         this.animatedIconBuilder = _dualIconBuilder(
           textBuilder,
           customTextBuilder,
@@ -821,7 +874,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
                   borderRadius: borderRadius,
                 ),
                 decoration: BoxDecoration(
-                  color: innerColor ?? theme.scaffoldBackgroundColor,
+                  gradient: innerGradient,
+                  // Redundant check
+                  color: innerGradient != null
+                      ? null
+                      : (innerColor ?? theme.scaffoldBackgroundColor),
                   borderRadius: borderRadius,
                   boxShadow: boxShadow,
                 ),
@@ -934,9 +991,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               if (loadingValue < 1.0)
-                Opacity(opacity: 1.0 - loadingValue, child: child),
+                Opacity(
+                    key: ValueKey(0),
+                    opacity: 1.0 - loadingValue,
+                    child: child),
               if (loadingValue > 0.0)
                 Opacity(
+                    key: ValueKey(1),
                     opacity: loadingValue,
                     child: loadingIconBuilder(context, global)),
             ],
@@ -989,9 +1050,12 @@ class _MyLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform.apple
-        ? CupertinoActivityIndicator()
-        : CircularProgressIndicator();
+    final color = Theme.of(context).iconTheme.color;
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Theme.of(context).platform.apple
+            ? CupertinoActivityIndicator(color: color)
+            : CircularProgressIndicator(color: color));
   }
 }
 
