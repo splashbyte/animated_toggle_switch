@@ -16,3 +16,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+
+screenshots:
+  - description: 'This screenshot shows three example usages of AnimatedToggleSwitch.rolling'
+    path: screenshots/preview.webp
