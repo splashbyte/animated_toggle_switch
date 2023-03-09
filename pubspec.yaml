@@ -2,6 +2,7 @@ name: animated_toggle_switch
 description: Simple and animated switch with multiple choices and smooth loading animation. It's a good alternative if you don't want to use something like a dropdown menu.
 version: 0.6.1
 repository: https://github.com/SplashByte/animated_toggle_switch
+issue_tracker: https://github.com/SplashByte/animated_toggle_switch/issues
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -17,6 +18,10 @@ dev_dependencies:
 
 flutter:
 
+funding:
+  - http://buymeacoffee.com/splashbyte
+  - https://ko-fi.com/splashbyte
+
 screenshots:
-  - description: 'This screenshot shows three example usages of AnimatedToggleSwitch.rolling'
+  - description: 'This screenshot shows three example usages of AnimatedToggleSwitch.rolling().'
     path: screenshots/preview.webp
