@@ -1,3 +1,6 @@
+## 0.6.2 (2022-03-09)
+- adds screenshot to pubspec.yaml
+
 ## 0.6.1 (2022-12-22)
 - adds examples for loading animation to README
 
