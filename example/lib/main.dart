@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: DefaultTextStyle(
-        style: theme.textTheme.headline6 ?? TextStyle(),
+        style: theme.textTheme.titleLarge ?? TextStyle(),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -185,8 +185,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 20.0,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Color.lerp(Colors.black26,
-                                  theme.backgroundColor, global.position),
+                              color: Color.lerp(
+                                  Colors.black26,
+                                  theme.colorScheme.background,
+                                  global.position),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(50.0)),
                             ),
