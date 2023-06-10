@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -786,7 +788,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           clipBehavior: clipAnimation ? Clip.hardEdge : Clip.none,
           child: Align(
             alignment: alignment,
-            widthFactor: 1 - local.animationValue,
+            widthFactor: min(
+                1,
+                1 -
+                    local.animationValue +
+                    global.indicatorSize.width /
+                        (2 * (global.indicatorSize.width + global.dif))),
             child: Padding(
               padding: textMargin,
               child: Transform.translate(

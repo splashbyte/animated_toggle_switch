@@ -23,5 +23,5 @@ funding:
   - https://ko-fi.com/splashbyte
 
 screenshots:
-  - description: 'This screenshot shows three example usages of AnimatedToggleSwitch.rolling().'
+  - description: 'This image shows three example usages of AnimatedToggleSwitch.rolling().'
     path: screenshots/preview.webp
