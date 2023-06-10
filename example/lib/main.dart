@@ -13,9 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(),
       home: MyHomePage(title: 'Example'),
     );
   }
@@ -32,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int value = 0;
+  int? nullableValue;
   bool positive = false;
   bool loading = false;
 
@@ -76,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() => positive = b);
                   return Future.delayed(Duration(seconds: 2));
                 },
-                colorBuilder: (b) => b ? Colors.red : Colors.green,
+                colorBuilder: (b) => b! ? Colors.red : Colors.green,
                 iconBuilder: (value) => value
                     ? Icon(Icons.coronavirus_rounded)
                     : Icon(Icons.tag_faces_rounded),
@@ -140,9 +139,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
-                current: value,
+                current: nullableValue,
                 values: const [0, 1, 2, 3],
-                onChanged: (i) => setState(() => value = i),
+                onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
                 indicatorColor: Colors.white,
@@ -241,7 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 borderWidth: 0.0,
                 borderColor: Colors.transparent,
-                colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
+                colorBuilder: (i) => i?.isEven == true ? Colors.amber : Colors.red,
                 onChanged: (i) {
                   setState(() => value = i);
                   return Future.delayed(Duration(seconds: 3));
@@ -269,8 +268,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   );
                 },
-                borderColor: value.isEven ? Colors.blue : Colors.red,
-                colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
+                borderColor: value.isEven == true ? Colors.blue : Colors.red,
+                colorBuilder: (i) => i?.isEven == true ? Colors.amber : Colors.red,
                 onChanged: (i) => setState(() => value = i),
               ),
               Padding(
@@ -305,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconSize: const Size.square(20),
                 iconBuilder: iconBuilder,
                 colorBuilder: (i) =>
-                    i.isEven ? Colors.green : Colors.tealAccent,
+                    i?.isEven == true ? Colors.green : Colors.tealAccent,
                 onChanged: (i) => setState(() => value = i),
                 borderRadius: BorderRadius.circular(8.0),
                 indicatorBorderRadius: BorderRadius.zero,

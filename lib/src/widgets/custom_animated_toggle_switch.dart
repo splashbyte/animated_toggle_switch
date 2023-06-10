@@ -16,6 +16,14 @@ typedef CustomIndicatorBuilder<T> = Widget Function(
 typedef CustomWrapperBuilder<T> = Widget Function(
     BuildContext context, GlobalToggleProperties<T> local, Widget child);
 
+/// Custom builder for the appearing animation of the indicator.
+///
+/// If [value] is [0.0], the indicator is completely disappeared.
+///
+/// If [value] is [1.0], the indicator is fully appeared.
+typedef IndicatorAppearingBuilder = Widget Function(
+    BuildContext context, double value, Widget indicator);
+
 enum FittingMode { none, preventHorizontalOverlapping }
 
 enum IconArrangement {
@@ -40,7 +48,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly.
-  final T current;
+  final T? current;
 
   /// All possible values.
   final List<T> values;
@@ -57,6 +65,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// A builder for an indicator which is in behind the icons.
   final CustomIndicatorBuilder<T>? backgroundIndicatorBuilder;
 
+  final IndicatorAppearingBuilder indicatorAppearingBuilder;
+
   /// Duration of the motion animation.
   final Duration animationDuration;
 
@@ -72,6 +82,12 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   ///
   /// Defaults to [animationCurve].
   final Curve? loadingAnimationCurve;
+
+  /// Duration of the appearing animation.
+  final Duration appearingAnimationDuration;
+
+  /// Curve of the appearing animation.
+  final Curve appearingAnimationCurve;
 
   /// Size of the indicator.
   final Size indicatorSize;
@@ -157,6 +173,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.wrapperBuilder,
     this.foregroundIndicatorBuilder,
     this.backgroundIndicatorBuilder,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.height = 50.0,
     this.iconArrangement = IconArrangement.row,
     this.iconsTappable = true,
@@ -172,6 +189,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    this.appearingAnimationDuration = const Duration(milliseconds: 350),
+    this.appearingAnimationCurve = Curves.easeOutBack,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         super(key: key);
@@ -179,6 +198,11 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   @override
   _CustomAnimatedToggleSwitchState createState() =>
       _CustomAnimatedToggleSwitchState<T>();
+
+  static Widget _defaultIndicatorAppearingBuilder(
+      BuildContext context, double value, Widget indicator) {
+    return Transform.scale(scale: value, child: indicator);
+  }
 }
 
 class _CustomAnimatedToggleSwitchState<T>
@@ -186,8 +210,14 @@ class _CustomAnimatedToggleSwitchState<T>
   /// The [AnimationController] for the movement of the indicator.
   late final AnimationController _controller;
 
+  /// The [AnimationController] for the appearing of the indicator.
+  late final AnimationController _appearingController;
+
   /// The [Animation] for the movement of the indicator.
   late CurvedAnimation _animation;
+
+  /// The [Animation] for the appearing of the indicator.
+  late CurvedAnimation _appearingAnimation;
 
   /// The current state of the movement of the indicator.
   late _AnimationInfo _animationInfo;
@@ -196,8 +226,10 @@ class _CustomAnimatedToggleSwitchState<T>
   void initState() {
     super.initState();
 
-    _animationInfo =
-        _AnimationInfo(widget.values.indexOf(widget.current).toDouble());
+    final current = widget.current;
+    final isValueSelected = current is T;
+    _animationInfo = _AnimationInfo(
+        isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0);
     _controller =
         AnimationController(vsync: this, duration: widget.animationDuration)
           ..addStatusListener((status) {
@@ -209,6 +241,17 @@ class _CustomAnimatedToggleSwitchState<T>
 
     _animation =
         CurvedAnimation(parent: _controller, curve: widget.animationCurve);
+
+    _appearingController = AnimationController(
+      vsync: this,
+      duration: widget.appearingAnimationDuration,
+      value: isValueSelected ? 1.0 : 0.0,
+    );
+
+    _appearingAnimation = CurvedAnimation(
+      parent: _appearingController,
+      curve: widget.appearingAnimationCurve,
+    );
   }
 
   @override
@@ -220,6 +263,20 @@ class _CustomAnimatedToggleSwitchState<T>
   @override
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.appearingAnimationDuration !=
+        widget.appearingAnimationDuration) {
+      _appearingController.duration = widget.appearingAnimationDuration;
+    }
+    if (oldWidget.appearingAnimationCurve != widget.appearingAnimationCurve) {
+      _appearingAnimation.curve = widget.appearingAnimationCurve;
+    }
+    if (oldWidget.animationDuration != widget.animationDuration) {
+      _controller.duration = widget.animationDuration;
+    }
+    if (oldWidget.animationCurve != widget.animationCurve) {
+      _animation.curve = widget.animationCurve;
+    }
+
     _checkValuePosition();
     if (oldWidget.loading != widget.loading) {
       if (widget.loading != null) _loading(widget.loading!);
@@ -256,8 +313,13 @@ class _CustomAnimatedToggleSwitchState<T>
   /// and starts an animation if necessary.
   void _checkValuePosition() {
     if (_animationInfo.toggleMode == ToggleMode.dragged) return;
-    int index = widget.values.indexOf(widget.current);
-    if (index != _animationInfo.end) _animateTo(index);
+    final current = widget.current;
+    if (current is T) {
+      int index = widget.values.indexOf(current);
+      _animateTo(index);
+    } else {
+      _appearingController.reverse();
+    }
   }
 
   /// Returns the value position by the local position of the cursor.
@@ -428,6 +490,8 @@ class _CustomAnimatedToggleSwitchState<T>
                           height: height,
                           indicatorSize: indicatorSize,
                           position: position,
+                          appearingAnimation: _appearingAnimation,
+                          appearingBuilder: widget.indicatorAppearingBuilder,
                           child: widget.backgroundIndicatorBuilder!(
                               context, properties),
                         ),
@@ -440,6 +504,8 @@ class _CustomAnimatedToggleSwitchState<T>
                           height: height,
                           indicatorSize: indicatorSize,
                           position: position,
+                          appearingAnimation: _appearingAnimation,
+                          appearingBuilder: widget.indicatorAppearingBuilder,
                           child: widget.foregroundIndicatorBuilder!(
                               context, properties),
                         ),
@@ -558,13 +624,19 @@ class _CustomAnimatedToggleSwitchState<T>
 
   /// Animates the indicator to a specific item by its index.
   void _animateTo(int index, {double? current}) {
-    if (index.toDouble() == _animationInfo.end ||
-        _animationInfo.toggleMode == ToggleMode.dragged) return;
-    _animationInfo = _animationInfo.toEnd(index.toDouble(),
-        current: current ?? _animationInfo.valueAt(_animation.value));
-    _controller.duration = widget.animationDuration;
-    _animation.curve = widget.animationCurve;
-    _controller.forward(from: 0.0);
+    if (_animationInfo.toggleMode == ToggleMode.dragged) return;
+    if (_appearingController.value > 0.0) {
+      if (index.toDouble() != _animationInfo.end) {
+        _animationInfo = _animationInfo.toEnd(index.toDouble(),
+            current: current ?? _animationInfo.valueAt(_animation.value));
+        _controller.duration = widget.animationDuration;
+        _animation.curve = widget.animationCurve;
+        _controller.forward(from: 0.0);
+      }
+    } else {
+      _animationInfo = _animationInfo.toEnd(index.toDouble()).ended();
+    }
+    _appearingController.forward();
   }
 
   /// Starts the dragging of the indicator and starts the animation to
@@ -612,15 +684,18 @@ class _Indicator extends StatelessWidget {
   final double position;
   final Widget child;
   final TextDirection textDirection;
+  final Animation<double> appearingAnimation;
+  final IndicatorAppearingBuilder appearingBuilder;
 
   const _Indicator({
-    Key? key,
     required this.height,
     required this.indicatorSize,
     required this.position,
-    required this.child,
     required this.textDirection,
-  }) : super(key: key);
+    required this.appearingAnimation,
+    required this.appearingBuilder,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -630,10 +705,11 @@ class _Indicator extends StatelessWidget {
       start: position - indicatorSize.width / 2,
       width: indicatorSize.width,
       height: indicatorSize.height,
-      child: SizedBox(
-        width: indicatorSize.width,
-        child: child,
-      ),
+      child: AnimatedBuilder(
+          animation: appearingAnimation,
+          builder: (context, _) {
+            return appearingBuilder(context, appearingAnimation.value, child);
+          }),
     );
   }
 }
@@ -673,15 +749,24 @@ class _AnimationInfo {
   final ToggleMode toggleMode;
   final bool loading;
 
-  const _AnimationInfo(this.start,
-      {this.toggleMode = ToggleMode.none, this.loading = false})
-      : end = start;
+  const _AnimationInfo(
+    this.start, {
+    this.toggleMode = ToggleMode.none,
+    this.loading = false,
+  }) : end = start;
 
-  const _AnimationInfo._internal(this.start, this.end,
-      {this.toggleMode = ToggleMode.none, this.loading = false});
+  const _AnimationInfo._internal(
+    this.start,
+    this.end, {
+    this.toggleMode = ToggleMode.none,
+    this.loading = false,
+  });
 
-  const _AnimationInfo.animating(this.start, this.end, {this.loading = false})
-      : toggleMode = ToggleMode.animating;
+  const _AnimationInfo.animating(
+    this.start,
+    this.end, {
+    this.loading = false,
+  }) : toggleMode = ToggleMode.animating;
 
   _AnimationInfo toEnd(double end, {double? current}) =>
       _AnimationInfo.animating(current ?? start, end, loading: loading);

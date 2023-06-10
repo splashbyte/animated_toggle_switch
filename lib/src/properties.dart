@@ -8,9 +8,11 @@ class GlobalToggleProperties<T> {
 
   /// The current value which is given to the switch.
   ///
+  /// It is [null] if no value is selected.
+  ///
   /// Helpful if the value is generated e.g.
   /// when the switch constructor is called.
-  final T current;
+  final T? current;
 
   /// The previous value of the switch.
   final T? previous;

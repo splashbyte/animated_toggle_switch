@@ -29,7 +29,7 @@ typedef AnimatedIconBuilder<T> = Widget Function(
 typedef IconBuilder<T> = Widget Function(BuildContext context,
     LocalToggleProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
-typedef ColorBuilder<T> = Color? Function(T value);
+typedef ColorBuilder<T> = Color? Function(T? value);
 
 /// Specifies when an icon should be highlighted.
 enum AnimationType {
@@ -64,7 +64,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly.
-  final T current;
+  final T? current;
 
   /// All possible values.
   final List<T> values;
@@ -757,7 +757,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         super(key: key);
 
   static Function() _dualOnTap<T>(
-      Function(T)? onChanged, List<T> values, T current) {
+      Function(T)? onChanged, List<T> values, T? current) {
     return () =>
         onChanged?.call(values.firstWhere((element) => element != current));
   }

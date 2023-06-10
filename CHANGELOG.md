@@ -1,3 +1,8 @@
+## 0.7.0
+- adds possibility that no value is selected (by setting `current` to `null`)
+- BREAKING: `GlobalToggleProperties.current` is nullable now
+- BREAKING: `ColorBuilder` value is nullable now
+
 ## 0.6.2 (2022-03-09)
 - adds screenshot to pubspec.yaml
 
