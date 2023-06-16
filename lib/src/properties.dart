@@ -1,6 +1,4 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
+part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class GlobalToggleProperties<T> {
   /// The position of the indicator relative to the indices of the values.
@@ -8,11 +6,9 @@ class GlobalToggleProperties<T> {
 
   /// The current value which is given to the switch.
   ///
-  /// It is [null] if no value is selected.
-  ///
   /// Helpful if the value is generated e.g.
   /// when the switch constructor is called.
-  final T? current;
+  final T current;
 
   /// The previous value of the switch.
   final T? previous;

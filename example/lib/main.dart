@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() => positive = b);
                   return Future.delayed(Duration(seconds: 2));
                 },
-                colorBuilder: (b) => b! ? Colors.red : Colors.green,
+                colorBuilder: (b) => b ? Colors.red : Colors.green,
                 iconBuilder: (value) => value
                     ? Icon(Icons.coronavirus_rounded)
                     : Icon(Icons.tag_faces_rounded),
@@ -138,8 +138,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 16.0),
-              AnimatedToggleSwitch<int>.rolling(
+              AnimatedToggleSwitch<int?>.rolling(
                 current: nullableValue,
+                preventUnknownValues: false,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
@@ -240,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 borderWidth: 0.0,
                 borderColor: Colors.transparent,
-                colorBuilder: (i) => i?.isEven == true ? Colors.amber : Colors.red,
+                colorBuilder: (i) => i.isEven == true ? Colors.amber : Colors.red,
                 onChanged: (i) {
                   setState(() => value = i);
                   return Future.delayed(Duration(seconds: 3));
@@ -269,7 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
                 borderColor: value.isEven == true ? Colors.blue : Colors.red,
-                colorBuilder: (i) => i?.isEven == true ? Colors.amber : Colors.red,
+                colorBuilder: (i) => i.isEven == true ? Colors.amber : Colors.red,
                 onChanged: (i) => setState(() => value = i),
               ),
               Padding(
@@ -304,7 +305,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconSize: const Size.square(20),
                 iconBuilder: iconBuilder,
                 colorBuilder: (i) =>
-                    i?.isEven == true ? Colors.green : Colors.tealAccent,
+                    i.isEven == true ? Colors.green : Colors.tealAccent,
                 onChanged: (i) => setState(() => value = i),
                 borderRadius: BorderRadius.circular(8.0),
                 indicatorBorderRadius: BorderRadius.zero,
@@ -349,9 +350,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return rollingIconBuilder(value, iconSize, false);
   }
 
-  Widget rollingIconBuilder(int value, Size iconSize, bool foreground) {
+  Widget rollingIconBuilder(int? value, Size iconSize, bool foreground) {
     IconData data = Icons.access_time_rounded;
-    if (value.isEven) data = Icons.cancel;
+    if (value?.isEven ?? false) data = Icons.cancel;
     return Icon(
       data,
       size: iconSize.shortestSide,

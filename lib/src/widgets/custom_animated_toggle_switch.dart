@@ -1,8 +1,4 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:animated_toggle_switch/src/widgets/drag_region.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 /// Custom builder for icons in the switch.
 typedef CustomIconBuilder<T> = Widget Function(BuildContext context,
@@ -26,6 +22,15 @@ typedef IndicatorAppearingBuilder = Widget Function(
 
 enum FittingMode { none, preventHorizontalOverlapping }
 
+// global parameter default values
+const _defaultIndicatorAppearingAnimationDuration = Duration(milliseconds: 350);
+const _defaultIndicatorAppearingAnimationCurve = Curves.easeOutBack;
+
+Widget _defaultIndicatorAppearingBuilder(
+    BuildContext context, double value, Widget indicator) {
+  return Transform.scale(scale: value, child: indicator);
+}
+
 enum IconArrangement {
   /// Indicates that the icons should be in a row.
   ///
@@ -48,7 +53,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly.
-  final T? current;
+  final T current;
 
   /// All possible values.
   final List<T> values;
@@ -65,6 +70,11 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// A builder for an indicator which is in behind the icons.
   final CustomIndicatorBuilder<T>? backgroundIndicatorBuilder;
 
+  /// Custom builder for the appearing animation of the indicator.
+  ///
+  /// If you want to use this feature, you have to set [preventUnknownValues] to [false].
+  ///
+  /// An indicator can appear if [current] was previously not contained in [values].
   final IndicatorAppearingBuilder indicatorAppearingBuilder;
 
   /// Duration of the motion animation.
@@ -84,10 +94,10 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final Curve? loadingAnimationCurve;
 
   /// Duration of the appearing animation.
-  final Duration appearingAnimationDuration;
+  final Duration indicatorAppearingAnimationDuration;
 
   /// Curve of the appearing animation.
-  final Curve appearingAnimationCurve;
+  final Curve indicatorAppearingAnimationCurve;
 
   /// Size of the indicator.
   final Size indicatorSize;
@@ -158,6 +168,12 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// returned by [onChanged] or [onTap].
   final bool? loading;
 
+  /// Indicates if an error should be thrown if [current] is not in [values].
+  ///
+  /// If [preventUnknownValues] is [false] and [values] does not contain [current],
+  /// the indicator disappears with the specified [indicatorAppearingBuilder].
+  final bool preventUnknownValues;
+
   const CustomAnimatedToggleSwitch({
     Key? key,
     required this.current,
@@ -189,8 +205,11 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
-    this.appearingAnimationDuration = const Duration(milliseconds: 350),
-    this.appearingAnimationCurve = Curves.easeOutBack,
+    this.indicatorAppearingAnimationDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingAnimationCurve =
+        _defaultIndicatorAppearingAnimationCurve,
+    this.preventUnknownValues = true,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         super(key: key);
@@ -198,11 +217,6 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   @override
   _CustomAnimatedToggleSwitchState createState() =>
       _CustomAnimatedToggleSwitchState<T>();
-
-  static Widget _defaultIndicatorAppearingBuilder(
-      BuildContext context, double value, Widget indicator) {
-    return Transform.scale(scale: value, child: indicator);
-  }
 }
 
 class _CustomAnimatedToggleSwitchState<T>
@@ -227,7 +241,7 @@ class _CustomAnimatedToggleSwitchState<T>
     super.initState();
 
     final current = widget.current;
-    final isValueSelected = current is T;
+    final isValueSelected = widget.values.contains(current);
     _animationInfo = _AnimationInfo(
         isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0);
     _controller =
@@ -244,13 +258,13 @@ class _CustomAnimatedToggleSwitchState<T>
 
     _appearingController = AnimationController(
       vsync: this,
-      duration: widget.appearingAnimationDuration,
+      duration: widget.indicatorAppearingAnimationDuration,
       value: isValueSelected ? 1.0 : 0.0,
     );
 
     _appearingAnimation = CurvedAnimation(
       parent: _appearingController,
-      curve: widget.appearingAnimationCurve,
+      curve: widget.indicatorAppearingAnimationCurve,
     );
   }
 
@@ -263,12 +277,21 @@ class _CustomAnimatedToggleSwitchState<T>
   @override
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.appearingAnimationDuration !=
-        widget.appearingAnimationDuration) {
-      _appearingController.duration = widget.appearingAnimationDuration;
+    if (widget.preventUnknownValues &&
+        !widget.values.contains(widget.current)) {
+      throw ArgumentError(
+          'The values in AnimatedToggleSwitch have to contain current if preventUnknownValues is true.\n'
+          'current: ${widget.current}\n'
+          'values: ${widget.values}');
     }
-    if (oldWidget.appearingAnimationCurve != widget.appearingAnimationCurve) {
-      _appearingAnimation.curve = widget.appearingAnimationCurve;
+    if (oldWidget.indicatorAppearingAnimationDuration !=
+        widget.indicatorAppearingAnimationDuration) {
+      _appearingController.duration =
+          widget.indicatorAppearingAnimationDuration;
+    }
+    if (oldWidget.indicatorAppearingAnimationCurve !=
+        widget.indicatorAppearingAnimationCurve) {
+      _appearingAnimation.curve = widget.indicatorAppearingAnimationCurve;
     }
     if (oldWidget.animationDuration != widget.animationDuration) {
       _controller.duration = widget.animationDuration;
@@ -314,7 +337,7 @@ class _CustomAnimatedToggleSwitchState<T>
   void _checkValuePosition() {
     if (_animationInfo.toggleMode == ToggleMode.dragged) return;
     final current = widget.current;
-    if (current is T) {
+    if (widget.values.contains(widget.current)) {
       int index = widget.values.indexOf(current);
       _animateTo(index);
     } else {

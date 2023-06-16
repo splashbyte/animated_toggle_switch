@@ -1,8 +1,4 @@
-import 'dart:math';
-
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 typedef SizeIconBuilder<T> = Widget Function(BuildContext context,
     SizeProperties<T> local, DetailedGlobalToggleProperties<T> global);
@@ -29,7 +25,7 @@ typedef AnimatedIconBuilder<T> = Widget Function(
 typedef IconBuilder<T> = Widget Function(BuildContext context,
     LocalToggleProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
-typedef ColorBuilder<T> = Color? Function(T? value);
+typedef ColorBuilder<T> = Color? Function(T value);
 
 /// Specifies when an icon should be highlighted.
 enum AnimationType {
@@ -64,7 +60,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly.
-  final T? current;
+  final T current;
 
   /// All possible values.
   final List<T> values;
@@ -212,6 +208,25 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Defaults to [animationCurve].
   final Curve? loadingAnimationCurve;
 
+  /// Indicates if an error should be thrown if [current] is not in [values].
+  ///
+  /// If [preventUnknownValues] is [false] and [values] does not contain [current],
+  /// the indicator disappears with the specified [indicatorAppearingBuilder].
+  final bool preventUnknownValues;
+
+  /// Custom builder for the appearing animation of the indicator.
+  ///
+  /// If you want to use this feature, you have to set [preventUnknownValues] to [false].
+  ///
+  /// An indicator can appear if [current] was previously not contained in [values].
+  final IndicatorAppearingBuilder indicatorAppearingBuilder;
+
+  /// Duration of the appearing animation.
+  final Duration indicatorAppearingAnimationDuration;
+
+  /// Curve of the appearing animation.
+  final Curve indicatorAppearingAnimationCurve;
+
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   ///
   /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
@@ -258,6 +273,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
+    this.preventUnknownValues = true,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+    this.indicatorAppearingAnimationDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingAnimationCurve =
+        _defaultIndicatorAppearingAnimationCurve,
   })  : this._iconArrangement = IconArrangement.row,
         super(key: key);
 
@@ -310,6 +331,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
+    this.preventUnknownValues = true,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+    this.indicatorAppearingAnimationDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingAnimationCurve =
+        _defaultIndicatorAppearingAnimationCurve,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconSize, selectedIconSize),
         this._iconArrangement = IconArrangement.row,
@@ -365,6 +392,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
+    this.preventUnknownValues = true,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+    this.indicatorAppearingAnimationDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingAnimationCurve =
+        _defaultIndicatorAppearingAnimationCurve,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -449,6 +482,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
+    this.preventUnknownValues = true,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+    this.indicatorAppearingAnimationDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingAnimationCurve =
+        _defaultIndicatorAppearingAnimationCurve,
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconArrangement = IconArrangement.row,
@@ -507,6 +546,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     ForegroundIndicatorTransitionType transitionType =
         ForegroundIndicatorTransitionType.rolling,
     this.innerGradient,
+    this.preventUnknownValues = true,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+    this.indicatorAppearingAnimationDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingAnimationCurve =
+        _defaultIndicatorAppearingAnimationCurve,
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -579,6 +624,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     ForegroundIndicatorTransitionType transitionType =
         ForegroundIndicatorTransitionType.rolling,
     this.innerGradient,
+    this.preventUnknownValues = true,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+    this.indicatorAppearingAnimationDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingAnimationCurve =
+        _defaultIndicatorAppearingAnimationCurve,
   })  : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
@@ -754,6 +805,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           opacityAnimation,
         ),
         this._iconArrangement = IconArrangement.overlap,
+        this.preventUnknownValues = true,
+        this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+        this.indicatorAppearingAnimationDuration =
+            _defaultIndicatorAppearingAnimationDuration,
+        this.indicatorAppearingAnimationCurve =
+            _defaultIndicatorAppearingAnimationCurve,
         super(key: key);
 
   static Function() _dualOnTap<T>(
@@ -852,6 +909,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         loading: loading,
         loadingAnimationCurve: loadingAnimationCurve,
         loadingAnimationDuration: loadingAnimationDuration,
+        preventUnknownValues: preventUnknownValues,
+        indicatorAppearingBuilder: indicatorAppearingBuilder,
+        indicatorAppearingAnimationDuration:
+            indicatorAppearingAnimationDuration,
+        indicatorAppearingAnimationCurve: indicatorAppearingAnimationCurve,
         backgroundIndicatorBuilder: foregroundIndicatorIconBuilder != null
             ? null
             : (context, properties) => _indicatorBuilder(context, properties,
