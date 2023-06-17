@@ -94,10 +94,10 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final Curve? loadingAnimationCurve;
 
   /// Duration of the appearing animation.
-  final Duration indicatorAppearingAnimationDuration;
+  final Duration indicatorAppearingDuration;
 
   /// Curve of the appearing animation.
-  final Curve indicatorAppearingAnimationCurve;
+  final Curve indicatorAppearingCurve;
 
   /// Size of the indicator.
   final Size indicatorSize;
@@ -205,9 +205,9 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
-    this.indicatorAppearingAnimationDuration =
+    this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingAnimationCurve =
+    this.indicatorAppearingCurve =
         _defaultIndicatorAppearingAnimationCurve,
     this.preventUnknownValues = true,
   })  : assert(foregroundIndicatorBuilder != null ||
@@ -258,13 +258,13 @@ class _CustomAnimatedToggleSwitchState<T>
 
     _appearingController = AnimationController(
       vsync: this,
-      duration: widget.indicatorAppearingAnimationDuration,
+      duration: widget.indicatorAppearingDuration,
       value: isValueSelected ? 1.0 : 0.0,
     );
 
     _appearingAnimation = CurvedAnimation(
       parent: _appearingController,
-      curve: widget.indicatorAppearingAnimationCurve,
+      curve: widget.indicatorAppearingCurve,
     );
   }
 
@@ -284,14 +284,14 @@ class _CustomAnimatedToggleSwitchState<T>
           'current: ${widget.current}\n'
           'values: ${widget.values}');
     }
-    if (oldWidget.indicatorAppearingAnimationDuration !=
-        widget.indicatorAppearingAnimationDuration) {
+    if (oldWidget.indicatorAppearingDuration !=
+        widget.indicatorAppearingDuration) {
       _appearingController.duration =
-          widget.indicatorAppearingAnimationDuration;
+          widget.indicatorAppearingDuration;
     }
-    if (oldWidget.indicatorAppearingAnimationCurve !=
-        widget.indicatorAppearingAnimationCurve) {
-      _appearingAnimation.curve = widget.indicatorAppearingAnimationCurve;
+    if (oldWidget.indicatorAppearingCurve !=
+        widget.indicatorAppearingCurve) {
+      _appearingAnimation.curve = widget.indicatorAppearingCurve;
     }
     if (oldWidget.animationDuration != widget.animationDuration) {
       _controller.duration = widget.animationDuration;
