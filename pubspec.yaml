@@ -1,6 +1,6 @@
 name: animated_toggle_switch
 description: Simple and animated switch with multiple choices and smooth loading animation. It's a good alternative if you don't want to use something like a dropdown menu.
-version: 0.6.2
+version: 0.7.0
 repository: https://github.com/SplashByte/animated_toggle_switch
 issue_tracker: https://github.com/SplashByte/animated_toggle_switch/issues
 
