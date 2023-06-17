@@ -72,7 +72,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
 
   /// Custom builder for the appearing animation of the indicator.
   ///
-  /// If you want to use this feature, you have to set [preventUnknownValues] to [false].
+  /// If you want to use this feature, you have to set [preventUnlistedValues] to [false].
   ///
   /// An indicator can appear if [current] was previously not contained in [values].
   final IndicatorAppearingBuilder indicatorAppearingBuilder;
@@ -170,9 +170,9 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
 
   /// Indicates if an error should be thrown if [current] is not in [values].
   ///
-  /// If [preventUnknownValues] is [false] and [values] does not contain [current],
+  /// If [preventUnlistedValues] is [false] and [values] does not contain [current],
   /// the indicator disappears with the specified [indicatorAppearingBuilder].
-  final bool preventUnknownValues;
+  final bool preventUnlistedValues;
 
   const CustomAnimatedToggleSwitch({
     Key? key,
@@ -209,7 +209,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve =
         _defaultIndicatorAppearingAnimationCurve,
-    this.preventUnknownValues = true,
+    this.preventUnlistedValues = true,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         super(key: key);
@@ -277,7 +277,7 @@ class _CustomAnimatedToggleSwitchState<T>
   @override
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.preventUnknownValues &&
+    if (widget.preventUnlistedValues &&
         !widget.values.contains(widget.current)) {
       throw ArgumentError(
           'The values in AnimatedToggleSwitch have to contain current if preventUnknownValues is true.\n'

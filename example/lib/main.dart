@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int?>.rolling(
                 current: nullableValue,
-                preventUnknownValues: false,
+                preventUnlistedValues: false,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
