@@ -210,13 +210,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Indicates if an error should be thrown if [current] is not in [values].
   ///
-  /// If [preventUnlistedValues] is [false] and [values] does not contain [current],
+  /// If [allowUnlistedValues] is [true] and [values] does not contain [current],
   /// the indicator disappears with the specified [indicatorAppearingBuilder].
-  final bool preventUnlistedValues;
+  final bool allowUnlistedValues;
 
   /// Custom builder for the appearing animation of the indicator.
   ///
-  /// If you want to use this feature, you have to set [preventUnlistedValues] to [false].
+  /// If you want to use this feature, you have to set [allowUnlistedValues] to [true].
   ///
   /// An indicator can appear if [current] was previously not contained in [values].
   final IndicatorAppearingBuilder indicatorAppearingBuilder;
@@ -273,7 +273,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
-    this.preventUnlistedValues = true,
+    this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
@@ -331,7 +331,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
-    this.preventUnlistedValues = true,
+    this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
@@ -392,7 +392,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
-    this.preventUnlistedValues = true,
+    this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
@@ -482,7 +482,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     this.innerGradient,
-    this.preventUnlistedValues = true,
+    this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
@@ -546,7 +546,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     ForegroundIndicatorTransitionType transitionType =
         ForegroundIndicatorTransitionType.rolling,
     this.innerGradient,
-    this.preventUnlistedValues = true,
+    this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
@@ -624,7 +624,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     ForegroundIndicatorTransitionType transitionType =
         ForegroundIndicatorTransitionType.rolling,
     this.innerGradient,
-    this.preventUnlistedValues = true,
+    this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
@@ -805,7 +805,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           opacityAnimation,
         ),
         this._iconArrangement = IconArrangement.overlap,
-        this.preventUnlistedValues = true,
+        this.allowUnlistedValues = false,
         this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
         this.indicatorAppearingDuration =
             _defaultIndicatorAppearingAnimationDuration,
@@ -909,7 +909,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         loading: loading,
         loadingAnimationCurve: loadingAnimationCurve,
         loadingAnimationDuration: loadingAnimationDuration,
-        preventUnlistedValues: preventUnlistedValues,
+        allowUnlistedValues: allowUnlistedValues,
         indicatorAppearingBuilder: indicatorAppearingBuilder,
         indicatorAppearingDuration:
             indicatorAppearingDuration,
