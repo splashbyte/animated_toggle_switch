@@ -30,8 +30,7 @@ For a slider with a similar look, you can check out [action_slider](https://pub.
 `AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/161432579-9fe81c57-6463-45c3-a48f-75db666a3a22.gif)   
 `AnimatedToggleSwitch.rolling()` with no initial selection   
-![animated_toggle_switch_example_unlisted_value](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/570f39e8-bc5c-4a19-a91a-d186d4bbd8fe)
-
+![animated_toggle_switch_example_unlisted_value](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/570f39e8-bc5c-4a19-a91a-d186d4bbd8fe)  
 `AnimatedToggleSwitch.rolling()` with loading animation  
 ![animated_toggle_switch_example_rolling_loading](https://user-images.githubusercontent.com/43761463/209121057-2ff2bfc3-063e-4704-a981-f5cc5f54720a.gif)  
 
@@ -103,6 +102,7 @@ AnimatedToggleSwitch<int?>.rolling(
    values: const [0, 1, 2, 3],
    onChanged: (i) => setState(() => nullableValue = i),
    iconBuilder: iconBuilder,
+   indicatorAppearingBuilder: ..., /// appearing animation is fully customizable (optional)
 )
 ```
 
