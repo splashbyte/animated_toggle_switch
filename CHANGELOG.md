@@ -1,9 +1,9 @@
-## 0.7.0
+## 0.7.0 (2023-06-19)
 
 - adds possibility that no valid value is selected (by setting `allowUnlistedValues` to `true`)
 - adds new parameters to almost all constructors: `allowUnlistedValues`, `indicatorAppearingBuilder`, `indicatorAppearingDuration`, `indicatorAppearingCurve`
 
-## 0.6.2 (2022-03-09)
+## 0.6.2 (2023-03-09)
 
 - adds screenshot to pubspec.yaml
 

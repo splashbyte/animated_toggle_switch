@@ -102,7 +102,7 @@ AnimatedToggleSwitch<int?>.rolling(
    values: const [0, 1, 2, 3],
    onChanged: (i) => setState(() => nullableValue = i),
    iconBuilder: iconBuilder,
-   indicatorAppearingBuilder: ..., /// appearing animation is fully customizable (optional)
+   indicatorAppearingBuilder: ..., // appearing animation is fully customizable (optional)
 )
 ```
 

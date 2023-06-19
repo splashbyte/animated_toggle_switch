@@ -277,8 +277,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingCurve =
-        _defaultIndicatorAppearingAnimationCurve,
+    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
   })  : this._iconArrangement = IconArrangement.row,
         super(key: key);
 
@@ -335,8 +334,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingCurve =
-        _defaultIndicatorAppearingAnimationCurve,
+    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconSize, selectedIconSize),
         this._iconArrangement = IconArrangement.row,
@@ -396,8 +394,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingCurve =
-        _defaultIndicatorAppearingAnimationCurve,
+    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -486,8 +483,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingCurve =
-        _defaultIndicatorAppearingAnimationCurve,
+    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconArrangement = IconArrangement.row,
@@ -550,8 +546,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingCurve =
-        _defaultIndicatorAppearingAnimationCurve,
+    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -628,8 +623,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingCurve =
-        _defaultIndicatorAppearingAnimationCurve,
+    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
   })  : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
@@ -809,8 +803,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
         this.indicatorAppearingDuration =
             _defaultIndicatorAppearingAnimationDuration,
-        this.indicatorAppearingCurve =
-            _defaultIndicatorAppearingAnimationCurve,
+        this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
         super(key: key);
 
   static Function() _dualOnTap<T>(
@@ -911,8 +904,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         loadingAnimationDuration: loadingAnimationDuration,
         allowUnlistedValues: allowUnlistedValues,
         indicatorAppearingBuilder: indicatorAppearingBuilder,
-        indicatorAppearingDuration:
-            indicatorAppearingDuration,
+        indicatorAppearingDuration: indicatorAppearingDuration,
         indicatorAppearingCurve: indicatorAppearingCurve,
         backgroundIndicatorBuilder: foregroundIndicatorIconBuilder != null
             ? null
