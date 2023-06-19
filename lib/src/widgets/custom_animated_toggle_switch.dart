@@ -209,6 +209,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
 
   @override
   _CustomAnimatedToggleSwitchState createState() => _CustomAnimatedToggleSwitchState<T>();
+
+  bool get _isCurrentUnlisted => !values.contains(current);
 }
 
 class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwitch<T>> with TickerProviderStateMixin {
@@ -261,15 +263,26 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
     super.dispose();
   }
 
+  @pragma('vm:notify-debugger-on-exception')
+  void _checkForUnlistedValue() {
+    if (!widget.allowUnlistedValues && widget._isCurrentUnlisted) {
+      try {
+        throw ArgumentError(
+            'The values in AnimatedToggleSwitch have to contain current if allowUnlistedValues is false.\n'
+            'current: ${widget.current}\n'
+            'values: ${widget.values}\n'
+            'This error is only thrown in debug mode to minimize problems with the production app.');
+      } catch (e, s) {
+        if (kDebugMode) rethrow;
+        FlutterError.reportError(FlutterErrorDetails(exception: e, stack: s, library: 'AnimatedToggleSwitch'));
+      }
+    }
+  }
+
   @override
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!widget.allowUnlistedValues && !widget.values.contains(widget.current)) {
-      throw ArgumentError(
-          'The values in AnimatedToggleSwitch have to contain current if allowUnlistedValues is false.\n'
-          'current: ${widget.current}\n'
-          'values: ${widget.values}');
-    }
+    _checkForUnlistedValue();
     if (oldWidget.indicatorAppearingDuration != widget.indicatorAppearingDuration) {
       _appearingController.duration = widget.indicatorAppearingDuration;
     }
@@ -437,7 +450,7 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                     double leftPosition = textDirection == TextDirection.rtl ? width - position : position;
 
                     bool isHoveringIndicator(Offset offset) {
-                      if (_animationInfo.loading) return false;
+                      if (_animationInfo.loading || widget._isCurrentUnlisted) return false;
                       double dx = textDirection == TextDirection.rtl ? width - offset.dx : offset.dx;
                       return position - (indicatorSize.width + dragDif) / 2 <= dx &&
                           dx <= (position + (indicatorSize.width + dragDif) / 2);
