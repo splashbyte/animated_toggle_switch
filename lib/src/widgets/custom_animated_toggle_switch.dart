@@ -1,21 +1,24 @@
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 /// Custom builder for icons in the switch.
-typedef CustomIconBuilder<T> = Widget Function(
-    BuildContext context, LocalToggleProperties<T> local, DetailedGlobalToggleProperties<T> global);
+typedef CustomIconBuilder<T> = Widget Function(BuildContext context,
+    LocalToggleProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
 /// Custom builder for the indicator of the switch.
-typedef CustomIndicatorBuilder<T> = Widget Function(BuildContext context, DetailedGlobalToggleProperties<T> global);
+typedef CustomIndicatorBuilder<T> = Widget Function(
+    BuildContext context, DetailedGlobalToggleProperties<T> global);
 
 /// Custom builder for the wrapper of the switch.
-typedef CustomWrapperBuilder<T> = Widget Function(BuildContext context, GlobalToggleProperties<T> local, Widget child);
+typedef CustomWrapperBuilder<T> = Widget Function(
+    BuildContext context, GlobalToggleProperties<T> local, Widget child);
 
 /// Custom builder for the appearing animation of the indicator.
 ///
 /// If [value] is [0.0], the indicator is completely disappeared.
 ///
 /// If [value] is [1.0], the indicator is fully appeared.
-typedef IndicatorAppearingBuilder = Widget Function(BuildContext context, double value, Widget indicator);
+typedef IndicatorAppearingBuilder = Widget Function(
+    BuildContext context, double value, Widget indicator);
 
 enum FittingMode { none, preventHorizontalOverlapping }
 
@@ -23,7 +26,8 @@ enum FittingMode { none, preventHorizontalOverlapping }
 const _defaultIndicatorAppearingAnimationDuration = Duration(milliseconds: 350);
 const _defaultIndicatorAppearingAnimationCurve = Curves.easeOutBack;
 
-Widget _defaultIndicatorAppearingBuilder(BuildContext context, double value, Widget indicator) {
+Widget _defaultIndicatorAppearingBuilder(
+    BuildContext context, double value, Widget indicator) {
   return Transform.scale(scale: value, child: indicator);
 }
 
@@ -201,19 +205,23 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
-    this.indicatorAppearingDuration = _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingDuration =
+        _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
     this.allowUnlistedValues = false,
-  })  : assert(foregroundIndicatorBuilder != null || backgroundIndicatorBuilder != null),
+  })  : assert(foregroundIndicatorBuilder != null ||
+            backgroundIndicatorBuilder != null),
         super(key: key);
 
   @override
-  _CustomAnimatedToggleSwitchState createState() => _CustomAnimatedToggleSwitchState<T>();
+  _CustomAnimatedToggleSwitchState createState() =>
+      _CustomAnimatedToggleSwitchState<T>();
 
   bool get _isCurrentUnlisted => !values.contains(current);
 }
 
-class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwitch<T>> with TickerProviderStateMixin {
+class _CustomAnimatedToggleSwitchState<T>
+    extends State<CustomAnimatedToggleSwitch<T>> with TickerProviderStateMixin {
   /// The [AnimationController] for the movement of the indicator.
   late final AnimationController _controller;
 
@@ -235,15 +243,19 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
 
     final current = widget.current;
     final isValueSelected = widget.values.contains(current);
-    _animationInfo = _AnimationInfo(isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0);
-    _controller = AnimationController(vsync: this, duration: widget.animationDuration)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && _animationInfo.toggleMode != ToggleMode.dragged) {
-          _animationInfo = _animationInfo.ended();
-        }
-      });
+    _animationInfo = _AnimationInfo(
+        isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0);
+    _controller =
+        AnimationController(vsync: this, duration: widget.animationDuration)
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed &&
+                _animationInfo.toggleMode != ToggleMode.dragged) {
+              _animationInfo = _animationInfo.ended();
+            }
+          });
 
-    _animation = CurvedAnimation(parent: _controller, curve: widget.animationCurve);
+    _animation =
+        CurvedAnimation(parent: _controller, curve: widget.animationCurve);
 
     _appearingController = AnimationController(
       vsync: this,
@@ -274,7 +286,8 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
             'This error is only thrown in debug mode to minimize problems with the production app.');
       } catch (e, s) {
         if (kDebugMode) rethrow;
-        FlutterError.reportError(FlutterErrorDetails(exception: e, stack: s, library: 'AnimatedToggleSwitch'));
+        FlutterError.reportError(FlutterErrorDetails(
+            exception: e, stack: s, library: 'AnimatedToggleSwitch'));
       }
     }
   }
@@ -283,7 +296,8 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     _checkForUnlistedValue();
-    if (oldWidget.indicatorAppearingDuration != widget.indicatorAppearingDuration) {
+    if (oldWidget.indicatorAppearingDuration !=
+        widget.indicatorAppearingDuration) {
       _appearingController.duration = widget.indicatorAppearingDuration;
     }
     if (oldWidget.indicatorAppearingCurve != widget.indicatorAppearingCurve) {
@@ -343,12 +357,16 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
 
   /// Returns the value position by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
-  double _doubleFromPosition(double x, DetailedGlobalToggleProperties properties) {
-    double result =
-        (x.clamp(properties.indicatorSize.width / 2, properties.switchSize.width - properties.indicatorSize.width / 2) -
-                properties.indicatorSize.width / 2) /
-            (properties.indicatorSize.width + properties.dif);
-    if (properties.textDirection == TextDirection.rtl) result = widget.values.length - 1 - result;
+  double _doubleFromPosition(
+      double x, DetailedGlobalToggleProperties properties) {
+    double result = (x.clamp(
+                properties.indicatorSize.width / 2,
+                properties.switchSize.width -
+                    properties.indicatorSize.width / 2) -
+            properties.indicatorSize.width / 2) /
+        (properties.indicatorSize.width + properties.dif);
+    if (properties.textDirection == TextDirection.rtl)
+      result = widget.values.length - 1 - result;
     return result;
   }
 
@@ -379,7 +397,9 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
         builder: (context, loadingValue, child) => AnimatedBuilder(
             animation: _animation,
             builder: (context, child) {
-              double positionValue = _animationInfo.valueAt(_animation.value).clamp(0, widget.values.length - 1);
+              double positionValue = _animationInfo
+                  .valueAt(_animation.value)
+                  .clamp(0, widget.values.length - 1);
               GlobalToggleProperties<T> properties = GlobalToggleProperties(
                 position: positionValue,
                 current: widget.current,
@@ -398,7 +418,9 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                   builder: (context, constraints) {
                     double height = constraints.maxHeight;
                     assert(
-                        constraints.maxWidth.isFinite || (widget.indicatorSize.width.isFinite && dif.isFinite),
+                        constraints.maxWidth.isFinite ||
+                            (widget.indicatorSize.width.isFinite &&
+                                dif.isFinite),
                         "With unbound width constraints "
                         "the width of the indicator and the dif "
                         "can't be infinite");
@@ -411,60 +433,83 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                     // infinite.
                     Size indicatorSize = Size(
                         widget.indicatorSize.width.isInfinite
-                            ? (constraints.maxWidth - dif * (widget.values.length - 1)) / widget.values.length
+                            ? (constraints.maxWidth -
+                                    dif * (widget.values.length - 1)) /
+                                widget.values.length
                             : widget.indicatorSize.width,
-                        widget.indicatorSize.height.isInfinite ? height : widget.indicatorSize.height);
+                        widget.indicatorSize.height.isInfinite
+                            ? height
+                            : widget.indicatorSize.height);
 
                     if (dif.isInfinite) {
-                      dif = (constraints.maxWidth - widget.indicatorSize.width * widget.values.length) /
+                      dif = (constraints.maxWidth -
+                              widget.indicatorSize.width *
+                                  widget.values.length) /
                           (widget.values.length - 1);
                     }
 
                     // Calculates the required width of the widget.
-                    double width = indicatorSize.width * widget.values.length + (widget.values.length - 1) * dif;
+                    double width = indicatorSize.width * widget.values.length +
+                        (widget.values.length - 1) * dif;
 
                     // Handles the case that the required width of the widget
                     // cannot be used due to the given BoxConstraints.
-                    if (widget.fittingMode == FittingMode.preventHorizontalOverlapping &&
+                    if (widget.fittingMode ==
+                            FittingMode.preventHorizontalOverlapping &&
                         width > constraints.maxWidth) {
                       double factor = constraints.maxWidth / width;
                       dif *= factor;
                       width = constraints.maxWidth;
                       indicatorSize = Size(
-                          indicatorSize.width.isInfinite ? width / widget.values.length : factor * indicatorSize.width,
+                          indicatorSize.width.isInfinite
+                              ? width / widget.values.length
+                              : factor * indicatorSize.width,
                           indicatorSize.height);
                     } else if (constraints.minWidth > width) {
-                      dif += (constraints.minWidth - width) / (widget.values.length - 1);
+                      dif += (constraints.minWidth - width) /
+                          (widget.values.length - 1);
                       width = constraints.minWidth;
                     }
 
                     // The additional width of the indicator's hitbox needed
                     // to reach the minTouchTargetSize.
-                    double dragDif = indicatorSize.width < widget.minTouchTargetSize
-                        ? (widget.minTouchTargetSize - indicatorSize.width)
-                        : 0;
+                    double dragDif =
+                        indicatorSize.width < widget.minTouchTargetSize
+                            ? (widget.minTouchTargetSize - indicatorSize.width)
+                            : 0;
 
                     // The local position of the indicator.
-                    double position = (indicatorSize.width + dif) * positionValue + indicatorSize.width / 2;
+                    double position =
+                        (indicatorSize.width + dif) * positionValue +
+                            indicatorSize.width / 2;
 
-                    double leftPosition = textDirection == TextDirection.rtl ? width - position : position;
+                    double leftPosition = textDirection == TextDirection.rtl
+                        ? width - position
+                        : position;
 
                     bool isHoveringIndicator(Offset offset) {
-                      if (_animationInfo.loading || widget._isCurrentUnlisted) return false;
-                      double dx = textDirection == TextDirection.rtl ? width - offset.dx : offset.dx;
-                      return position - (indicatorSize.width + dragDif) / 2 <= dx &&
-                          dx <= (position + (indicatorSize.width + dragDif) / 2);
+                      if (_animationInfo.loading || widget._isCurrentUnlisted)
+                        return false;
+                      double dx = textDirection == TextDirection.rtl
+                          ? width - offset.dx
+                          : offset.dx;
+                      return position - (indicatorSize.width + dragDif) / 2 <=
+                              dx &&
+                          dx <=
+                              (position + (indicatorSize.width + dragDif) / 2);
                     }
 
-                    DetailedGlobalToggleProperties<T> properties = DetailedGlobalToggleProperties(
+                    DetailedGlobalToggleProperties<T> properties =
+                        DetailedGlobalToggleProperties(
                       dif: dif,
                       position: positionValue,
                       indicatorSize: indicatorSize,
                       switchSize: Size(width, height),
                       current: widget.current,
-                      previous: _animationInfo.start.toInt() == _animationInfo.start
-                          ? widget.values[_animationInfo.start.toInt()]
-                          : null,
+                      previous:
+                          _animationInfo.start.toInt() == _animationInfo.start
+                              ? widget.values[_animationInfo.start.toInt()]
+                              : null,
                       values: widget.values,
                       previousPosition: _animationInfo.start,
                       textDirection: textDirection,
@@ -481,7 +526,8 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                           position: position,
                           appearingAnimation: _appearingAnimation,
                           appearingBuilder: widget.indicatorAppearingBuilder,
-                          child: widget.backgroundIndicatorBuilder!(context, properties),
+                          child: widget.backgroundIndicatorBuilder!(
+                              context, properties),
                         ),
                       ...(widget.iconArrangement == IconArrangement.overlap
                           ? _buildBackgroundStack(context, properties)
@@ -494,13 +540,16 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                           position: position,
                           appearingAnimation: _appearingAnimation,
                           appearingBuilder: widget.indicatorAppearingBuilder,
-                          child: widget.foregroundIndicatorBuilder!(context, properties),
+                          child: widget.foregroundIndicatorBuilder!(
+                              context, properties),
                         ),
                     ];
 
                     return _WidgetPart(
-                      left: loadingValue * (leftPosition - 0.5 * indicatorSize.width),
-                      width: indicatorSize.width + (1 - loadingValue) * (width - indicatorSize.width),
+                      left: loadingValue *
+                          (leftPosition - 0.5 * indicatorSize.width),
+                      width: indicatorSize.width +
+                          (1 - loadingValue) * (width - indicatorSize.width),
                       height: height,
                       child: SizedBox(
                         width: width,
@@ -509,29 +558,38 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                         // to make sure that GestureDetector and MouseRegion match.
                         // TODO: one widget for DragRegion and GestureDetector to avoid redundancy
                         child: DragRegion(
-                          dragging: _animationInfo.toggleMode == ToggleMode.dragged,
+                          dragging:
+                              _animationInfo.toggleMode == ToggleMode.dragged,
                           draggingCursor: widget.draggingCursor,
                           dragCursor: widget.dragCursor,
                           hoverCheck: isHoveringIndicator,
                           defaultCursor: _animationInfo.loading
                               ? widget.loadingCursor
                               : (widget.defaultCursor ??
-                                  (widget.iconsTappable ? SystemMouseCursors.click : MouseCursor.defer)),
+                                  (widget.iconsTappable
+                                      ? SystemMouseCursors.click
+                                      : MouseCursor.defer)),
                           child: GestureDetector(
                             dragStartBehavior: DragStartBehavior.down,
                             onTapUp: (details) {
                               _onTap();
                               if (!widget.iconsTappable) return;
-                              T newValue = _valueFromPosition(details.localPosition.dx, properties);
+                              T newValue = _valueFromPosition(
+                                  details.localPosition.dx, properties);
                               if (newValue == widget.current) return;
                               _onChanged(newValue);
                             },
                             onHorizontalDragStart: (details) {
-                              if (!isHoveringIndicator(details.localPosition)) return;
-                              _onDragged(_doubleFromPosition(details.localPosition.dx, properties), positionValue);
+                              if (!isHoveringIndicator(details.localPosition))
+                                return;
+                              _onDragged(
+                                  _doubleFromPosition(
+                                      details.localPosition.dx, properties),
+                                  positionValue);
                             },
                             onHorizontalDragUpdate: (details) {
-                              _onDragUpdate(_doubleFromPosition(details.localPosition.dx, properties));
+                              _onDragUpdate(_doubleFromPosition(
+                                  details.localPosition.dx, properties));
                             },
                             onHorizontalDragEnd: (details) {
                               _onDragEnd();
@@ -540,7 +598,8 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                             child: DecoratedBox(
                                 position: DecorationPosition.background,
                                 decoration: const BoxDecoration(),
-                                child: Stack(clipBehavior: Clip.none, children: stack)),
+                                child: Stack(
+                                    clipBehavior: Clip.none, children: stack)),
                           ),
                         ),
                       ),
@@ -548,28 +607,36 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
                   },
                 ),
               );
-              return widget.wrapperBuilder?.call(context, properties, child) ?? child;
+              return widget.wrapperBuilder?.call(context, properties, child) ??
+                  child;
             }),
       ),
     );
   }
 
   /// The builder of the icons for [IconArrangement.overlap].
-  List<Positioned> _buildBackgroundStack(BuildContext context, DetailedGlobalToggleProperties<T> properties) {
+  List<Positioned> _buildBackgroundStack(
+      BuildContext context, DetailedGlobalToggleProperties<T> properties) {
     return List.generate(widget.values.length, (i) {
       double position = i * (properties.indicatorSize.width + properties.dif);
       return Positioned.directional(
         textDirection: _textDirectionOf(context),
         start: i == 0 ? position : position - properties.dif,
-        width: (i == 0 || i == widget.values.length - 1 ? 1 : 2) * properties.dif + properties.indicatorSize.width,
+        width:
+            (i == 0 || i == widget.values.length - 1 ? 1 : 2) * properties.dif +
+                properties.indicatorSize.width,
         height: properties.indicatorSize.height,
-        child: widget.iconBuilder(context, LocalToggleProperties(value: widget.values[i], index: i), properties),
+        child: widget.iconBuilder(
+            context,
+            LocalToggleProperties(value: widget.values[i], index: i),
+            properties),
       );
     }).toList();
   }
 
   /// The builder of the icons for [IconArrangement.row].
-  List<Widget> _buildBackgroundRow(BuildContext context, DetailedGlobalToggleProperties<T> properties) {
+  List<Widget> _buildBackgroundRow(
+      BuildContext context, DetailedGlobalToggleProperties<T> properties) {
     return [
       Row(
         textDirection: _textDirectionOf(context),
@@ -579,7 +646,10 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
           (i) => SizedBox(
             width: properties.indicatorSize.width,
             height: properties.indicatorSize.height,
-            child: widget.iconBuilder(context, LocalToggleProperties(value: widget.values[i], index: i), properties),
+            child: widget.iconBuilder(
+                context,
+                LocalToggleProperties(value: widget.values[i], index: i),
+                properties),
           ),
         ),
       ),
@@ -591,8 +661,8 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
     if (_animationInfo.toggleMode == ToggleMode.dragged) return;
     if (_appearingController.value > 0.0) {
       if (index.toDouble() != _animationInfo.end) {
-        _animationInfo =
-            _animationInfo.toEnd(index.toDouble(), current: current ?? _animationInfo.valueAt(_animation.value));
+        _animationInfo = _animationInfo.toEnd(index.toDouble(),
+            current: current ?? _animationInfo.valueAt(_animation.value));
         _controller.duration = widget.animationDuration;
         _animation.curve = widget.animationCurve;
         _controller.forward(from: 0.0);
@@ -634,7 +704,9 @@ class _CustomAnimatedToggleSwitchState<T> extends State<CustomAnimatedToggleSwit
 
   /// Returns the [TextDirection] of the widget.
   TextDirection _textDirectionOf(BuildContext context) =>
-      widget.textDirection ?? Directionality.maybeOf(context) ?? TextDirection.ltr;
+      widget.textDirection ??
+      Directionality.maybeOf(context) ??
+      TextDirection.ltr;
 }
 
 /// The [Positioned] for an indicator. It is used as wrapper for
@@ -733,12 +805,13 @@ class _AnimationInfo {
   _AnimationInfo toEnd(double end, {double? current}) =>
       _AnimationInfo.animating(current ?? start, end, loading: loading);
 
-  _AnimationInfo none({double? current}) =>
-      _AnimationInfo(current ?? start, toggleMode: ToggleMode.none, loading: loading);
+  _AnimationInfo none({double? current}) => _AnimationInfo(current ?? start,
+      toggleMode: ToggleMode.none, loading: loading);
 
   _AnimationInfo ended() => _AnimationInfo(end, loading: loading);
 
-  _AnimationInfo dragged(double current, {double? pos}) => _AnimationInfo._internal(
+  _AnimationInfo dragged(double current, {double? pos}) =>
+      _AnimationInfo._internal(
         pos ?? start,
         current,
         toggleMode: ToggleMode.dragged,
@@ -746,7 +819,8 @@ class _AnimationInfo {
       );
 
   _AnimationInfo setLoading(bool loading) =>
-      _AnimationInfo._internal(start, end, toggleMode: toggleMode, loading: loading);
+      _AnimationInfo._internal(start, end,
+          toggleMode: toggleMode, loading: loading);
 
   double valueAt(num position) => start + (end - start) * position;
 }

@@ -9,9 +9,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 part 'src/properties.dart';
-
 part 'src/utils.dart';
-
 part 'src/widgets/animated_toggle_switch.dart';
-
 part 'src/widgets/custom_animated_toggle_switch.dart';
