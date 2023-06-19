@@ -1,6 +1,4 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
+part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class GlobalToggleProperties<T> {
   /// The position of the indicator relative to the indices of the values.

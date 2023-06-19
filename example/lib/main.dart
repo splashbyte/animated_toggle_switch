@@ -13,9 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(),
       home: MyHomePage(title: 'Example'),
     );
   }
@@ -32,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int value = 0;
+  int? nullableValue;
   bool positive = false;
   bool loading = false;
 
@@ -77,12 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Future.delayed(Duration(seconds: 2));
                 },
                 colorBuilder: (b) => b ? Colors.red : Colors.green,
-                iconBuilder: (value) => value
-                    ? Icon(Icons.coronavirus_rounded)
-                    : Icon(Icons.tag_faces_rounded),
-                textBuilder: (value) => value
-                    ? Center(child: Text('Oh no...'))
-                    : Center(child: Text('Nice :)')),
+                iconBuilder: (value) => value ? Icon(Icons.coronavirus_rounded) : Icon(Icons.tag_faces_rounded),
+                textBuilder: (value) => value ? Center(child: Text('Oh no...')) : Center(child: Text('Nice :)')),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -116,8 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     value = i;
                     loading = true;
                   });
-                  return Future.delayed(Duration(seconds: 3))
-                      .then((_) => setState(() => loading = false));
+                  return Future.delayed(Duration(seconds: 3)).then((_) => setState(() => loading = false));
                 },
                 iconBuilder: rollingIconBuilder,
                 borderColor: Colors.transparent,
@@ -139,15 +133,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 16.0),
-              AnimatedToggleSwitch<int>.rolling(
-                current: value,
+              AnimatedToggleSwitch<int?>.rolling(
+                current: nullableValue,
+                allowUnlistedValues: false,
                 values: const [0, 1, 2, 3],
-                onChanged: (i) => setState(() => value = i),
+                onTap: () => setState(() => nullableValue = null),
+                onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
                 indicatorColor: Colors.white,
-                innerGradient:
-                    const LinearGradient(colors: [Colors.red, Colors.blue]),
+                innerGradient: const LinearGradient(colors: [Colors.red, Colors.blue]),
                 innerColor: Colors.amber,
                 height: 55,
                 dif: 20.0,
@@ -185,12 +180,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 20.0,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Color.lerp(
-                                  Colors.black26,
-                                  theme.colorScheme.background,
-                                  global.position),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(50.0)),
+                              color: Color.lerp(Colors.black26, theme.colorScheme.background, global.position),
+                              borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                             ),
                           )),
                       child,
@@ -202,15 +193,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     size: global.indicatorSize,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Color.lerp(
-                            Colors.white, theme.primaryColor, global.position),
+                        color: Color.lerp(Colors.white, theme.primaryColor, global.position),
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         boxShadow: const [
                           BoxShadow(
-                              color: Colors.black38,
-                              spreadRadius: 0.05,
-                              blurRadius: 1.1,
-                              offset: Offset(0.0, 0.8))
+                              color: Colors.black38, spreadRadius: 0.05, blurRadius: 1.1, offset: Offset(0.0, 0.8))
                         ],
                       ),
                     ),
@@ -241,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 borderWidth: 0.0,
                 borderColor: Colors.transparent,
-                colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
+                colorBuilder: (i) => i.isEven == true ? Colors.amber : Colors.red,
                 onChanged: (i) {
                   setState(() => value = i);
                   return Future.delayed(Duration(seconds: 3));
@@ -269,8 +256,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   );
                 },
-                borderColor: value.isEven ? Colors.blue : Colors.red,
-                colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
+                borderColor: value.isEven == true ? Colors.blue : Colors.red,
+                colorBuilder: (i) => i.isEven == true ? Colors.amber : Colors.red,
                 onChanged: (i) => setState(() => value = i),
               ),
               Padding(
@@ -291,21 +278,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Transform.rotate(
                       angle: 2.0 * pi * transitionValue,
                       child: Stack(children: [
-                        Opacity(
-                            opacity: 1 - transitionValue,
-                            child:
-                                iconBuilder(pos.floor(), global.indicatorSize)),
-                        Opacity(
-                            opacity: transitionValue,
-                            child:
-                                iconBuilder(pos.ceil(), global.indicatorSize))
+                        Opacity(opacity: 1 - transitionValue, child: iconBuilder(pos.floor(), global.indicatorSize)),
+                        Opacity(opacity: transitionValue, child: iconBuilder(pos.ceil(), global.indicatorSize))
                       ]));
                 },
                 selectedIconSize: const Size.square(20),
                 iconSize: const Size.square(20),
                 iconBuilder: iconBuilder,
-                colorBuilder: (i) =>
-                    i.isEven ? Colors.green : Colors.tealAccent,
+                colorBuilder: (i) => i.isEven == true ? Colors.green : Colors.tealAccent,
                 onChanged: (i) => setState(() => value = i),
                 borderRadius: BorderRadius.circular(8.0),
                 indicatorBorderRadius: BorderRadius.zero,
@@ -350,22 +330,20 @@ class _MyHomePageState extends State<MyHomePage> {
     return rollingIconBuilder(value, iconSize, false);
   }
 
-  Widget rollingIconBuilder(int value, Size iconSize, bool foreground) {
+  Widget rollingIconBuilder(int? value, Size iconSize, bool foreground) {
     IconData data = Icons.access_time_rounded;
-    if (value.isEven) data = Icons.cancel;
+    if (value?.isEven ?? false) data = Icons.cancel;
     return Icon(
       data,
       size: iconSize.shortestSide,
     );
   }
 
-  Widget sizeIconBuilder(BuildContext context, SizeProperties<int> local,
-      GlobalToggleProperties<int> global) {
+  Widget sizeIconBuilder(BuildContext context, SizeProperties<int> local, GlobalToggleProperties<int> global) {
     return iconBuilder(local.value, local.iconSize);
   }
 
-  Widget alternativeIconBuilder(BuildContext context, SizeProperties<int> local,
-      GlobalToggleProperties<int> global) {
+  Widget alternativeIconBuilder(BuildContext context, SizeProperties<int> local, GlobalToggleProperties<int> global) {
     IconData data = Icons.access_time_rounded;
     switch (local.value) {
       case 0:

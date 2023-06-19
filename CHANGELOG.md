@@ -1,10 +1,18 @@
+## 0.7.0
+
+- adds possibility that no valid value is selected (by setting `allowUnlistedValues` to `true`)
+- adds new parameters to almost all constructors: `allowUnlistedValues`, `indicatorAppearingBuilder`, `indicatorAppearingDuration`, `indicatorAppearingCurve`
+
 ## 0.6.2 (2022-03-09)
+
 - adds screenshot to pubspec.yaml
 
 ## 0.6.1 (2022-12-22)
+
 - adds examples for loading animation to README
 
 ## 0.6.0 (2022-12-22)
+
 - fixes README
 - fixes #28
 - BREAKING: Increases minimum SDK to 2.17
@@ -14,6 +22,7 @@
 - Adds `transitionType` to `AnimatedToggleSwitch.rolling`, `AnimatedToggleSwitch.rollingByHeight` and `AnimatedToggleSwitch.dual`
 
 ## 0.5.2 (2022-04-22)
+
 - Minor performance improvement
 - Minor fixes
 - Improves code documentation
