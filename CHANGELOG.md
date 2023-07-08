@@ -1,3 +1,7 @@
+## 0.7.1
+- updates dart sdk dependency to `>=3.0.0`
+- adds tests for `AnimatedToggleSwitch`
+
 ## 0.7.0 (2023-06-19)
 
 - adds possibility that no valid value is selected (by setting `allowUnlistedValues` to `true`)
