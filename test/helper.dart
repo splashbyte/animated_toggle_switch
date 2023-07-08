@@ -22,11 +22,27 @@ class TestWrapper extends StatelessWidget {
   }
 }
 
+void checkValidSwitchIconBuilderState<T>(T current, List<T> values) {
+  for (var value in values) {
+    final iconFinder = find.byKey(iconKey(value));
+    final iconForegroundFinder = find.byKey(iconKey(value, foreground: true));
+    expect(iconFinder, findsOneWidget);
+    expect(iconForegroundFinder,
+        current == value ? anyOf(findsNothing, findsOneWidget) : findsNothing);
+  }
+}
+
 Widget iconBuilder<T>(T value, bool foreground) =>
     Text(key: iconKey(value, foreground: foreground), '$value');
 
 Key iconKey<T>(T value, {bool foreground = false}) =>
     ValueKey((foreground, value));
+
+final loadingIconKey = GlobalKey();
+
+Widget _loadingIconBuilder<T>(
+        BuildContext context, GlobalToggleProperties<T> global) =>
+    SizedBox(key: loadingIconKey);
 
 typedef TestIconBuilder<T> = Widget Function(T value, bool foreground);
 
@@ -35,12 +51,18 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch Function({
   required List<T> values,
   TestIconBuilder<T>? iconBuilder,
   TextDirection? textDirection,
+  Function(T)? onChanged,
+  Function()? onTap,
+  bool? loading,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch Function({
   required T current,
   TestIconBuilder<T>? iconBuilder,
   TextDirection? textDirection,
+  Function(T)? onChanged,
+  Function()? onTap,
+  bool? loading,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
@@ -58,12 +80,18 @@ void defaultTestAllSwitches(
               required int current,
               TestIconBuilder<int>? iconBuilder,
               TextDirection? textDirection,
+              Function(int)? onChanged,
+              Function()? onTap,
+              bool? loading,
             }) =>
                 buildSwitch(
               current: current,
               values: defaultValues,
               iconBuilder: iconBuilder,
               textDirection: textDirection,
+              onChanged: onChanged,
+              onTap: onTap,
+              loading: loading,
             ),
             defaultValues,
           ));
@@ -76,6 +104,10 @@ void defaultTestAllSwitches(
           required int current,
           TestIconBuilder<int>? iconBuilder,
           TextDirection? textDirection,
+          Function(int)? onChanged,
+          Function()? onTap,
+          LoadingIconBuilder? loadingIconBuilder,
+          bool? loading,
         }) =>
             AnimatedToggleSwitch.dual(
           current: current,
@@ -84,6 +116,7 @@ void defaultTestAllSwitches(
           iconBuilder:
               iconBuilder == null ? null : (value) => iconBuilder(value, true),
           textDirection: textDirection,
+          loading: loading,
         ),
         defaultValues.sublist(0, 2),
       ),
@@ -105,6 +138,10 @@ void testAllSwitches<T>(
             required List<T> values,
             TestIconBuilder<T>? iconBuilder,
             TextDirection? textDirection,
+            Function(T)? onChanged,
+            Function()? onTap,
+            LoadingIconBuilder? loadingIconBuilder,
+            bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.rolling(
                 current: current,
@@ -114,6 +151,10 @@ void testAllSwitches<T>(
                     : (value, size, foreground) =>
                         iconBuilder(value, foreground),
                 textDirection: textDirection,
+                onTap: onTap,
+                onChanged: onChanged,
+                loadingIconBuilder: _loadingIconBuilder,
+                loading: loading,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.size)',
@@ -124,6 +165,10 @@ void testAllSwitches<T>(
             required List<T> values,
             TestIconBuilder<T>? iconBuilder,
             TextDirection? textDirection,
+            Function(T)? onChanged,
+            Function()? onTap,
+            LoadingIconBuilder? loadingIconBuilder,
+            bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.size(
                 current: current,
@@ -132,6 +177,10 @@ void testAllSwitches<T>(
                     ? null
                     : (value, size) => iconBuilder(value, false),
                 textDirection: textDirection,
+                onChanged: onChanged,
+                onTap: onTap,
+                loadingIconBuilder: _loadingIconBuilder,
+                loading: loading,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
@@ -142,6 +191,10 @@ void testAllSwitches<T>(
             required List<T> values,
             TestIconBuilder<T>? iconBuilder,
             TextDirection? textDirection,
+            Function(T)? onChanged,
+            Function()? onTap,
+            LoadingIconBuilder? loadingIconBuilder,
+            bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.rollingByHeight(
                 current: current,
@@ -151,6 +204,10 @@ void testAllSwitches<T>(
                     : (value, size, foreground) =>
                         iconBuilder(value, foreground),
                 textDirection: textDirection,
+                onChanged: onChanged,
+                onTap: onTap,
+                loadingIconBuilder: _loadingIconBuilder,
+                loading: loading,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.sizeByHeight)',
@@ -161,6 +218,10 @@ void testAllSwitches<T>(
             required List<T> values,
             TestIconBuilder<T>? iconBuilder,
             TextDirection? textDirection,
+            Function(T)? onChanged,
+            Function()? onTap,
+            LoadingIconBuilder? loadingIconBuilder,
+            bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.sizeByHeight(
                 current: current,
@@ -169,6 +230,10 @@ void testAllSwitches<T>(
                     ? null
                     : (value, size) => iconBuilder(value, false),
                 textDirection: textDirection,
+                onChanged: onChanged,
+                onTap: onTap,
+                loadingIconBuilder: _loadingIconBuilder,
+                loading: loading,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.custom)',
@@ -179,6 +244,10 @@ void testAllSwitches<T>(
             required List<T> values,
             TestIconBuilder<T>? iconBuilder,
             TextDirection? textDirection,
+            Function(T)? onChanged,
+            Function()? onTap,
+            LoadingIconBuilder? loadingIconBuilder,
+            bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.custom(
                 current: current,
@@ -188,6 +257,10 @@ void testAllSwitches<T>(
                     : (context, local, global) =>
                         iconBuilder(local.value, false),
                 textDirection: textDirection,
+                onChanged: onChanged,
+                onTap: onTap,
+                loadingIconBuilder: _loadingIconBuilder,
+                loading: loading,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.customByHeight)',
@@ -198,6 +271,9 @@ void testAllSwitches<T>(
             required List<T> values,
             TestIconBuilder<T>? iconBuilder,
             TextDirection? textDirection,
+            Function(T)? onChanged,
+            Function()? onTap,
+            bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
@@ -207,5 +283,9 @@ void testAllSwitches<T>(
                     : (context, local, global) =>
                         iconBuilder(local.value, false),
                 textDirection: textDirection,
+                onChanged: onChanged,
+                onTap: onTap,
+                loadingIconBuilder: _loadingIconBuilder,
+                loading: loading,
               )));
 }

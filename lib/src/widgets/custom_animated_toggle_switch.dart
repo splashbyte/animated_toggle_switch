@@ -320,7 +320,7 @@ class _CustomAnimatedToggleSwitchState<T>
     var result = widget.onChanged?.call(value);
     if (result is Future && widget.loading == null) {
       _loading(true);
-      result.onError((e, s) => null).then((value) => _loading(false));
+      result.whenComplete(() => _loading(false));
     }
   }
 
@@ -329,7 +329,7 @@ class _CustomAnimatedToggleSwitchState<T>
     var result = widget.onTap?.call();
     if (result is Future && widget.loading == null) {
       _loading(true);
-      result.onError((e, s) => null).then((value) => _loading(false));
+      result.whenComplete(() => _loading(false));
     }
   }
 

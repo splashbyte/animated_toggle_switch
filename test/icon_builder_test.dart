@@ -1,16 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
-
 import 'helper.dart';
-
-void _checkValidSwitchIconBuilderState<T>(T current, List<T> values) {
-  for (var value in values) {
-    final iconFinder = find.byKey(iconKey(value));
-    final iconForegroundFinder = find.byKey(iconKey(value, foreground: true));
-    expect(iconFinder, findsOneWidget);
-    expect(iconForegroundFinder,
-        current == value ? anyOf(findsNothing, findsOneWidget) : findsNothing);
-  }
-}
 
 void main() {
   defaultTestAllSwitches(
@@ -23,7 +11,7 @@ void main() {
         iconBuilder: iconBuilder,
       ),
     ));
-    _checkValidSwitchIconBuilderState(current, values);
+    checkValidSwitchIconBuilderState(current, values);
   });
   defaultTestAllSwitches(
       'AnimatedToggleSwitch changes its state when current changes',
@@ -36,15 +24,15 @@ void main() {
         iconBuilder: iconBuilder,
       ),
     ));
-    _checkValidSwitchIconBuilderState(current, values);
+    checkValidSwitchIconBuilderState(current, values);
     await tester.pumpWidget(TestWrapper(
       child: buildSwitch(
         current: next,
         iconBuilder: iconBuilder,
       ),
     ));
-    _checkValidSwitchIconBuilderState(current, values);
+    checkValidSwitchIconBuilderState(current, values);
     await tester.pump(const Duration(seconds: 1));
-    _checkValidSwitchIconBuilderState(next, values);
+    checkValidSwitchIconBuilderState(next, values);
   });
 }
