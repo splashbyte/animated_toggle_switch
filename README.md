@@ -11,7 +11,7 @@
 
 ### If you like this package, please leave a like there on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
 
-Simple and animated switch with multiple choices and smooth loading animation. It's an easy way if you don't want to use something like a `DropDownMenuButton`.  
+Fully customizable, draggable and animated switch with multiple choices and smooth loading animation. It has prebuilt constructors for rolling and size animations. 
 `LTR` and `RTL` are both supported.  
 [Switches without an (initial) selection](#simple-rolling-animation-with-nullable-selection) are also possible.  
 Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom version. This ensures that you can get started easily and still customize a lot if necessary.

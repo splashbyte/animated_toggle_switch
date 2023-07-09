@@ -4,6 +4,8 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'keys.dart';
+
 const defaultValues = [0, 1, 2, 3];
 
 class TestWrapper extends StatelessWidget {
@@ -36,7 +38,7 @@ Widget iconBuilder<T>(T value, bool foreground) =>
     Text(key: iconKey(value, foreground: foreground), '$value');
 
 Key iconKey<T>(T value, {bool foreground = false}) =>
-    ValueKey((foreground, value));
+    IconKey(value, foreground: foreground);
 
 final loadingIconKey = GlobalKey();
 
@@ -71,7 +73,7 @@ void defaultTestAllSwitches(
     FutureOr<void> Function(WidgetTester tester,
             SimpleSwitchBuilder<int> buildSwitch, List<int> values)
         test,
-    {bool testDual = false}) {
+    {bool testDual = true}) {
   testAllSwitches<int>(
       description,
       (tester, buildSwitch) => test(
@@ -96,6 +98,7 @@ void defaultTestAllSwitches(
             defaultValues,
           ));
   if (testDual) {
+    final values = defaultValues.sublist(0, 2);
     testWidgets(
       '$description (AnimatedToggleSwitch.dual)',
       (tester) async => await test(
@@ -106,19 +109,25 @@ void defaultTestAllSwitches(
           TextDirection? textDirection,
           Function(int)? onChanged,
           Function()? onTap,
-          LoadingIconBuilder? loadingIconBuilder,
           bool? loading,
         }) =>
-            AnimatedToggleSwitch.dual(
+            AnimatedToggleSwitch<int>.dual(
           current: current,
-          first: defaultValues[0],
-          second: defaultValues[1],
+          first: values[0],
+          second: values[1],
           iconBuilder:
               iconBuilder == null ? null : (value) => iconBuilder(value, true),
+          textBuilder: iconBuilder == null
+              ? null
+              : (value) =>
+                  iconBuilder(values[(values.indexOf(value) + 1) % 2], false),
           textDirection: textDirection,
+          onTap: onTap,
+          onChanged: onChanged,
+          loadingIconBuilder: _loadingIconBuilder,
           loading: loading,
         ),
-        defaultValues.sublist(0, 2),
+        values,
       ),
     );
   }
@@ -140,7 +149,6 @@ void testAllSwitches<T>(
             TextDirection? textDirection,
             Function(T)? onChanged,
             Function()? onTap,
-            LoadingIconBuilder? loadingIconBuilder,
             bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.rolling(
@@ -167,7 +175,6 @@ void testAllSwitches<T>(
             TextDirection? textDirection,
             Function(T)? onChanged,
             Function()? onTap,
-            LoadingIconBuilder? loadingIconBuilder,
             bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.size(
@@ -193,7 +200,6 @@ void testAllSwitches<T>(
             TextDirection? textDirection,
             Function(T)? onChanged,
             Function()? onTap,
-            LoadingIconBuilder? loadingIconBuilder,
             bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.rollingByHeight(
@@ -220,7 +226,6 @@ void testAllSwitches<T>(
             TextDirection? textDirection,
             Function(T)? onChanged,
             Function()? onTap,
-            LoadingIconBuilder? loadingIconBuilder,
             bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.sizeByHeight(
@@ -246,7 +251,6 @@ void testAllSwitches<T>(
             TextDirection? textDirection,
             Function(T)? onChanged,
             Function()? onTap,
-            LoadingIconBuilder? loadingIconBuilder,
             bool? loading,
           }) =>
               AnimatedToggleSwitch<T>.custom(

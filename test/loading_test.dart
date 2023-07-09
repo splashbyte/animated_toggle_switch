@@ -74,5 +74,52 @@ void main() {
     expect(loadingFinder, findsOneWidget);
     await tester.pump(const Duration(milliseconds: 500));
     expect(loadingFinder, findsNothing);
-  });
+  }, testDual: false);
+
+  defaultTestAllSwitches('Switch supports initial loading',
+          (tester, buildSwitch, values) async {
+        final current = values.first;
+
+        await tester.pumpWidget(TestWrapper(
+          child: buildSwitch(
+            current: current,
+            iconBuilder: iconBuilder,
+            loading: true,
+          ),
+        ));
+        final currentFinder = find.byKey(iconKey(current, foreground: true));
+        final loadingFinder = find.byKey(loadingIconKey);
+
+        expect(loadingFinder, findsOneWidget);
+        expect(currentFinder, findsNothing);
+      });
+
+  defaultTestAllSwitches('Switch disables loading by setting loading to false',
+          (tester, buildSwitch, values) async {
+        final current = values.first;
+        final next = values.last;
+        const loadingDuration = Duration(seconds: 3);
+
+        await tester.pumpWidget(TestWrapper(
+          child: buildSwitch(
+            current: current,
+            iconBuilder: iconBuilder,
+            onTap: () => Future.delayed(loadingDuration),
+            onChanged: (_) => Future.delayed(loadingDuration),
+            loading: false,
+          ),
+        ));
+        final nextFinder = find.byKey(iconKey(next));
+        final loadingFinder = find.byKey(loadingIconKey);
+
+        expect(loadingFinder, findsNothing);
+
+        await tester.tap(nextFinder, warnIfMissed: false);
+        await tester.pump(Duration.zero);
+        await tester.pump(const Duration(milliseconds: 500));
+
+        expect(loadingFinder, findsNothing);
+
+        await tester.pump(loadingDuration);
+      });
 }

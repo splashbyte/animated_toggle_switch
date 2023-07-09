@@ -30,7 +30,10 @@ void main() {
 
     await tester.tap(nextFinder, warnIfMissed: false);
     verify(() => changedFunction(next)).called(1);
-  });
+    verify(() => tapFunction()).called(1);
+
+    verifyNoMoreInteractions(changedFunction);
+  }, testDual: false);
 
   testWidgets('Tap on AnimatedToggleSwitch.dual triggers onChanged by default',
       (tester) async {
@@ -48,14 +51,16 @@ void main() {
         onChanged: changedFunction,
       ),
     ));
-    verifyNever(() => changedFunction(any()));
     final currentFinder = find.byKey(iconKey(current, foreground: true));
+
+    verifyNoMoreInteractions(changedFunction);
 
     await tester.tap(currentFinder, warnIfMissed: false);
     verify(() => changedFunction(next)).called(1);
+    verifyNoMoreInteractions(changedFunction);
   });
 
-  defaultTestAllSwitches('Switch handles swipes correctly',
+  defaultTestAllSwitches('Switch handles drags correctly',
       (tester, buildSwitch, values) async {
     final current = values.first;
     final next = values.last;
@@ -70,18 +75,19 @@ void main() {
         onChanged: changedFunction,
       ),
     ));
-    verifyNever(() => tapFunction.call());
-    verifyNever(() => changedFunction(any()));
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
 
-    await tester.drag(currentFinder, tester.getCenter(nextFinder),
-        warnIfMissed: false);
-    verify(() => changedFunction(next)).called(1);
+    verifyNoMoreInteractions(changedFunction);
 
     await tester.drag(currentFinder, tester.getCenter(nextFinder),
         warnIfMissed: false);
     verify(() => changedFunction(next)).called(1);
-    verifyNever(() => changedFunction(current));
+
+    await tester.drag(nextFinder, tester.getCenter(currentFinder),
+        warnIfMissed: false);
+    
+    verifyNoMoreInteractions(changedFunction);
+    verifyNoMoreInteractions(tapFunction);
   });
 }

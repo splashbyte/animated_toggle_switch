@@ -57,5 +57,5 @@ void main() {
       ),
     ));
     _verifyTextDirection(tester, values, TextDirection.rtl);
-  });
+  }, testDual: false);
 }

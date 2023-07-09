@@ -1,6 +1,6 @@
 ## 0.7.1
-- updates dart sdk dependency to `>=3.0.0`
-- adds tests for `AnimatedToggleSwitch`
+- adds tests for all `AnimatedToggleSwitch` constructors
+- fixes initial loading
 
 ## 0.7.0 (2023-06-19)
 

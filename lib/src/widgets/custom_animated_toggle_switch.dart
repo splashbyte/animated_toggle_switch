@@ -244,7 +244,8 @@ class _CustomAnimatedToggleSwitchState<T>
     final current = widget.current;
     final isValueSelected = widget.values.contains(current);
     _animationInfo = _AnimationInfo(
-        isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0);
+            isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0)
+        .setLoading(widget.loading ?? false);
     _controller =
         AnimationController(vsync: this, duration: widget.animationDuration)
           ..addStatusListener((status) {
