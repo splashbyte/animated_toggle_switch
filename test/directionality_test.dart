@@ -12,9 +12,11 @@ void _verifyTextDirection<T>(
     case TextDirection.ltr:
       expect((firstPos - lastPos).dx < 0, true,
           reason: 'First icon is to the left of the second');
+      break;
     case TextDirection.rtl:
       expect((firstPos - lastPos).dx > 0, true,
           reason: 'First icon is to the right of the second');
+      break;
   }
 }
 
