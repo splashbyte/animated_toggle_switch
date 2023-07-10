@@ -243,6 +243,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
     final current = widget.current;
     final isValueSelected = widget.values.contains(current);
+    _checkForUnlistedValue();
     _animationInfo = _AnimationInfo(
             isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0)
         .setLoading(widget.loading ?? false);
@@ -779,8 +780,12 @@ class _WidgetPart extends StatelessWidget {
 
 /// A class for holding the current state of [_CustomAnimatedToggleSwitchState].
 class _AnimationInfo {
+  /// The start position of the current animation.
   final double start;
+
+  /// The end position of the current animation.
   final double end;
+
   final ToggleMode toggleMode;
   final bool loading;
 

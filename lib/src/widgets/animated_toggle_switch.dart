@@ -1114,12 +1114,12 @@ class _MyLoading extends StatelessWidget {
     final color = Theme.of(context).iconTheme.color;
     return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Theme.of(context).platform.apple
+        child: Theme.of(context).platform.isApple
             ? CupertinoActivityIndicator(color: color)
             : CircularProgressIndicator(color: color));
   }
 }
 
 extension _XTargetPlatform on TargetPlatform {
-  bool get apple => this == TargetPlatform.iOS || this == TargetPlatform.macOS;
+  bool get isApple => this == TargetPlatform.iOS || this == TargetPlatform.macOS;
 }

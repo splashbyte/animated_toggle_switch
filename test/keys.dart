@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 //TODO: Replace with record after Dart SDK upgrade
 class IconKey<T> extends LocalKey {

@@ -56,6 +56,7 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch Function({
   Function(T)? onChanged,
   Function()? onTap,
   bool? loading,
+  bool allowUnlistedValues,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch Function({
@@ -65,6 +66,7 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch Function({
   Function(T)? onChanged,
   Function()? onTap,
   bool? loading,
+  bool allowUnlistedValues,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
@@ -85,6 +87,7 @@ void defaultTestAllSwitches(
               Function(int)? onChanged,
               Function()? onTap,
               bool? loading,
+              bool allowUnlistedValues = false,
             }) =>
                 buildSwitch(
               current: current,
@@ -94,6 +97,7 @@ void defaultTestAllSwitches(
               onChanged: onChanged,
               onTap: onTap,
               loading: loading,
+              allowUnlistedValues: allowUnlistedValues,
             ),
             defaultValues,
           ));
@@ -110,6 +114,7 @@ void defaultTestAllSwitches(
           Function(int)? onChanged,
           Function()? onTap,
           bool? loading,
+          bool allowUnlistedValues = false,
         }) =>
             AnimatedToggleSwitch<int>.dual(
           current: current,
@@ -150,6 +155,7 @@ void testAllSwitches<T>(
             Function(T)? onChanged,
             Function()? onTap,
             bool? loading,
+            bool allowUnlistedValues = false,
           }) =>
               AnimatedToggleSwitch<T>.rolling(
                 current: current,
@@ -163,6 +169,7 @@ void testAllSwitches<T>(
                 onChanged: onChanged,
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
+                allowUnlistedValues: allowUnlistedValues,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.size)',
@@ -176,6 +183,7 @@ void testAllSwitches<T>(
             Function(T)? onChanged,
             Function()? onTap,
             bool? loading,
+            bool allowUnlistedValues = false,
           }) =>
               AnimatedToggleSwitch<T>.size(
                 current: current,
@@ -188,6 +196,7 @@ void testAllSwitches<T>(
                 onTap: onTap,
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
+                allowUnlistedValues: allowUnlistedValues,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
@@ -201,6 +210,7 @@ void testAllSwitches<T>(
             Function(T)? onChanged,
             Function()? onTap,
             bool? loading,
+            bool allowUnlistedValues = false,
           }) =>
               AnimatedToggleSwitch<T>.rollingByHeight(
                 current: current,
@@ -214,6 +224,7 @@ void testAllSwitches<T>(
                 onTap: onTap,
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
+                allowUnlistedValues: allowUnlistedValues,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.sizeByHeight)',
@@ -227,6 +238,7 @@ void testAllSwitches<T>(
             Function(T)? onChanged,
             Function()? onTap,
             bool? loading,
+            bool allowUnlistedValues = false,
           }) =>
               AnimatedToggleSwitch<T>.sizeByHeight(
                 current: current,
@@ -239,6 +251,7 @@ void testAllSwitches<T>(
                 onTap: onTap,
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
+                allowUnlistedValues: allowUnlistedValues,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.custom)',
@@ -252,6 +265,7 @@ void testAllSwitches<T>(
             Function(T)? onChanged,
             Function()? onTap,
             bool? loading,
+            bool allowUnlistedValues = false,
           }) =>
               AnimatedToggleSwitch<T>.custom(
                 current: current,
@@ -265,6 +279,7 @@ void testAllSwitches<T>(
                 onTap: onTap,
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
+                allowUnlistedValues: allowUnlistedValues,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.customByHeight)',
@@ -278,6 +293,7 @@ void testAllSwitches<T>(
             Function(T)? onChanged,
             Function()? onTap,
             bool? loading,
+            bool allowUnlistedValues = false,
           }) =>
               AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
@@ -291,5 +307,6 @@ void testAllSwitches<T>(
                 onTap: onTap,
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
+                allowUnlistedValues: allowUnlistedValues,
               )));
 }

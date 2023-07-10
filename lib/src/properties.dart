@@ -88,10 +88,11 @@ class LocalToggleProperties<T> {
 }
 
 class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
-  /// A value between 0 and 1.
+  /// A value between [0] and [1].
   ///
-  /// 0 indicates that [value] is not selected.
-  /// 1 indicates that [value] is selected.
+  /// [0] indicates that [value] is not selected.
+  ///
+  /// [1] indicates that [value] is selected.
   final double animationValue;
 
   AnimatedToggleProperties.fromLocal({
