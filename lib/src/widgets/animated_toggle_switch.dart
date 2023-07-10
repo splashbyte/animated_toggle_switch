@@ -227,6 +227,20 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Curve of the appearing animation.
   final Curve indicatorAppearingCurve;
 
+  /// Builder for divider or other separators between the icons. Consider using [customSeparatorBuilder] for maximum customizability.
+  ///
+  /// The available width is specified by [dif].
+  ///
+  /// This builder is supported by [IconArrangement.row] only.
+  final IndexedWidgetBuilder? separatorBuilder;
+
+  /// Builder for divider or other separators between the icons. Consider using [separatorBuilder] for a simpler builder function.
+  ///
+  /// The available width is specified by [dif].
+  ///
+  /// This builder is supported by [IconArrangement.row] only.
+  final CustomSeparatorBuilder<T>? customSeparatorBuilder;
+
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   ///
   /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
@@ -278,6 +292,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+    this.separatorBuilder,
+    this.customSeparatorBuilder,
   })  : this._iconArrangement = IconArrangement.row,
         super(key: key);
 
@@ -335,6 +351,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+    this.separatorBuilder,
+    this.customSeparatorBuilder,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconSize, selectedIconSize),
         this._iconArrangement = IconArrangement.row,
@@ -395,6 +413,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+    this.separatorBuilder,
+    this.customSeparatorBuilder,
   })  : this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this.dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -484,6 +504,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+    this.separatorBuilder,
+    this.customSeparatorBuilder,
   })  : this.dif = dif * (height - 2 * borderWidth),
         this.indicatorSize = indicatorSize * (height - 2 * borderWidth),
         this._iconArrangement = IconArrangement.row,
@@ -547,6 +569,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+    this.separatorBuilder,
+    this.customSeparatorBuilder,
   })  : this.iconAnimationCurve = Curves.linear,
         this.dif = dif * (height - 2 * borderWidth),
         this.iconAnimationDuration = Duration.zero,
@@ -624,6 +648,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAppearingDuration =
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+    this.separatorBuilder,
+    this.customSeparatorBuilder,
   })  : this.iconAnimationCurve = Curves.linear,
         this.iconAnimationDuration = Duration.zero,
         this.selectedIconOpacity = iconOpacity,
@@ -804,6 +830,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         this.indicatorAppearingDuration =
             _defaultIndicatorAppearingAnimationDuration,
         this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+        this.separatorBuilder = null,
+        this.customSeparatorBuilder = null,
         super(key: key);
 
   static Function() _dualOnTap<T>(
@@ -906,6 +934,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         indicatorAppearingBuilder: indicatorAppearingBuilder,
         indicatorAppearingDuration: indicatorAppearingDuration,
         indicatorAppearingCurve: indicatorAppearingCurve,
+        separatorBuilder: customSeparatorBuilder ??
+            (separatorBuilder == null
+                ? null
+                : (context, local, global) =>
+                    separatorBuilder!(context, local.index)),
         backgroundIndicatorBuilder: foregroundIndicatorIconBuilder != null
             ? null
             : (context, properties) => _indicatorBuilder(context, properties,
@@ -1121,5 +1154,6 @@ class _MyLoading extends StatelessWidget {
 }
 
 extension _XTargetPlatform on TargetPlatform {
-  bool get isApple => this == TargetPlatform.iOS || this == TargetPlatform.macOS;
+  bool get isApple =>
+      this == TargetPlatform.iOS || this == TargetPlatform.macOS;
 }

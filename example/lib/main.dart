@@ -151,6 +151,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.rolling(
+                current: value,
+                allowUnlistedValues: true,
+                values: const [0, 1, 2, 3],
+                onChanged: (i) => setState(() => value = i),
+                iconBuilder: rollingIconBuilder,
+                separatorBuilder: (context, index) => const VerticalDivider(),
+                borderWidth: 4.5,
+                indicatorColor: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                innerColor: Colors.amber,
+                height: 55,
+                dif: 20.0,
+                borderColor: Colors.transparent,
+                loading: loading,
+              ),
+              SizedBox(height: 16.0),
               AnimatedToggleSwitch<int?>.rolling(
                 current: nullableValue,
                 allowUnlistedValues: true,
@@ -261,6 +278,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() => value = i);
                   return Future.delayed(Duration(seconds: 3));
                 },
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.size(
+                current: min(value, 2),
+                borderRadius: BorderRadius.circular(10.0),
+                indicatorBorderRadius: BorderRadius.zero,
+                innerColor: Color(0xFF919191),
+                values: const [0, 1, 2],
+                iconOpacity: 1.0,
+                indicatorSize: const Size.fromWidth(100),
+                iconAnimationType: AnimationType.onHover,
+                indicatorAnimationType: AnimationType.onHover,
+                dif: 2.0,
+                customSeparatorBuilder: (context, local, global) {
+                  final opacity =
+                      ((global.position - local.position).abs() - 0.5).clamp(0.0, 1.0);
+                  return VerticalDivider(
+                      indent: 10.0,
+                      endIndent: 10.0,
+                      color: Colors.white38.withOpacity(opacity));
+                },
+                customIconBuilder: (context, local, global) {
+                  final text = const ['not', 'just', 'icons'][local.index];
+                  return Center(
+                      child: Text(text,
+                          style: TextStyle(
+                              color: Color.lerp(Colors.black, Colors.white,
+                                  local.animationValue))));
+                },
+                borderWidth: 0.0,
+                borderColor: Colors.transparent,
+                colorBuilder: (i) => Color(0xFFEC3345),
+                onChanged: (i) => setState(() => value = i),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

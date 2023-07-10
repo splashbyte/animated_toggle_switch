@@ -1,5 +1,7 @@
 ## 0.7.1
 - adds tests for all `AnimatedToggleSwitch` constructors
+- adds `separatorBuilder` and `customSeparatorBuilder` to `AnimatedToggleSwitch`
+- adds `separatorBuilder` to `CustomAnimatedToggleSwitch`
 - fixes initial loading
 
 ## 0.7.0 (2023-06-19)

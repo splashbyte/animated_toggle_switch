@@ -10,7 +10,11 @@ typedef CustomIndicatorBuilder<T> = Widget Function(
 
 /// Custom builder for the wrapper of the switch.
 typedef CustomWrapperBuilder<T> = Widget Function(
-    BuildContext context, GlobalToggleProperties<T> local, Widget child);
+    BuildContext context, GlobalToggleProperties<T> global, Widget child);
+
+/// Custom builder for the dif section between the icons.
+typedef CustomSeparatorBuilder<T> = Widget Function(BuildContext context,
+    DifProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
 /// Custom builder for the appearing animation of the indicator.
 ///
@@ -108,6 +112,13 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// Space between the "indicator rooms" of the adjacent icons.
   final double dif;
 
+  /// Builder for divider or other separators between the icons.
+  ///
+  /// The available width is specified by [dif].
+  ///
+  /// This builder is supported by [IconArrangement.row] only.
+  final CustomSeparatorBuilder<T>? separatorBuilder;
+
   /// Callback for tapping anywhere on the widget.
   final Function()? onTap;
 
@@ -184,6 +195,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.indicatorSize = const Size(48.0, double.infinity),
     this.onChanged,
     this.dif = 0.0,
+    this.separatorBuilder,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.wrapperBuilder,
@@ -211,6 +223,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.allowUnlistedValues = false,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
+        assert(separatorBuilder == null ||
+            (dif > 0 && iconArrangement == IconArrangement.row)),
         super(key: key);
 
   @override
@@ -601,7 +615,9 @@ class _CustomAnimatedToggleSwitchState<T>
                                 position: DecorationPosition.background,
                                 decoration: const BoxDecoration(),
                                 child: Stack(
-                                    clipBehavior: Clip.none, children: stack)),
+                                  clipBehavior: Clip.none,
+                                  children: stack,
+                                )),
                           ),
                         ),
                       ),
@@ -629,9 +645,10 @@ class _CustomAnimatedToggleSwitchState<T>
                 properties.indicatorSize.width,
         height: properties.indicatorSize.height,
         child: widget.iconBuilder(
-            context,
-            LocalToggleProperties(value: widget.values[i], index: i),
-            properties),
+          context,
+          LocalToggleProperties(value: widget.values[i], index: i),
+          properties,
+        ),
       );
     }).toList();
   }
@@ -639,21 +656,31 @@ class _CustomAnimatedToggleSwitchState<T>
   /// The builder of the icons for [IconArrangement.row].
   List<Widget> _buildBackgroundRow(
       BuildContext context, DetailedGlobalToggleProperties<T> properties) {
+    final length = properties.values.length;
     return [
       Row(
         textDirection: _textDirectionOf(context),
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(
-          widget.values.length,
-          (i) => SizedBox(
-            width: properties.indicatorSize.width,
-            height: properties.indicatorSize.height,
-            child: widget.iconBuilder(
-                context,
-                LocalToggleProperties(value: widget.values[i], index: i),
-                properties),
-          ),
-        ),
+        children: [
+          for (int i = 0; i < length; i++) ...[
+            SizedBox(
+                width: properties.indicatorSize.width,
+                height: properties.indicatorSize.height,
+                child: widget.iconBuilder(
+                  context,
+                  LocalToggleProperties(value: widget.values[i], index: i),
+                  properties,
+                )),
+            if (i < length - 1 && widget.separatorBuilder != null)
+              SizedBox(
+                width: properties.dif,
+                child: Center(
+                  child: widget.separatorBuilder!(
+                      context, DifProperties(index: i), properties),
+                ),
+              ),
+          ]
+        ],
       ),
     ];
   }

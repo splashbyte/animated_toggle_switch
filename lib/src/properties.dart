@@ -59,6 +59,8 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
   /// The size of the switch exclusive the outer wrapper
   final Size switchSize;
 
+  Size get difSize => Size(dif, switchSize.height);
+
   const DetailedGlobalToggleProperties({
     required this.dif,
     required this.indicatorSize,
@@ -162,5 +164,15 @@ class SizeProperties<T> extends AnimatedToggleProperties<T> {
     required super.value,
     required super.index,
     required super.animationValue,
+  });
+}
+
+class DifProperties<T> {
+  final int index;
+
+  double get position => index + 0.5;
+
+  const DifProperties({
+    required this.index,
   });
 }
