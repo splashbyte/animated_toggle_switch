@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'AnimatedToggleSwitch Demo',
       theme: ThemeData(),
       home: MyHomePage(title: 'Example'),
     );
@@ -293,14 +293,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 dif: 2.0,
                 customSeparatorBuilder: (context, local, global) {
                   final opacity =
-                      ((global.position - local.position).abs() - 0.5).clamp(0.0, 1.0);
+                      ((global.position - local.position).abs() - 0.5)
+                          .clamp(0.0, 1.0);
                   return VerticalDivider(
                       indent: 10.0,
                       endIndent: 10.0,
                       color: Colors.white38.withOpacity(opacity));
                 },
                 customIconBuilder: (context, local, global) {
-                  final text = const ['not', 'just', 'icons'][local.index];
+                  final text = const ['not', 'only', 'icons'][local.index];
                   return Center(
                       child: Text(text,
                           style: TextStyle(
