@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -70,10 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     offset: Offset(0, 1.5),
                   ),
                 ],
-                onChanged: (b) {
-                  setState(() => positive = b);
-                  return Future.delayed(Duration(seconds: 2));
-                },
+                onChanged: (b) => setState(() => positive = b),
                 colorBuilder: (b) => b ? Colors.red : Colors.green,
                 iconBuilder: (value) => value
                     ? Icon(Icons.coronavirus_rounded)
@@ -81,6 +79,53 @@ class _MyHomePageState extends State<MyHomePage> {
                 textBuilder: (value) => value
                     ? Center(child: Text('Oh no...'))
                     : Center(child: Text('Nice :)')),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'AnimatedToggleSwitch.dual with loading animation:',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              DefaultTextStyle.merge(
+                style: const TextStyle(color: Colors.white),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: Colors.white),
+                  child: AnimatedToggleSwitch<bool>.dual(
+                    current: positive,
+                    first: false,
+                    second: true,
+                    dif: 45.0,
+                    borderColor: Colors.transparent,
+                    borderWidth: 10.0,
+                    height: 50,
+                    loadingIconBuilder: (context, global) =>
+                        const CupertinoActivityIndicator(color: Colors.white),
+                    borderRadius: BorderRadius.circular(4.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.purple,
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset: Offset(0, 0.5),
+                      ),
+                    ],
+                    onChanged: (b) {
+                      setState(() => positive = b);
+                      return Future.delayed(Duration(seconds: 2));
+                    },
+                    innerColor: Colors.black,
+                    colorBuilder: (b) => b ? Colors.purple : Colors.green,
+                    iconBuilder: (value) => value
+                        ? Icon(Icons.coronavirus_rounded)
+                        : Icon(Icons.tag_faces_rounded),
+                    textBuilder: (value) => value
+                        ? Center(
+                            child: Text('Oh no...',
+                                style: const TextStyle(color: Colors.white)))
+                        : Center(child: Text('Nice :)')),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
