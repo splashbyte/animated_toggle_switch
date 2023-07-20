@@ -42,11 +42,11 @@ enum IconArrangement {
   row,
 
   /// Indicates that the icons should overlap.
-  /// Normally you don't need this setting unless you want the icons to overlap.
+  /// Normally you don't need this setting.
   ///
   /// This is used for example with [AnimatedToggleSwitch.dual],
   /// because the texts partially overlap here.
-  overlap
+  overlap,
 }
 
 /// With this widget you can implement your own switches with nice animations.
@@ -59,13 +59,13 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// [current] has to be in [values] for working correctly if [allowUnlistedValues] is false.
   final T current;
 
-  /// All possible values.
+  /// All selectable values.
   final List<T> values;
 
-  /// The IconBuilder for all icons with the specified size.
+  /// The builder for the wrapper around the switch.
   final CustomWrapperBuilder<T>? wrapperBuilder;
 
-  /// The IconBuilder for all icons with the specified size.
+  /// The builder for all icons.
   final CustomIconBuilder<T> iconBuilder;
 
   /// A builder for an indicator which is in front of the icons.
@@ -133,7 +133,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
 
   /// The [FittingMode] of the switch.
   ///
-  /// Change this only if you don't want the switch to adjust when the constraints are too small.
+  /// Change this only if you don't want the switch to adjust if the constraints are too small.
   final FittingMode fittingMode;
 
   /// The height of the whole switch including wrapper.
@@ -243,10 +243,10 @@ class _CustomAnimatedToggleSwitchState<T>
   late final AnimationController _appearingController;
 
   /// The [Animation] for the movement of the indicator.
-  late CurvedAnimation _animation;
+  late final CurvedAnimation _animation;
 
   /// The [Animation] for the appearing of the indicator.
-  late CurvedAnimation _appearingAnimation;
+  late final CurvedAnimation _appearingAnimation;
 
   /// The current state of the movement of the indicator.
   late _AnimationInfo _animationInfo;
@@ -437,13 +437,13 @@ class _CustomAnimatedToggleSwitchState<T>
                         constraints.maxWidth.isFinite ||
                             (widget.indicatorSize.width.isFinite &&
                                 dif.isFinite),
-                        "With unbound width constraints "
-                        "the width of the indicator and the dif "
+                        'With unbound width constraints '
+                        'the width of the indicator and the dif '
                         "can't be infinite");
                     assert(
                         widget.indicatorSize.width.isFinite || dif.isFinite,
-                        "The width of the indicator "
-                        "or the dif must be finite.");
+                        'The width of the indicator '
+                        'or the dif must be finite.');
 
                     // Recalculates the indicatorSize if its width or height is
                     // infinite.

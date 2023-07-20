@@ -67,7 +67,9 @@ class SwitchColors {
 
   /// Constructor for adapting the [BorderRadius] of switch and indicator also.
   ///
-  /// This should mainly be used with [AnimatedToggleSwitch.colorBuilder].
+  /// This constructor should mainly be used with [AnimatedToggleSwitch.colorBuilder]
+  /// because the [BorderRadius] can be adapted with [AnimatedToggleSwitch.borderRadius]
+  /// and [AnimatedToggleSwitch.indicatorBorderRadius] otherwise.
   const SwitchColors.withBorder({
     this.indicatorColor,
     this.backgroundColor,
