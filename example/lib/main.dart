@@ -114,8 +114,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   size: 32.0,
                 ),
                 textBuilder: (value) => value
-                    ? const Center(child: Text('On', style: TextStyle(color: Colors.black)))
-                    : const Center(child: Text('Off', style: TextStyle(color: Colors.white))),
+                    ? const Center(
+                        child:
+                            Text('On', style: TextStyle(color: Colors.black)))
+                    : const Center(
+                        child:
+                            Text('Off', style: TextStyle(color: Colors.white))),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

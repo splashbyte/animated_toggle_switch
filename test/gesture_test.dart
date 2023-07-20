@@ -86,7 +86,7 @@ void main() {
 
     await tester.drag(nextFinder, tester.getCenter(currentFinder),
         warnIfMissed: false);
-    
+
     verifyNoMoreInteractions(changedFunction);
     verifyNoMoreInteractions(tapFunction);
   });
