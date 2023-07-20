@@ -8,7 +8,7 @@
 [![license](https://img.shields.io/github/license/SplashByte/animated_toggle_switch.svg)](https://github.com/SplashByte/animated_toggle_switch/blob/main/LICENSE)
 [![codecov](https://codecov.io/gh/splashbyte/animated_toggle_switch/branch/main/graph/badge.svg?token=NY1D6W88H2)](https://codecov.io/gh/splashbyte/animated_toggle_switch)
 
-[![buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20pizza&emoji=🍕&slug=splashbyte&button_colour=FF8838&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff')](https://www.buymeacoffee.com/splashbyte)
+[![buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20pizza&emoji=🍕&slug=splashbyte&button_colour=FF8838&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff')](https://www.buymeacoffee.com/splashbyte)
 
 ### If you like this package, please leave a like there on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
 
