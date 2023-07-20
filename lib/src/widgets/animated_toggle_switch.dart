@@ -25,14 +25,115 @@ typedef AnimatedIconBuilder<T> = Widget Function(
 typedef IconBuilder<T> = Widget Function(BuildContext context,
     LocalToggleProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
-typedef ColorBuilder<T> = Color? Function(T value);
+typedef ColorBuilder<T> = SwitchColors? Function(T value);
 
-/// Specifies when an icon should be highlighted.
+typedef GradientBuilder<T> = Gradient? Function(T value);
+
+class SwitchColors {
+  /// Background color of the indicator.
+  final Color? indicatorColor;
+
+  /// Background color of the switch.
+  final Color? backgroundColor;
+
+  /// Gradient of the background. Overwrites [innerColor] if not [null].
+  final Gradient? backgroundGradient;
+
+  /// Border color of the switch.
+  ///
+  /// For deactivating please set this to [Colors.transparent].
+  final Color? borderColor;
+
+  /// [BorderRadius] of the switch.
+  ///
+  /// If set, this value overwrites [AnimatedToggleSwitch.borderRadius].
+  final BorderRadiusGeometry? borderRadius;
+
+  /// [BorderRadius] of the indicator.
+  ///
+  /// If set, this value overwrites [AnimatedToggleSwitch.indicatorBorderRadius].
+  final BorderRadiusGeometry? indicatorBorderRadius;
+
+  /// Default constructor for [SwitchColors].
+  ///
+  /// If you want to adapt the [BorderRadius], you should use [SwitchColors.withBorder] instead.
+  const SwitchColors({
+    this.indicatorColor,
+    this.backgroundColor,
+    this.backgroundGradient,
+    this.borderColor,
+  })  : borderRadius = null,
+        indicatorBorderRadius = null;
+
+  /// Constructor for adapting the [BorderRadius] of switch and indicator also.
+  ///
+  /// This should mainly be used with [AnimatedToggleSwitch.colorBuilder].
+  const SwitchColors.withBorder({
+    this.indicatorColor,
+    this.backgroundColor,
+    this.backgroundGradient,
+    this.borderColor,
+    this.borderRadius,
+    this.indicatorBorderRadius,
+  });
+
+  /// Private constructor for setting all possible parameters.
+  SwitchColors._({
+    required this.indicatorColor,
+    required this.backgroundColor,
+    required this.backgroundGradient,
+    required this.borderColor,
+    required this.borderRadius,
+    required this.indicatorBorderRadius,
+  });
+
+  SwitchColors _merge(SwitchColors? other) => other == null
+      ? this
+      : SwitchColors._(
+          indicatorColor: other.indicatorColor ?? indicatorColor,
+          backgroundColor: other.backgroundColor ?? backgroundColor,
+          backgroundGradient: other.backgroundGradient ??
+              (other.backgroundColor == null ? null : backgroundGradient),
+          borderColor: other.borderColor ?? borderColor,
+          borderRadius: other.borderRadius ?? borderRadius,
+          indicatorBorderRadius: other.indicatorBorderRadius ??
+              indicatorBorderRadius ??
+              other.borderRadius ??
+              borderRadius,
+        );
+
+  static SwitchColors _lerp(
+          SwitchColors colors1, SwitchColors colors2, double t) =>
+      SwitchColors._(
+        indicatorColor:
+            Color.lerp(colors1.indicatorColor, colors2.indicatorColor, t),
+        backgroundColor:
+            Color.lerp(colors1.backgroundColor, colors2.backgroundColor, t),
+        backgroundGradient: Gradient.lerp(
+          colors1.backgroundGradient ?? colors1.backgroundColor?.toGradient(),
+          colors2.backgroundGradient ?? colors2.backgroundColor?.toGradient(),
+          t,
+        ),
+        borderColor: Color.lerp(colors1.borderColor, colors2.borderColor, t),
+        borderRadius: BorderRadiusGeometry.lerp(
+          colors1.borderRadius,
+          colors2.borderRadius,
+          t,
+        ),
+        indicatorBorderRadius: BorderRadiusGeometry.lerp(
+          colors1.indicatorBorderRadius ?? colors1.borderRadius,
+          colors2.indicatorBorderRadius ?? colors2.borderRadius,
+          t,
+        ),
+      );
+}
+
+/// Specifies when an value should be animated.
 enum AnimationType {
   /// Starts an animation if an item is selected.
   onSelected,
 
-  /// Start an animation if an item is hovered by the indicator.
+  /// Starts an animation if an item is hovered by the indicator.
   onHover,
 }
 
@@ -68,7 +169,14 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// The IconBuilder for all icons with the specified size.
   final AnimatedIconBuilder<T>? animatedIconBuilder;
 
-  /// Builder for the color of the indicator depending on the current value.
+  /// The default colors for this switch.
+  ///
+  /// This value can be overwritten by [colorBuilder].
+  final SwitchColors colors;
+
+  /// Builder for the colors of the indicator depending on the current value.
+  ///
+  /// The return values overwrite the [colors] parameter if not [null].
   final ColorBuilder<T>? colorBuilder;
 
   /// Duration of the motion animation.
@@ -96,20 +204,17 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Width of the border of the switch. For deactivating please set this to 0.0 and set [borderColor] to Colors.transparent.
   final double borderWidth;
 
-  /// [BorderRadius] of the border. If this is null, the standard BorderRadius is taken.
+  /// [BorderRadius] of the switch.
+  ///
+  /// You can alternatively use [SwitchColors.withBorder] and [colorBuilder] for
+  /// animating this value.
   final BorderRadiusGeometry? borderRadius;
 
   /// [BorderRadius] of the indicator. Defaults to [borderRadius].
+  ///
+  /// You can alternatively use [SwitchColors.withBorder] and [colorBuilder] for
+  /// animating this value.
   final BorderRadiusGeometry? indicatorBorderRadius;
-
-  /// Standard color of the border of the switch. For deactivating please set this to Colors.transparent and set [borderWidth] to 0.0.
-  final Color? borderColor;
-
-  /// Color of the background.
-  final Color? innerColor;
-
-  /// Gradient of the background. Overwrites [innerColor] if not null.
-  final Gradient? innerGradient;
 
   /// Opacity for the icons.
   ///
@@ -121,7 +226,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Please set [iconOpacity] and [selectedIconOpacity] to 1.0 for deactivating the AnimatedOpacity.
   final double selectedIconOpacity;
 
-  /// Space between the "indicator rooms" of the adjacent icons.
+  /// Space between the "indicator spaces" of the adjacent icons.
   final double dif;
 
   /// Total height of the widget.
@@ -130,16 +235,18 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// If null, the indicator is behind the icons. Otherwise an icon is in the indicator and is built using this function.
   final CustomIndicatorBuilder<T>? foregroundIndicatorIconBuilder;
 
-  /// Standard Indicator Color
-  final Color? indicatorColor;
-
-  /// A builder for the Color of the Border. Can be used alternatively to [borderColor].
-  final ColorBuilder<T>? borderColorBuilder;
-
-  /// Which iconAnimationType for the [animatedIconBuilder] should be taken?
+  /// The [AnimationType] for the [animatedIconBuilder].
   final AnimationType iconAnimationType;
 
-  /// Which iconAnimationType for the indicator should be taken?
+  /// The [AnimationType] for [colorBuilder].
+  ///
+  /// The [AnimationType] for [SwitchColors.indicatorColor] and [SwitchColors.indicatorBorderRadius]
+  /// is managed separately with [indicatorAnimationType].
+  final AnimationType colorAnimationType;
+
+  /// The [AnimationType] for the [SwitchColors.indicatorColor].
+  ///
+  /// For the other colors, please use [colorAnimationType].
   final AnimationType indicatorAnimationType;
 
   /// Callback for tapping anywhere on the widget.
@@ -170,7 +277,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   final BoxBorder? indicatorBorder;
 
   /// Shadow for the indicator [Container].
-  final List<BoxShadow> foregroundBoxShadow;
+  final List<BoxShadow> indicatorBoxShadow;
 
   /// Shadow for the [Container] in the background.
   final List<BoxShadow> boxShadow;
@@ -208,7 +315,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Defaults to [animationCurve].
   final Curve? loadingAnimationCurve;
 
-  /// Indicates if an error should be thrown if [current] is not in [values].
+  /// Indicates that no error should be thrown if [current] is not contained in [values].
   ///
   /// If [allowUnlistedValues] is [true] and [values] does not contain [current],
   /// the indicator disappears with the specified [indicatorAppearingBuilder].
@@ -254,9 +361,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorSize = const Size(48.0, double.infinity),
     this.onChanged,
     this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.indicatorColor,
+    this.colors = const SwitchColors(),
     this.colorBuilder,
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
@@ -266,13 +371,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
     this.height = 50.0,
-    this.borderColorBuilder,
     this.iconAnimationType = AnimationType.onSelected,
-    this.indicatorAnimationType = AnimationType.onSelected,
+    this.colorAnimationType = AnimationType.onSelected,
+    this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
+    this.indicatorBoxShadow = const [],
     this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
@@ -286,7 +391,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
-    this.innerGradient,
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -311,27 +415,25 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorSize = const Size(48.0, double.infinity),
     this.onChanged,
     this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.indicatorColor,
+    this.colors = const SwitchColors(),
     this.colorBuilder,
     iconSize = const Size(23.0, 23.0),
     selectedIconSize = const Size(34.5, 34.5),
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
+    this.selectedIconOpacity = 1.0,
     this.borderRadius,
     this.dif = 0.0,
     this.foregroundIndicatorIconBuilder,
-    this.selectedIconOpacity = 1.0,
     this.height = 50.0,
-    this.borderColorBuilder,
     this.iconAnimationType = AnimationType.onSelected,
-    this.indicatorAnimationType = AnimationType.onSelected,
+    this.colorAnimationType = AnimationType.onSelected,
+    this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
+    this.indicatorBoxShadow = const [],
     this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
@@ -345,7 +447,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
-    this.innerGradient,
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -374,9 +475,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     SizeIconBuilder<T>? customIconBuilder,
     this.onChanged,
     this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.indicatorColor,
+    this.colors = const SwitchColors(),
     this.colorBuilder,
     iconSize = const Size(0.5, 0.5),
     selectedIconSize = const Size(0.75, 0.75),
@@ -387,13 +486,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     dif = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
-    this.borderColorBuilder,
     this.iconAnimationType = AnimationType.onSelected,
-    this.indicatorAnimationType = AnimationType.onSelected,
+    this.colorAnimationType = AnimationType.onSelected,
+    this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
+    this.indicatorBoxShadow = const [],
     this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
@@ -407,7 +506,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
-    this.innerGradient,
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -467,9 +565,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     Size indicatorSize = const Size(1.0, 1.0),
     this.onChanged,
     this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.indicatorColor,
+    this.colors = const SwitchColors(),
     this.colorBuilder,
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
@@ -478,13 +574,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     dif = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
-    this.borderColorBuilder,
     this.iconAnimationType = AnimationType.onSelected,
-    this.indicatorAnimationType = AnimationType.onSelected,
+    this.colorAnimationType = AnimationType.onSelected,
+    this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
+    this.indicatorBoxShadow = const [],
     this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
@@ -498,7 +594,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
-    this.innerGradient,
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -533,21 +628,19 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     Size indicatorSize = const Size(1.0, 1.0),
     this.onChanged,
     this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.indicatorColor,
+    this.colors = const SwitchColors(),
     this.colorBuilder,
     double iconRadius = 0.25,
     double selectedIconRadius = 0.35,
     this.iconOpacity = 0.5,
     this.borderRadius,
     double dif = 0.0,
-    this.borderColorBuilder,
-    this.indicatorAnimationType = AnimationType.onSelected,
+    this.colorAnimationType = AnimationType.onSelected,
+    this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
+    this.indicatorBoxShadow = const [],
     this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
@@ -563,7 +656,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationCurve,
     ForegroundIndicatorTransitionType transitionType =
         ForegroundIndicatorTransitionType.rolling,
-    this.innerGradient,
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -611,9 +703,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorSize = const Size(46.0, double.infinity),
     this.onChanged,
     this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.indicatorColor,
+    this.colors = const SwitchColors(),
     this.colorBuilder,
     double iconRadius = 11.5,
     double selectedIconRadius = 16.1,
@@ -621,12 +711,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.borderRadius,
     this.dif = 0.0,
     this.height = 50.0,
-    this.borderColorBuilder,
-    this.indicatorAnimationType = AnimationType.onSelected,
+    this.colorAnimationType = AnimationType.onSelected,
+    this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
+    this.indicatorBoxShadow = const [],
     this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
@@ -642,7 +732,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationCurve,
     ForegroundIndicatorTransitionType transitionType =
         ForegroundIndicatorTransitionType.rolling,
-    this.innerGradient,
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -765,9 +854,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorSize = const Size(46.0, double.infinity),
     this.onChanged,
     this.borderWidth = 2,
-    this.borderColor,
-    this.innerColor,
-    this.indicatorColor,
+    this.colors = const SwitchColors(),
     this.colorBuilder,
     double iconRadius = 16.1,
     this.borderRadius,
@@ -775,12 +862,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.height = 50.0,
     this.iconAnimationDuration = const Duration(milliseconds: 500),
     this.iconAnimationCurve = Curves.easeInOut,
-    this.borderColorBuilder,
+    this.colorAnimationType = AnimationType.onHover,
     this.indicatorAnimationType = AnimationType.onHover,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     Function()? onTap,
     this.indicatorBorder,
-    this.foregroundBoxShadow = const [],
+    this.indicatorBoxShadow = const [],
     this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
@@ -799,7 +886,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.loadingAnimationCurve,
     ForegroundIndicatorTransitionType transitionType =
         ForegroundIndicatorTransitionType.rolling,
-    this.innerGradient,
   })  : assert(clipAnimation || opacityAnimation),
         this.iconOpacity = 1.0,
         this.selectedIconOpacity = 1.0,
@@ -904,9 +990,16 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    BorderRadiusGeometry borderRadius =
+    BorderRadiusGeometry defaultBorderRadius =
         this.borderRadius ?? BorderRadius.circular(height / 2);
-    Color indicatorColor = this.indicatorColor ?? theme.colorScheme.secondary;
+    final colors = SwitchColors._(
+      indicatorColor: theme.colorScheme.secondary,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundGradient: null,
+      borderColor: theme.colorScheme.secondary,
+      borderRadius: defaultBorderRadius,
+      indicatorBorderRadius: indicatorBorderRadius ?? defaultBorderRadius,
+    )._merge(this.colors);
 
     return CustomAnimatedToggleSwitch<T>(
         animationCurve: animationCurve,
@@ -941,74 +1034,88 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
                     separatorBuilder!(context, local.index)),
         backgroundIndicatorBuilder: foregroundIndicatorIconBuilder != null
             ? null
-            : (context, properties) => _indicatorBuilder(context, properties,
-                indicatorColor, indicatorBorderRadius ?? borderRadius),
+            : (context, properties) =>
+                _indicatorBuilder(context, properties, colors),
         foregroundIndicatorBuilder: foregroundIndicatorIconBuilder == null
             ? null
-            : (context, properties) => _indicatorBuilder(context, properties,
-                indicatorColor, indicatorBorderRadius ?? borderRadius),
+            : (context, properties) =>
+                _indicatorBuilder(context, properties, colors),
         iconBuilder: (context, local, global) => _animatedOpacityIcon(
             _animatedSizeIcon(context, local, global), local.value == current),
         padding: EdgeInsets.all(borderWidth),
-        wrapperBuilder: (context, properties, child) =>
-            TweenAnimationBuilder<Color?>(
-              duration: animationDuration,
-              tween: ColorTween(
-                begin: borderColorBuilder?.call(current) ??
-                    borderColor ??
-                    theme.colorScheme.secondary,
-                end: borderColorBuilder?.call(current) ??
-                    borderColor ??
-                    theme.colorScheme.secondary,
+        wrapperBuilder: (context, properties, child) {
+          //TODO: extract this method in separate widget (performance improvement)
+          return _animationTypeBuilder<SwitchColors>(
+            context,
+            colorAnimationType,
+            (t) => colors._merge(colorBuilder?.call(t)),
+            SwitchColors._lerp,
+            (colors) => DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.backgroundColor,
+                gradient: colors.backgroundGradient,
+                borderRadius: colors.borderRadius,
+                boxShadow: boxShadow,
               ),
-              builder: (c, color, _) => Container(
-                clipBehavior: Clip.hardEdge,
-                foregroundDecoration: BoxDecoration(
-                  border: Border.all(color: color!, width: borderWidth),
-                  borderRadius: borderRadius,
-                ),
+              child: DecoratedBox(
+                position: DecorationPosition.foreground,
                 decoration: BoxDecoration(
-                  gradient: innerGradient,
-                  // Redundant check
-                  color: innerGradient != null
-                      ? null
-                      : (innerColor ?? theme.scaffoldBackgroundColor),
-                  borderRadius: borderRadius,
-                  boxShadow: boxShadow,
+                  border: Border.all(
+                    color: colors.borderColor!,
+                    width: borderWidth,
+                  ),
+                  borderRadius: colors.borderRadius,
                 ),
-                child: child,
+                child: ClipRRect(
+                  borderRadius: colors.borderRadius,
+                  child: child,
+                ),
               ),
-            ));
+            ),
+            properties,
+          );
+        });
   }
 
-  Widget _indicatorBuilder(
-      BuildContext context,
-      DetailedGlobalToggleProperties<T> properties,
-      Color indicatorColor,
-      BorderRadiusGeometry borderRadius) {
+  Widget _animationTypeBuilder<V>(
+    BuildContext context,
+    AnimationType animationType,
+    V Function(T item) valueProvider,
+    V Function(V value1, V value2, double t) lerp,
+    Widget Function(V value) builder,
+    GlobalToggleProperties<T> properties,
+  ) {
     double pos = properties.position;
-    switch (iconAnimationType) {
+    switch (animationType) {
       case AnimationType.onSelected:
-        Color currentColor = colorBuilder?.call(current) ?? indicatorColor;
-        return TweenAnimationBuilder<Color?>(
-            child: foregroundIndicatorIconBuilder?.call(context, properties),
+        V currentValue = valueProvider(current);
+        return TweenAnimationBuilder<V>(
             duration: animationDuration,
-            tween: ColorTween(begin: currentColor, end: currentColor),
-            builder: (c, color, child) => _customIndicatorBuilder(
-                context, color!, borderRadius, child, properties));
+            tween: _CustomTween(lerp, begin: currentValue, end: currentValue),
+            builder: (context, v, _) => builder(v));
       case AnimationType.onHover:
-        return _customIndicatorBuilder(
-          context,
-          Color.lerp(
-                  colorBuilder?.call(values[pos.floor()]) ?? indicatorColor,
-                  colorBuilder?.call(values[pos.ceil()]) ?? indicatorColor,
-                  pos - pos.floor()) ??
-              indicatorColor,
-          borderRadius,
-          foregroundIndicatorIconBuilder?.call(context, properties),
-          properties,
-        );
+        return builder(lerp(valueProvider(values[pos.floor()]),
+            valueProvider(values[pos.ceil()]), pos - pos.floor()));
     }
+  }
+
+  Widget _indicatorBuilder(BuildContext context,
+      DetailedGlobalToggleProperties<T> properties, SwitchColors colors) {
+    final child = foregroundIndicatorIconBuilder?.call(context, properties);
+    return _animationTypeBuilder<SwitchColors>(
+      context,
+      indicatorAnimationType,
+      (item) => colors._merge(colorBuilder?.call(item)),
+      SwitchColors._lerp,
+      (colors) => _customIndicatorBuilder(
+        context,
+        colors.indicatorColor!,
+        colors.indicatorBorderRadius!,
+        child,
+        properties,
+      ),
+      properties,
+    );
   }
 
   Widget _animatedIcon(BuildContext context, AnimatedToggleProperties<T> local,
@@ -1049,7 +1156,9 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         return _animatedIcon(
           context,
           AnimatedToggleProperties.fromLocal(
-              animationValue: animationValue, properties: local),
+            animationValue: animationValue,
+            properties: local,
+          ),
           global,
         );
     }
@@ -1077,7 +1186,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           color: color,
           borderRadius: borderRadius,
           border: indicatorBorder,
-          boxShadow: foregroundBoxShadow,
+          boxShadow: indicatorBoxShadow,
         ),
         child: Center(
           child: Stack(
@@ -1153,7 +1262,20 @@ class _MyLoading extends StatelessWidget {
   }
 }
 
+class _CustomTween<V> extends Tween<V> {
+  final V Function(V value1, V value2, double t) lerpFunction;
+
+  _CustomTween(this.lerpFunction, {super.begin, super.end});
+
+  @override
+  V lerp(double t) => lerpFunction(begin!, end!, t);
+}
+
 extension _XTargetPlatform on TargetPlatform {
   bool get isApple =>
       this == TargetPlatform.iOS || this == TargetPlatform.macOS;
+}
+
+extension _XColorToGradient on Color {
+  Gradient toGradient() => LinearGradient(colors: [this, this]);
 }

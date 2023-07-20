@@ -1,8 +1,12 @@
-## 0.7.1
+## 0.8.0
 - adds tests for all `AnimatedToggleSwitch` constructors
-- adds `separatorBuilder` and `customSeparatorBuilder` to `AnimatedToggleSwitch`
+- adds `separatorBuilder`, `customSeparatorBuilder`, `colors` and `colorAnimationType` to `AnimatedToggleSwitch`
 - adds `separatorBuilder` to `CustomAnimatedToggleSwitch`
 - fixes initial loading
+- BREAKING: moves `innerColor`, `innerGradient`, `borderColor` and `indicatorColor` to `colors`
+- BREAKING: merges `borderColorBuilder` with `colorBuilder`
+- BREAKING: `indicatorAnimationType` handles `SwitchColors.indicatorColor` and `SwitchColors.indicatorBorderRadius` now
+- BREAKING: renames `foregroundBoxShadow` to `indicatorBoxShadow`
 
 ## 0.7.0 (2023-06-19)
 

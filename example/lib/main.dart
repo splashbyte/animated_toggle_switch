@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    const green = Color(0xFF45CC0D);
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 first: false,
                 second: true,
                 dif: 50.0,
-                borderColor: Colors.transparent,
+                colors: const SwitchColors(borderColor: Colors.transparent),
                 borderWidth: 5.0,
                 height: 55,
                 boxShadow: const [
@@ -72,13 +73,49 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
                 onChanged: (b) => setState(() => positive = b),
-                colorBuilder: (b) => b ? Colors.red : Colors.green,
+                colorBuilder: (b) =>
+                    SwitchColors(indicatorColor: b ? Colors.red : Colors.green),
                 iconBuilder: (value) => value
                     ? Icon(Icons.coronavirus_rounded)
                     : Icon(Icons.tag_faces_rounded),
                 textBuilder: (value) => value
                     ? Center(child: Text('Oh no...'))
                     : Center(child: Text('Nice :)')),
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<bool>.dual(
+                current: positive,
+                first: false,
+                second: true,
+                dif: 50.0,
+                colors: const SwitchColors(borderColor: Colors.transparent),
+                borderWidth: 5.0,
+                height: 55,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: Offset(0, 1.5),
+                  ),
+                ],
+                onChanged: (b) => setState(() => positive = b),
+                colorBuilder: (b) => SwitchColors.withBorder(
+                  backgroundColor: b ? Colors.white : Colors.black,
+                  indicatorColor: b ? Colors.blue : Colors.red,
+                  borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(4.0), right: Radius.circular(50.0)),
+                  indicatorBorderRadius: BorderRadius.circular(b ? 50.0 : 4.0),
+                ),
+                iconBuilder: (value) => Icon(
+                  value
+                      ? Icons.access_time_rounded
+                      : Icons.power_settings_new_rounded,
+                  size: 32.0,
+                ),
+                textBuilder: (value) => value
+                    ? const Center(child: Text('On', style: TextStyle(color: Colors.black)))
+                    : const Center(child: Text('Off', style: TextStyle(color: Colors.white))),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -96,7 +133,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     first: false,
                     second: true,
                     dif: 45.0,
-                    borderColor: Colors.transparent,
+                    colors: const SwitchColors(
+                      borderColor: Colors.transparent,
+                      backgroundColor: Colors.black,
+                    ),
                     borderWidth: 10.0,
                     height: 50,
                     loadingIconBuilder: (context, global) =>
@@ -114,8 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() => positive = b);
                       return Future.delayed(Duration(seconds: 2));
                     },
-                    innerColor: Colors.black,
-                    colorBuilder: (b) => b ? Colors.purple : Colors.green,
+                    colorBuilder: (b) => SwitchColors(
+                        indicatorColor: b ? Colors.purple : Colors.green),
                     iconBuilder: (value) => value
                         ? Icon(Icons.coronavirus_rounded)
                         : Icon(Icons.tag_faces_rounded),
@@ -124,6 +164,46 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Text('Oh no...',
                                 style: const TextStyle(color: Colors.white)))
                         : Center(child: Text('Nice :)')),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              DefaultTextStyle.merge(
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: Colors.white),
+                  child: AnimatedToggleSwitch<bool>.dual(
+                    current: positive,
+                    first: false,
+                    second: true,
+                    dif: 45.0,
+                    colors: SwitchColors(
+                      borderColor: Colors.transparent,
+                      indicatorColor: Colors.white,
+                      backgroundColor: Colors.black,
+                    ),
+                    colorBuilder: (value) => SwitchColors(
+                        backgroundColor: value ? green : Colors.red[800]),
+                    borderWidth: 6.0,
+                    height: 60.0,
+                    loadingIconBuilder: (context, global) =>
+                        CupertinoActivityIndicator(
+                            color: Color.lerp(
+                                Colors.red[800], green, global.position)),
+                    onChanged: (b) {
+                      setState(() => positive = b);
+                      return Future.delayed(Duration(seconds: 2));
+                    },
+                    iconBuilder: (value) => value
+                        ? Icon(Icons.power_outlined, color: green, size: 32.0)
+                        : Icon(Icons.power_settings_new_rounded,
+                            color: Colors.red[800], size: 32.0),
+                    textBuilder: (value) => value
+                        ? Center(child: Text('Active'))
+                        : Center(child: Text('Inactive')),
                   ),
                 ),
               ),
@@ -177,8 +257,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       .then((_) => setState(() => loading = false));
                 },
                 iconBuilder: rollingIconBuilder,
-                borderColor: Colors.transparent,
-                foregroundBoxShadow: const [
+                colors: SwitchColors(borderColor: Colors.transparent),
+                indicatorBoxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     spreadRadius: 1,
@@ -196,6 +276,35 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 16.0),
+              IconTheme.merge(
+                data: IconThemeData(color: Colors.white),
+                child: AnimatedToggleSwitch<int>.rolling(
+                  current: value,
+                  values: const [0, 1, 2, 3],
+                  onChanged: (i) => setState(() => value = i),
+                  colors: SwitchColors(
+                    indicatorColor: Colors.white,
+                    borderColor: Colors.transparent,
+                  ),
+                  iconBuilder: coloredRollingIconBuilder,
+                  borderWidth: 3.0,
+                  colorAnimationType: AnimationType.onHover,
+                  colorBuilder: (value) => SwitchColors.withBorder(
+                    backgroundColor: colorBuilder(value),
+                    borderRadius: BorderRadius.circular(value * 10.0),
+                    indicatorBorderRadius: BorderRadius.circular(value * 10.0),
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
                 allowUnlistedValues: true,
@@ -204,12 +313,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconBuilder: rollingIconBuilder,
                 separatorBuilder: (context, index) => const VerticalDivider(),
                 borderWidth: 4.5,
-                indicatorColor: Colors.white,
+                colors: SwitchColors(
+                  indicatorColor: Colors.white,
+                  backgroundColor: Colors.amber,
+                  borderColor: Colors.transparent,
+                ),
                 borderRadius: BorderRadius.circular(10.0),
-                innerColor: Colors.amber,
                 height: 55,
                 dif: 20.0,
-                borderColor: Colors.transparent,
                 loading: loading,
               ),
               SizedBox(height: 16.0),
@@ -221,13 +332,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
-                indicatorColor: Colors.white,
-                innerGradient:
-                    const LinearGradient(colors: [Colors.red, Colors.blue]),
-                innerColor: Colors.amber,
+                colors: SwitchColors(
+                  indicatorColor: Colors.white,
+                  backgroundGradient:
+                      const LinearGradient(colors: [Colors.red, Colors.blue]),
+                  borderColor: Colors.transparent,
+                ),
                 height: 55,
                 dif: 20.0,
-                borderColor: Colors.transparent,
                 loading: loading,
               ),
               Padding(
@@ -306,7 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconOpacity: 0.2,
                 indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
-                indicatorAnimationType: AnimationType.onHover,
+                colorAnimationType: AnimationType.onHover,
                 iconBuilder: (value, size) {
                   IconData data = Icons.access_time_rounded;
                   if (value.isEven) data = Icons.cancel;
@@ -315,10 +427,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     size: min(size.width, size.height),
                   );
                 },
+                colors: const SwitchColors(borderColor: Colors.transparent),
                 borderWidth: 0.0,
-                borderColor: Colors.transparent,
-                colorBuilder: (i) =>
-                    i.isEven == true ? Colors.amber : Colors.red,
+                colorBuilder: (i) => SwitchColors(
+                    indicatorColor:
+                        i.isEven == true ? Colors.amber : Colors.red),
                 onChanged: (i) {
                   setState(() => value = i);
                   return Future.delayed(Duration(seconds: 3));
@@ -329,12 +442,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: min(value, 2),
                 borderRadius: BorderRadius.circular(10.0),
                 indicatorBorderRadius: BorderRadius.zero,
-                innerColor: Color(0xFF919191),
+                colors: SwitchColors(
+                  backgroundColor: Color(0xFF919191),
+                  indicatorColor: Color(0xFFEC3345),
+                  borderColor: Colors.transparent,
+                ),
                 values: const [0, 1, 2],
                 iconOpacity: 1.0,
                 indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
-                indicatorAnimationType: AnimationType.onHover,
+                colorAnimationType: AnimationType.onHover,
                 dif: 2.0,
                 customSeparatorBuilder: (context, local, global) {
                   final opacity =
@@ -354,8 +471,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   local.animationValue))));
                 },
                 borderWidth: 0.0,
-                borderColor: Colors.transparent,
-                colorBuilder: (i) => Color(0xFFEC3345),
                 onChanged: (i) => setState(() => value = i),
               ),
               Padding(
@@ -380,9 +495,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   );
                 },
-                borderColor: value.isEven == true ? Colors.blue : Colors.red,
-                colorBuilder: (i) =>
-                    i.isEven == true ? Colors.amber : Colors.red,
+                colors: SwitchColors(borderColor: Colors.transparent),
+                colorBuilder: (i) => SwitchColors(
+                    indicatorColor:
+                        i.isEven == true ? Colors.amber : Colors.red),
                 onChanged: (i) => setState(() => value = i),
               ),
               Padding(
@@ -416,12 +532,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 selectedIconSize: const Size.square(20),
                 iconSize: const Size.square(20),
                 iconBuilder: iconBuilder,
-                colorBuilder: (i) =>
-                    i.isEven == true ? Colors.green : Colors.tealAccent,
+                colors: const SwitchColors(borderColor: Colors.red),
+                colorBuilder: (i) => SwitchColors(
+                    indicatorColor:
+                        i.isEven == true ? Colors.green : Colors.tealAccent),
                 onChanged: (i) => setState(() => value = i),
                 borderRadius: BorderRadius.circular(8.0),
                 indicatorBorderRadius: BorderRadius.zero,
-                borderColor: Colors.red,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -455,6 +572,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
+    );
+  }
+
+  Color colorBuilder(int value) => switch (value) {
+        0 => Colors.blueAccent,
+        1 => Colors.green,
+        2 => Colors.orangeAccent,
+        _ => Colors.red,
+      };
+
+  Widget coloredRollingIconBuilder(int value, Size iconSize, bool foreground) {
+    final color = foreground ? colorBuilder(value) : null;
+    return Icon(
+      switch (value) {
+        0 => Icons.access_time_rounded,
+        1 => Icons.check_circle_outline_rounded,
+        2 => Icons.power_settings_new_rounded,
+        _ => Icons.lightbulb_outline_rounded,
+      },
+      color: color,
+      size: iconSize.shortestSide,
     );
   }
 

@@ -69,6 +69,7 @@ AnimatedToggleSwitch<int>.rolling(
   values: [0, 1, 2, 3],
   onChanged: (i) => setState(() => value = i),
   iconBuilder: iconBuilder,
+  colors: SwitchColors(...), // optional color settings
   ... // many more parameters available
 )
 ```
@@ -125,16 +126,19 @@ CustomAnimatedToggleSwitch<int>(
 ```dart
 AnimatedToggleSwitch<int>.size(
   current: value,
-  values: [0, 1, 2, 3],
+  values: const [0, 1, 2, 3],
   iconOpacity: 0.2,
-  indicatorSize: Size.fromWidth(100),
+  indicatorSize: const Size.fromWidth(100),
+  iconAnimationType: AnimationType.onHover,
+  colorAnimationType: AnimationType.onHover,
   iconBuilder: (value, size) {
     IconData data = Icons.access_time_rounded;
     if (value.isEven) data = Icons.cancel;
     return Icon(data, size: min(size.width, size.height));
   },
-  borderColor: value.isEven ? Colors.blue : Colors.red,
-  colorBuilder: (i) => i.isEven ? Colors.amber : Colors.red,
+  colors: const SwitchColors(borderColor: Colors.transparent),
+  borderWidth: 0.0,
+  colorBuilder: (i) => SwitchColors(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
   onChanged: (i) => setState(() => value = i),
 )
 ```
@@ -143,10 +147,10 @@ AnimatedToggleSwitch<int>.size(
 
 ```dart
 AnimatedToggleSwitch<int>.size(
-  value: value,
-  values: [0, 1, 2, 3],
+  current: value,
+  values: const [0, 1, 2, 3],
   iconOpacity: 1.0,
-  indicatorSize: Size.fromWidth(25),
+  indicatorSize: const Size.fromWidth(25),
   foregroundIndicatorIconBuilder: (context, global) {
     double pos = global.position;
     double transitionValue = pos - pos.floorToDouble();
@@ -159,15 +163,15 @@ AnimatedToggleSwitch<int>.size(
         Opacity(
           opacity: transitionValue,
           child: iconBuilder(pos.ceil(), global.indicatorSize))
-      ]),
-    );
+        ]));
   },
-  selectedIconSize: Size.square(20),
-  iconSize: Size.square(20),
+  selectedIconSize: const Size.square(20),
+  iconSize: const Size.square(20),
   iconBuilder: iconBuilder,
-  colorBuilder: (i) => i.isEven ? Colors.green : Colors.tealAccent,
+  colors: const SwitchColors(borderColor: Colors.red),
+  colorBuilder: (i) => SwitchColors(indicatorColor: i.isEven == true ? Colors.green : Colors.tealAccent),
   onChanged: (i) => setState(() => value = i),
   borderRadius: BorderRadius.circular(8.0),
-  borderColor: Colors.red,
-),
+  indicatorBorderRadius: BorderRadius.zero,
+)
 ```
