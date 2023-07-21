@@ -185,6 +185,9 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// the indicator disappears with the specified [indicatorAppearingBuilder].
   final bool allowUnlistedValues;
 
+  /// Indicates if the switch is active.
+  final bool active = true;
+
   const CustomAnimatedToggleSwitch({
     Key? key,
     required this.current,
@@ -325,6 +328,9 @@ class _CustomAnimatedToggleSwitchState<T>
     if (oldWidget.animationCurve != widget.animationCurve) {
       _animation.curve = widget.animationCurve;
     }
+    if (oldWidget.active != widget.active && !widget.active) {
+      _onDragEnd();
+    }
 
     _checkValuePosition();
     if (oldWidget.loading != widget.loading) {
@@ -332,7 +338,10 @@ class _CustomAnimatedToggleSwitchState<T>
     }
   }
 
+  bool get _isActive => widget.active && !_animationInfo.loading;
+
   void _onChanged(T value) {
+    if (!_isActive) return;
     var result = widget.onChanged?.call(value);
     if (result is Future && widget.loading == null) {
       _loading(true);
@@ -341,7 +350,7 @@ class _CustomAnimatedToggleSwitchState<T>
   }
 
   void _onTap() {
-    if (_animationInfo.loading) return;
+    if (!_isActive) return;
     var result = widget.onTap?.call();
     if (result is Future && widget.loading == null) {
       _loading(true);
@@ -504,7 +513,7 @@ class _CustomAnimatedToggleSwitchState<T>
                         : position;
 
                     bool isHoveringIndicator(Offset offset) {
-                      if (_animationInfo.loading || widget._isCurrentUnlisted)
+                      if (!_isActive || widget._isCurrentUnlisted)
                         return false;
                       double dx = textDirection == TextDirection.rtl
                           ? width - offset.dx
@@ -705,7 +714,7 @@ class _CustomAnimatedToggleSwitchState<T>
   /// Starts the dragging of the indicator and starts the animation to
   /// the current cursor position.
   void _onDragged(double indexPosition, double pos) {
-    if (_animationInfo.loading) return;
+    if (!_isActive) return;
     _animationInfo = _animationInfo.dragged(indexPosition, pos: pos);
     _controller.duration = widget.dragStartDuration;
     _animation.curve = widget.dragStartCurve;
