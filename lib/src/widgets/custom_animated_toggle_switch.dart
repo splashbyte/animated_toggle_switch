@@ -513,8 +513,7 @@ class _CustomAnimatedToggleSwitchState<T>
                         : position;
 
                     bool isHoveringIndicator(Offset offset) {
-                      if (!_isActive || widget._isCurrentUnlisted)
-                        return false;
+                      if (!_isActive || widget._isCurrentUnlisted) return false;
                       double dx = textDirection == TextDirection.rtl
                           ? width - offset.dx
                           : offset.dx;
