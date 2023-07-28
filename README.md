@@ -85,7 +85,7 @@ If you need additional parameters, you can use `customStyleBuilder`.
 AnimatedToggleSwitch<int>.rolling(
   ...
   style: ToggleStyle(backgroundColor: Colors.red), // backgroundColor is set independently of the current selection
-  styleBuilder: ToggleStyle(indicatorColor: (value) => value.isEven ? Colors.yellow : Colors.green)), // indicatorColor changes and animates its value with the selection
+  styleBuilder: (value) => ToggleStyle(indicatorColor: value.isEven ? Colors.yellow : Colors.green)), // indicatorColor changes and animates its value with the selection
   ...
 )
 ```
