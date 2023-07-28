@@ -153,7 +153,7 @@ AnimatedToggleSwitch<int>.size(
   },
   style: const ToggleStyle(borderColor: Colors.transparent),
   borderWidth: 0.0,
-  colorBuilder: (i) => SwitchColors(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
+styleBuilder: (i) => ToggleStyle(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
   onChanged: (i) => setState(() => value = i),
 )
 ```
@@ -188,7 +188,7 @@ AnimatedToggleSwitch<int>.size(
     borderRadius: BorderRadius.circular(8.0),
     indicatorBorderRadius: BorderRadius.zero,
   ),
-  colorBuilder: (i) => SwitchColors(indicatorColor: i.isEven == true ? Colors.green : Colors.tealAccent),
+  styleBuilder: (i) => ToggleStyle(indicatorColor: i.isEven == true ? Colors.green : Colors.tealAccent),
   onChanged: (i) => setState(() => value = i),
 )
 ```
