@@ -91,9 +91,6 @@ class LocalToggleProperties<T> {
 
 class StyledToggleProperties<T> extends LocalToggleProperties<T> {
   //TODO: Add style to this class
-  StyledToggleProperties._fromLocal({
-    required LocalToggleProperties<T> properties,
-  }) : super(value: properties.value, index: properties.index);
 
   const StyledToggleProperties({
     required super.value,
