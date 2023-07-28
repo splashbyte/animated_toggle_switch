@@ -19,10 +19,10 @@ Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom ve
 
 For a slider with a similar look, you can check out [action_slider](https://pub.dev/packages/action_slider).
 
-### Example Usage
+## Example Usage
 ![usage](https://user-images.githubusercontent.com/43761463/114942384-c1200d00-9e44-11eb-9904-3cb1d7296da4.gif)
 
-### Examples
+## Examples
 `AnimatedToggleSwitch.dual()`  
 ![animated_toggle_switch_example_dual](https://user-images.githubusercontent.com/43761463/161432631-e6dd3d16-7b64-410b-a9fa-c956d3442598.gif)
 ![animated_toggle_switch_example_borderradius_builder](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/985492df-82a4-4225-a0ad-500970ad692d)
