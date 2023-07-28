@@ -245,9 +245,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         colors: [green, Colors.red[800]!],
                         stops: [
                           global.position -
-                              (1 - 2 * (global.position - 0.5).abs()) * 0.2,
+                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
                           global.position +
-                              (1 - 2 * (global.position - 0.5).abs()) * 0.2,
+                              max(0, 2 * (global.position - 0.5)) * 0.2,
                         ],
                       ));
                     },
