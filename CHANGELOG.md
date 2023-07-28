@@ -15,7 +15,7 @@
   - `indicatorBoxShadow`
   - `boxShadow`
 - BREAKING: merges `borderColorBuilder` with `styleBuilder`
-- BREAKING: `indicatorAnimationType` handles `ToggleStyle.indicatorColor` and `ToggleStyle.indicatorBorderRadius` now
+- BREAKING: `indicatorAnimationType` handles `ToggleStyle.indicatorColor`, `ToggleStyle.indicatorBorderRadius`, `ToggleStyle.indicatorBorder` and `ToggleStyle.indicatorBoxShadow` now
 - BREAKING: renames `foregroundBoxShadow` to `indicatorBoxShadow`
 
 ## 0.7.0 (2023-06-19)
