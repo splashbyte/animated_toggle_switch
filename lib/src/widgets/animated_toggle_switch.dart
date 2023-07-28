@@ -58,18 +58,21 @@ class ToggleStyle {
   final Color? borderColor;
 
   /// [BorderRadius] of the switch.
-  ///
-  /// If set, this value overwrites [AnimatedToggleSwitch.borderRadius].
   final BorderRadiusGeometry? borderRadius;
 
   /// [BorderRadius] of the indicator.
-  ///
-  /// If set, this value overwrites [AnimatedToggleSwitch.indicatorBorderRadius].
   final BorderRadiusGeometry? indicatorBorderRadius;
 
+  /// [BorderRadius] of the indicator.
+  final BoxBorder? indicatorBorder;
+
+  /// Shadow for the indicator [Container].
+  final List<BoxShadow>? indicatorBoxShadow;
+
+  /// Shadow for the [Container] in the background.
+  final List<BoxShadow>? boxShadow;
+
   /// Default constructor for [ToggleStyle].
-  ///
-  /// If you want to adapt the [BorderRadius], you should use [SwitchColors.withBorder] instead.
   const ToggleStyle({
     this.indicatorColor,
     this.backgroundColor,
@@ -77,6 +80,9 @@ class ToggleStyle {
     this.borderColor,
     this.borderRadius,
     this.indicatorBorderRadius,
+    this.indicatorBorder,
+    this.indicatorBoxShadow,
+    this.boxShadow,
   });
 
   /// Private constructor for setting all possible parameters.
@@ -87,6 +93,9 @@ class ToggleStyle {
     required this.borderColor,
     required this.borderRadius,
     required this.indicatorBorderRadius,
+    required this.indicatorBorder,
+    required this.indicatorBoxShadow,
+    required this.boxShadow,
   });
 
   ToggleStyle _merge(ToggleStyle? other) => other == null
@@ -102,28 +111,46 @@ class ToggleStyle {
               indicatorBorderRadius ??
               other.borderRadius ??
               borderRadius,
+          indicatorBorder: other.indicatorBorder ?? indicatorBorder,
+          indicatorBoxShadow: other.indicatorBoxShadow ?? indicatorBoxShadow,
+          boxShadow: other.boxShadow ?? boxShadow,
         );
 
-  static ToggleStyle _lerp(ToggleStyle style1, ToggleStyle colors2, double t) =>
+  static ToggleStyle _lerp(ToggleStyle style1, ToggleStyle style2, double t) =>
       ToggleStyle._(
         indicatorColor:
-            Color.lerp(style1.indicatorColor, colors2.indicatorColor, t),
+            Color.lerp(style1.indicatorColor, style2.indicatorColor, t),
         backgroundColor:
-            Color.lerp(style1.backgroundColor, colors2.backgroundColor, t),
+            Color.lerp(style1.backgroundColor, style2.backgroundColor, t),
         backgroundGradient: Gradient.lerp(
           style1.backgroundGradient ?? style1.backgroundColor?.toGradient(),
-          colors2.backgroundGradient ?? colors2.backgroundColor?.toGradient(),
+          style2.backgroundGradient ?? style2.backgroundColor?.toGradient(),
           t,
         ),
-        borderColor: Color.lerp(style1.borderColor, colors2.borderColor, t),
+        borderColor: Color.lerp(style1.borderColor, style2.borderColor, t),
         borderRadius: BorderRadiusGeometry.lerp(
           style1.borderRadius,
-          colors2.borderRadius,
+          style2.borderRadius,
           t,
         ),
         indicatorBorderRadius: BorderRadiusGeometry.lerp(
           style1.indicatorBorderRadius ?? style1.borderRadius,
-          colors2.indicatorBorderRadius ?? colors2.borderRadius,
+          style2.indicatorBorderRadius ?? style2.borderRadius,
+          t,
+        ),
+        indicatorBorder: BoxBorder.lerp(
+          style1.indicatorBorder,
+          style2.indicatorBorder,
+          t,
+        ),
+        indicatorBoxShadow: BoxShadow.lerpList(
+          style1.indicatorBoxShadow,
+          style2.indicatorBoxShadow,
+          t,
+        ),
+        boxShadow: BoxShadow.lerpList(
+          style1.boxShadow,
+          style2.boxShadow,
           t,
         ),
       );
@@ -146,8 +173,7 @@ enum ForegroundIndicatorTransitionType {
   /// Fades between the different icons.
   fading,
 
-  /// Fades between the different icons and shows a rolling animation
-  /// additionally.
+  /// Fades between the different icons and shows a rolling animation additionally.
   rolling,
 }
 
@@ -272,14 +298,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Change this only if you don't want the switch to adjust when the constraints are too small.
   final FittingMode fittingMode;
 
-  final BoxBorder? indicatorBorder;
-
-  /// Shadow for the indicator [Container].
-  final List<BoxShadow> indicatorBoxShadow;
-
-  /// Shadow for the [Container] in the background.
-  final List<BoxShadow> boxShadow;
-
   /// Indicates if [onChanged] is called when an icon is tapped.
   /// If [false] the user can change the value only by dragging the indicator.
   final bool iconsTappable;
@@ -374,9 +392,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    this.indicatorBorder,
-    this.indicatorBoxShadow = const [],
-    this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
@@ -430,9 +445,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    this.indicatorBorder,
-    this.indicatorBoxShadow = const [],
-    this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
@@ -489,9 +501,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    this.indicatorBorder,
-    this.indicatorBoxShadow = const [],
-    this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
@@ -577,9 +586,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    this.indicatorBorder,
-    this.indicatorBoxShadow = const [],
-    this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
@@ -637,9 +643,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    this.indicatorBorder,
-    this.indicatorBoxShadow = const [],
-    this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
@@ -713,9 +716,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    this.indicatorBorder,
-    this.indicatorBoxShadow = const [],
-    this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
@@ -864,9 +864,6 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.indicatorAnimationType = AnimationType.onHover,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     Function()? onTap,
-    this.indicatorBorder,
-    this.indicatorBoxShadow = const [],
-    this.boxShadow = const [],
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.defaultCursor = SystemMouseCursors.click,
@@ -1001,13 +998,16 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     BorderRadiusGeometry defaultBorderRadius =
         BorderRadius.circular(height / 2);
-    final colors = ToggleStyle._(
+    final style = ToggleStyle._(
       indicatorColor: theme.colorScheme.secondary,
       backgroundColor: theme.scaffoldBackgroundColor,
       backgroundGradient: null,
       borderColor: theme.colorScheme.secondary,
       borderRadius: defaultBorderRadius,
       indicatorBorderRadius: defaultBorderRadius,
+      indicatorBorder: null,
+      indicatorBoxShadow: null,
+      boxShadow: null,
     )._merge(this.style);
 
     return CustomAnimatedToggleSwitch<T>(
@@ -1044,11 +1044,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         backgroundIndicatorBuilder: foregroundIndicatorIconBuilder != null
             ? null
             : (context, properties) =>
-                _indicatorBuilder(context, properties, colors),
+                _indicatorBuilder(context, properties, style),
         foregroundIndicatorBuilder: foregroundIndicatorIconBuilder == null
             ? null
             : (context, properties) =>
-                _indicatorBuilder(context, properties, colors),
+                _indicatorBuilder(context, properties, style),
         iconBuilder: (context, local, global) => _animatedOpacityIcon(
             _animatedSizeIcon(context, local, global), local.value == current),
         padding: EdgeInsets.all(borderWidth),
@@ -1057,14 +1057,14 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           return _animationTypeBuilder<ToggleStyle>(
             context,
             styleAnimationType,
-            (local) => colors._merge(_styleBuilder(context, local, global)),
+            (local) => style._merge(_styleBuilder(context, local, global)),
             ToggleStyle._lerp,
-            (colors) => DecoratedBox(
+            (style) => DecoratedBox(
               decoration: BoxDecoration(
-                color: colors.backgroundColor,
-                gradient: colors.backgroundGradient,
-                borderRadius: colors.borderRadius,
-                boxShadow: boxShadow,
+                color: style.backgroundColor,
+                gradient: style.backgroundGradient,
+                borderRadius: style.borderRadius,
+                boxShadow: style.boxShadow,
               ),
               child: DecoratedBox(
                 position: DecorationPosition.foreground,
@@ -1072,13 +1072,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
                   border: borderWidth <= 0.0
                       ? null
                       : Border.all(
-                          color: colors.borderColor!,
+                          color: style.borderColor!,
                           width: borderWidth,
                         ),
-                  borderRadius: colors.borderRadius,
+                  borderRadius: style.borderRadius,
                 ),
                 child: ClipRRect(
-                  borderRadius: colors.borderRadius,
+                  borderRadius: style.borderRadius,
                   child: child,
                 ),
               ),
@@ -1121,20 +1121,14 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   }
 
   Widget _indicatorBuilder(BuildContext context,
-      DetailedGlobalToggleProperties<T> properties, ToggleStyle colors) {
+      DetailedGlobalToggleProperties<T> properties, ToggleStyle style) {
     final child = foregroundIndicatorIconBuilder?.call(context, properties);
     return _animationTypeBuilder<ToggleStyle>(
       context,
       indicatorAnimationType,
-      (local) => colors._merge(_styleBuilder(context, local, properties)),
+      (local) => style._merge(_styleBuilder(context, local, properties)),
       ToggleStyle._lerp,
-      (colors) => _customIndicatorBuilder(
-        context,
-        colors.indicatorColor!,
-        colors.indicatorBorderRadius!,
-        child,
-        properties,
-      ),
+      (style) => _customIndicatorBuilder(context, style, child, properties),
       properties,
     );
   }
@@ -1197,19 +1191,15 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
           );
   }
 
-  Widget _customIndicatorBuilder(
-      BuildContext context,
-      Color color,
-      BorderRadiusGeometry borderRadius,
-      Widget? child,
-      DetailedGlobalToggleProperties<T> global) {
+  Widget _customIndicatorBuilder(BuildContext context, ToggleStyle style,
+      Widget? child, DetailedGlobalToggleProperties<T> global) {
     final loadingValue = global.loadingAnimationValue;
     return DecoratedBox(
         decoration: BoxDecoration(
-          color: color,
-          borderRadius: borderRadius,
-          border: indicatorBorder,
-          boxShadow: indicatorBoxShadow,
+          color: style.indicatorColor,
+          borderRadius: style.indicatorBorderRadius,
+          border: style.indicatorBorder,
+          boxShadow: style.indicatorBoxShadow,
         ),
         child: Center(
           child: Stack(

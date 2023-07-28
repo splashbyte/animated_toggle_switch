@@ -3,7 +3,17 @@
 - adds `separatorBuilder`, `customSeparatorBuilder`, `style` and `styleAnimationType` to `AnimatedToggleSwitch`
 - adds `separatorBuilder` to `CustomAnimatedToggleSwitch`
 - fixes initial loading
-- BREAKING: moves `innerColor`, `innerGradient`, `borderColor`, `indicatorColor`, `borderRadius` and `indicatorBorderColor` to `style`
+- BREAKING: moves many parameters to `style`:
+  - `innerColor` (renamed to `backgroundColor`)
+  - `innerGradient` (renamed to `backgroundGradient`)
+  - `borderColor`
+  - `indicatorColor`
+  - `borderRadius`
+  - `indicatorBorderColor`
+  - `indicatorBorder`
+  - `indicatorBorder`
+  - `indicatorBoxShadow`
+  - `boxShadow`
 - BREAKING: merges `borderColorBuilder` with `styleBuilder`
 - BREAKING: `indicatorAnimationType` handles `ToggleStyle.indicatorColor` and `ToggleStyle.indicatorBorderRadius` now
 - BREAKING: renames `foregroundBoxShadow` to `indicatorBoxShadow`

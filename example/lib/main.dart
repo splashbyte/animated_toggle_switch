@@ -61,17 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 first: false,
                 second: true,
                 dif: 50.0,
-                style: const ToggleStyle(borderColor: Colors.transparent),
+                style: const ToggleStyle(
+                  borderColor: Colors.transparent,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                ),
                 borderWidth: 5.0,
                 height: 55,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  ),
-                ],
                 onChanged: (b) => setState(() => positive = b),
                 styleBuilder: (b) =>
                     ToggleStyle(indicatorColor: b ? Colors.red : Colors.green),
@@ -88,17 +90,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 first: false,
                 second: true,
                 dif: 50.0,
-                style: const ToggleStyle(borderColor: Colors.transparent),
+                style: const ToggleStyle(
+                  borderColor: Colors.transparent,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                ),
                 borderWidth: 5.0,
                 height: 55,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  ),
-                ],
                 onChanged: (b) => setState(() => positive = b),
                 styleBuilder: (b) => ToggleStyle(
                   backgroundColor: b ? Colors.white : Colors.black,
@@ -142,19 +146,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderColor: Colors.transparent,
                       backgroundColor: Colors.black,
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.purple,
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: Offset(0, 0.5),
+                        ),
+                      ],
                     ),
                     borderWidth: 10.0,
                     height: 50,
                     loadingIconBuilder: (context, global) =>
                         const CupertinoActivityIndicator(color: Colors.white),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.purple,
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset: Offset(0, 0.5),
-                      ),
-                    ],
                     onChanged: (b) {
                       setState(() => positive = b);
                       return Future.delayed(Duration(seconds: 2));
@@ -314,23 +318,25 @@ class _MyHomePageState extends State<MyHomePage> {
                       .then((_) => setState(() => loading = false));
                 },
                 iconBuilder: rollingIconBuilder,
-                style: ToggleStyle(borderColor: Colors.transparent),
-                indicatorBoxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  )
-                ],
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  )
-                ],
+                style: ToggleStyle(
+                  borderColor: Colors.transparent,
+                  indicatorBoxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    )
+                  ],
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    )
+                  ],
+                ),
               ),
               SizedBox(height: 16.0),
               IconTheme.merge(
@@ -342,6 +348,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: ToggleStyle(
                     indicatorColor: Colors.white,
                     borderColor: Colors.transparent,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 1.5),
+                      )
+                    ],
                   ),
                   iconBuilder: coloredRollingIconBuilder,
                   borderWidth: 3.0,
@@ -351,14 +365,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     borderRadius: BorderRadius.circular(value * 10.0),
                     indicatorBorderRadius: BorderRadius.circular(value * 10.0),
                   ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      offset: Offset(0, 1.5),
-                    )
-                  ],
                 ),
               ),
               SizedBox(height: 16.0),
