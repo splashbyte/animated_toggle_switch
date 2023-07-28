@@ -73,6 +73,20 @@ AnimatedToggleSwitch<int>.rolling(
 )
 ```
 
+### Styling
+`style`, `styleBuilder` and `customStyleBuilder` can be used to style the switch.  
+For the general look of the switch, you can use `style`.  
+For parameters that should change with the selection, you can use `styleBuilder`.  
+If you need additional parameters, you can use `customStyleBuilder`.  
+```dart
+AnimatedToggleSwitch<int>.rolling(
+  ...
+  style: ToggleStyle(backgroundColor: Colors.red), // backgroundColor is set independently of the current selection
+  styleBuilder: ToggleStyle(indicatorColor: (value) => value.isEven ? Colors.yellow : Colors.green)), // indicatorColor changes and animates its value with the selection
+  ...
+)
+```
+
 ### Simple rolling animation with loading
 ![animated_toggle_switch_example_rolling_loading](https://user-images.githubusercontent.com/43761463/209121057-2ff2bfc3-063e-4704-a981-f5cc5f54720a.gif)  
 To use the loading animation, you simply have to return a `Future` in `onChanged` or `onTap`.
