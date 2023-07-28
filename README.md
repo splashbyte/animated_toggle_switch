@@ -26,10 +26,10 @@ For a slider with a similar look, you can check out [action_slider](https://pub.
 `AnimatedToggleSwitch.dual()`  
 ![animated_toggle_switch_example_dual](https://user-images.githubusercontent.com/43761463/161432631-e6dd3d16-7b64-410b-a9fa-c956d3442598.gif)
 ![animated_toggle_switch_example_borderradius_builder](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/985492df-82a4-4225-a0ad-500970ad692d)
+![animated_toggle_switch_example_lite_rolling_gradient](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/6cd5d2d3-b4bd-4020-8568-354c71221e40)
 
 Switch inspired by [lite_rolling_switch](https://pub.dev/packages/lite_rolling_switch) (made with `AnimatedToggleSwitch.dual()`)  
 ![animated_toggle_switch_example_lite_rolling](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/f1bec7cd-4885-4e8d-ac13-176d6b46245a)
-![animated_toggle_switch_example_lite_rolling_gradient](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/6cd5d2d3-b4bd-4020-8568-354c71221e40)
 
 
 Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made with `AnimatedToggleSwitch.size()`)  
