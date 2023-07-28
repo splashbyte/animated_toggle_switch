@@ -24,6 +24,8 @@ typedef CustomSeparatorBuilder<T> = Widget Function(BuildContext context,
 typedef IndicatorAppearingBuilder = Widget Function(
     BuildContext context, double value, Widget indicator);
 
+enum ToggleMode { animating, dragged, none }
+
 enum FittingMode { none, preventHorizontalOverlapping }
 
 // global parameter default values
