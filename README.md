@@ -17,7 +17,7 @@ Fully customizable, draggable and animated switch with multiple choices and [smo
 [Switches without an (initial) selection](#simple-rolling-animation-with-nullable-selection) are also possible.  
 Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom version. This ensures that you can get started easily and still customize a lot if necessary.
 
-For a slider with a similar look, you can check out [action_slider](https://pub.dev/packages/action_slider).
+For a slider with a similar look you can check out [action_slider](https://pub.dev/packages/action_slider).
 
 ## Example Usage
 ![usage](https://user-images.githubusercontent.com/43761463/114942384-c1200d00-9e44-11eb-9904-3cb1d7296da4.gif)
