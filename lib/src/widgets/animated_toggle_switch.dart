@@ -264,7 +264,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// The [AnimationType] for [styleBuilder].
   ///
-  /// The [AnimationType] for [ToggleStyle.indicatorColor] and [ToggleStyle.indicatorBorderRadius]
+  /// The [AnimationType] for [ToggleStyle.indicatorColor], [ToggleStyle.indicatorBorderRadius],
+  /// [ToggleStyle.indicatorBorder] and [ToggleStyle.indicatorBoxShadow].
   /// is managed separately with [indicatorAnimationType].
   final AnimationType styleAnimationType;
 
