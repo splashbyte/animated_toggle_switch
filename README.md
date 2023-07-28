@@ -28,7 +28,9 @@ For a slider with a similar look, you can check out [action_slider](https://pub.
 ![animated_toggle_switch_example_borderradius_builder](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/985492df-82a4-4225-a0ad-500970ad692d)
 
 Switch inspired by [lite_rolling_switch](https://pub.dev/packages/lite_rolling_switch) (made with `AnimatedToggleSwitch.dual()`)  
-![animated_toggle_switch_example_lite_rolling_switch_highres](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/357c31b5-710f-47e9-9132-07779371c1a6)
+![animated_toggle_switch_example_lite_rolling](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/f1bec7cd-4885-4e8d-ac13-176d6b46245a)
+![animated_toggle_switch_example_lite_rolling_gradient](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/6cd5d2d3-b4bd-4020-8568-354c71221e40)
+
 
 Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made with `AnimatedToggleSwitch.size()`)  
 ![animated_toggle_switch_example_toggle_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/4812efdc-fe9a-4c34-808a-0983de65d2a4)
@@ -39,7 +41,8 @@ Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made
 ![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/161432579-9fe81c57-6463-45c3-a48f-75db666a3a22.gif)
 ![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/161432589-d76f61f6-cb97-42e2-b1fd-8c5203a965fa.gif)
 ![animated_toggle_switch_example_gradient](https://user-images.githubusercontent.com/43761463/209117203-90a41ddc-db1c-41be-8375-5304317d1352.gif)
-![animated_toggle_switch_example_borderradius_builder_2](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/e9a6328e-fc6a-4080-9868-1f0eaf60f6db)  
+![animated_toggle_switch_example_borderradius_builder_2](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/e9a6328e-fc6a-4080-9868-1f0eaf60f6db)
+![animated_toggle_switch_example_rolling_separator](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/562fa54d-6a03-4099-a61b-0bc386d22adb)
 
 
 You can build any other switch with `CustomAnimatedToggleSwitch()`  
