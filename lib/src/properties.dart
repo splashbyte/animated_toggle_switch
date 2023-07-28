@@ -89,7 +89,19 @@ class LocalToggleProperties<T> {
   });
 }
 
-class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
+class StyledToggleProperties<T> extends LocalToggleProperties<T> {
+  //TODO: Add style to this class
+  StyledToggleProperties._fromLocal({
+    required LocalToggleProperties<T> properties,
+  }) : super(value: properties.value, index: properties.index);
+
+  const StyledToggleProperties({
+    required super.value,
+    required super.index,
+  });
+}
+
+class AnimatedToggleProperties<T> extends StyledToggleProperties<T> {
   /// A value between [0] and [1].
   ///
   /// [0] indicates that [value] is not selected.
@@ -97,7 +109,7 @@ class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
   /// [1] indicates that [value] is selected.
   final double animationValue;
 
-  AnimatedToggleProperties.fromLocal({
+  AnimatedToggleProperties._fromLocal({
     required this.animationValue,
     required LocalToggleProperties<T> properties,
   }) : super(value: properties.value, index: properties.index);
@@ -116,7 +128,7 @@ class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
   }
 }
 
-class RollingProperties<T> extends LocalToggleProperties<T> {
+class RollingProperties<T> extends StyledToggleProperties<T> {
   /// The size the icon should currently have.
   final Size iconSize;
 
@@ -126,7 +138,7 @@ class RollingProperties<T> extends LocalToggleProperties<T> {
   /// or in the background.
   final bool foreground;
 
-  RollingProperties.fromLocal({
+  RollingProperties._fromLocal({
     required Size iconSize,
     required bool foreground,
     required LocalToggleProperties<T> properties,

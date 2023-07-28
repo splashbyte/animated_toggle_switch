@@ -68,7 +68,7 @@ AnimatedToggleSwitch<int>.rolling(
   values: [0, 1, 2, 3],
   onChanged: (i) => setState(() => value = i),
   iconBuilder: iconBuilder,
-  colors: SwitchColors(...), // optional color settings
+  style: ToggleStyle(...), // optional style settings
   ... // many more parameters available
 )
 ```
@@ -137,7 +137,7 @@ AnimatedToggleSwitch<int>.size(
     if (value.isEven) data = Icons.cancel;
     return Icon(data, size: min(size.width, size.height));
   },
-  colors: const SwitchColors(borderColor: Colors.transparent),
+  style: const ToggleStyle(borderColor: Colors.transparent),
   borderWidth: 0.0,
   colorBuilder: (i) => SwitchColors(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
   onChanged: (i) => setState(() => value = i),
@@ -169,10 +169,12 @@ AnimatedToggleSwitch<int>.size(
   selectedIconSize: const Size.square(20),
   iconSize: const Size.square(20),
   iconBuilder: iconBuilder,
-  colors: const SwitchColors(borderColor: Colors.red),
+  style: ToggleStyle(
+    borderColor: Colors.red,
+    borderRadius: BorderRadius.circular(8.0),
+    indicatorBorderRadius: BorderRadius.zero,
+  ),
   colorBuilder: (i) => SwitchColors(indicatorColor: i.isEven == true ? Colors.green : Colors.tealAccent),
   onChanged: (i) => setState(() => value = i),
-  borderRadius: BorderRadius.circular(8.0),
-  indicatorBorderRadius: BorderRadius.zero,
 )
 ```

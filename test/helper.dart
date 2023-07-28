@@ -57,6 +57,9 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch Function({
   Function()? onTap,
   bool? loading,
   bool allowUnlistedValues,
+  ToggleStyle? style,
+  StyleBuilder<T>? styleBuilder,
+  CustomStyleBuilder<T>? customStyleBuilder,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch Function({
@@ -67,6 +70,9 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch Function({
   Function()? onTap,
   bool? loading,
   bool allowUnlistedValues,
+  ToggleStyle? style,
+  StyleBuilder<T>? styleBuilder,
+  CustomStyleBuilder<T>? customStyleBuilder,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
@@ -88,6 +94,9 @@ void defaultTestAllSwitches(
               Function()? onTap,
               bool? loading,
               bool allowUnlistedValues = false,
+              ToggleStyle? style,
+              StyleBuilder<int>? styleBuilder,
+              CustomStyleBuilder<int>? customStyleBuilder,
             }) =>
                 buildSwitch(
               current: current,
@@ -98,6 +107,9 @@ void defaultTestAllSwitches(
               onTap: onTap,
               loading: loading,
               allowUnlistedValues: allowUnlistedValues,
+              style: style,
+              styleBuilder: styleBuilder,
+              customStyleBuilder: customStyleBuilder,
             ),
             defaultValues,
           ));
@@ -115,6 +127,9 @@ void defaultTestAllSwitches(
           Function()? onTap,
           bool? loading,
           bool allowUnlistedValues = false,
+          ToggleStyle? style,
+          StyleBuilder<int>? styleBuilder,
+          CustomStyleBuilder<int>? customStyleBuilder,
         }) =>
             AnimatedToggleSwitch<int>.dual(
           current: current,
@@ -131,6 +146,9 @@ void defaultTestAllSwitches(
           onChanged: onChanged,
           loadingIconBuilder: _loadingIconBuilder,
           loading: loading,
+          style: style ?? const ToggleStyle(),
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
         ),
         values,
       ),
@@ -156,6 +174,9 @@ void testAllSwitches<T>(
             Function()? onTap,
             bool? loading,
             bool allowUnlistedValues = false,
+            ToggleStyle? style,
+            StyleBuilder<T>? styleBuilder,
+            CustomStyleBuilder<T>? customStyleBuilder,
           }) =>
               AnimatedToggleSwitch<T>.rolling(
                 current: current,
@@ -170,6 +191,9 @@ void testAllSwitches<T>(
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
                 allowUnlistedValues: allowUnlistedValues,
+                style: style ?? const ToggleStyle(),
+                styleBuilder: styleBuilder,
+                customStyleBuilder: customStyleBuilder,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.size)',
@@ -184,6 +208,9 @@ void testAllSwitches<T>(
             Function()? onTap,
             bool? loading,
             bool allowUnlistedValues = false,
+            ToggleStyle? style,
+            StyleBuilder<T>? styleBuilder,
+            CustomStyleBuilder<T>? customStyleBuilder,
           }) =>
               AnimatedToggleSwitch<T>.size(
                 current: current,
@@ -197,6 +224,9 @@ void testAllSwitches<T>(
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
                 allowUnlistedValues: allowUnlistedValues,
+                style: style ?? const ToggleStyle(),
+                styleBuilder: styleBuilder,
+                customStyleBuilder: customStyleBuilder,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
@@ -211,6 +241,9 @@ void testAllSwitches<T>(
             Function()? onTap,
             bool? loading,
             bool allowUnlistedValues = false,
+            ToggleStyle? style,
+            StyleBuilder<T>? styleBuilder,
+            CustomStyleBuilder<T>? customStyleBuilder,
           }) =>
               AnimatedToggleSwitch<T>.rollingByHeight(
                 current: current,
@@ -225,6 +258,9 @@ void testAllSwitches<T>(
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
                 allowUnlistedValues: allowUnlistedValues,
+                style: style ?? const ToggleStyle(),
+                styleBuilder: styleBuilder,
+                customStyleBuilder: customStyleBuilder,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.sizeByHeight)',
@@ -239,6 +275,9 @@ void testAllSwitches<T>(
             Function()? onTap,
             bool? loading,
             bool allowUnlistedValues = false,
+            ToggleStyle? style,
+            StyleBuilder<T>? styleBuilder,
+            CustomStyleBuilder<T>? customStyleBuilder,
           }) =>
               AnimatedToggleSwitch<T>.sizeByHeight(
                 current: current,
@@ -252,6 +291,9 @@ void testAllSwitches<T>(
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
                 allowUnlistedValues: allowUnlistedValues,
+                style: style ?? const ToggleStyle(),
+                styleBuilder: styleBuilder,
+                customStyleBuilder: customStyleBuilder,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.custom)',
@@ -266,6 +308,9 @@ void testAllSwitches<T>(
             Function()? onTap,
             bool? loading,
             bool allowUnlistedValues = false,
+            ToggleStyle? style,
+            StyleBuilder<T>? styleBuilder,
+            CustomStyleBuilder<T>? customStyleBuilder,
           }) =>
               AnimatedToggleSwitch<T>.custom(
                 current: current,
@@ -280,6 +325,9 @@ void testAllSwitches<T>(
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
                 allowUnlistedValues: allowUnlistedValues,
+                style: style ?? const ToggleStyle(),
+                styleBuilder: styleBuilder,
+                customStyleBuilder: customStyleBuilder,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.customByHeight)',
@@ -294,6 +342,9 @@ void testAllSwitches<T>(
             Function()? onTap,
             bool? loading,
             bool allowUnlistedValues = false,
+            ToggleStyle? style,
+            StyleBuilder<T>? styleBuilder,
+            CustomStyleBuilder<T>? customStyleBuilder,
           }) =>
               AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
@@ -308,5 +359,8 @@ void testAllSwitches<T>(
                 loadingIconBuilder: _loadingIconBuilder,
                 loading: loading,
                 allowUnlistedValues: allowUnlistedValues,
+                style: style ?? const ToggleStyle(),
+                styleBuilder: styleBuilder,
+                customStyleBuilder: customStyleBuilder,
               )));
 }
