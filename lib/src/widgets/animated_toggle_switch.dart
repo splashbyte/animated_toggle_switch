@@ -61,6 +61,8 @@ class ToggleStyle {
   final BorderRadiusGeometry? borderRadius;
 
   /// [BorderRadius] of the indicator.
+  ///
+  /// Defaults to [borderRadius].
   final BorderRadiusGeometry? indicatorBorderRadius;
 
   /// [BorderRadius] of the indicator.
@@ -1005,7 +1007,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       backgroundGradient: null,
       borderColor: theme.colorScheme.secondary,
       borderRadius: defaultBorderRadius,
-      indicatorBorderRadius: null,
+      indicatorBorderRadius: defaultBorderRadius,
       indicatorBorder: null,
       indicatorBoxShadow: null,
       boxShadow: null,
