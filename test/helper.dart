@@ -60,6 +60,7 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch Function({
   ToggleStyle? style,
   StyleBuilder<T>? styleBuilder,
   CustomStyleBuilder<T>? customStyleBuilder,
+  bool? iconsTappable,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch Function({
@@ -73,6 +74,7 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch Function({
   ToggleStyle? style,
   StyleBuilder<T>? styleBuilder,
   CustomStyleBuilder<T>? customStyleBuilder,
+  bool? iconsTappable,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
@@ -97,6 +99,7 @@ void defaultTestAllSwitches(
               ToggleStyle? style,
               StyleBuilder<int>? styleBuilder,
               CustomStyleBuilder<int>? customStyleBuilder,
+              bool? iconsTappable,
             }) =>
                 buildSwitch(
               current: current,
@@ -110,6 +113,7 @@ void defaultTestAllSwitches(
               style: style,
               styleBuilder: styleBuilder,
               customStyleBuilder: customStyleBuilder,
+              iconsTappable: iconsTappable,
             ),
             defaultValues,
           ));
@@ -130,6 +134,7 @@ void defaultTestAllSwitches(
           ToggleStyle? style,
           StyleBuilder<int>? styleBuilder,
           CustomStyleBuilder<int>? customStyleBuilder,
+          bool? iconsTappable,
         }) =>
             AnimatedToggleSwitch<int>.dual(
           current: current,
@@ -177,6 +182,7 @@ void testAllSwitches<T>(
             ToggleStyle? style,
             StyleBuilder<T>? styleBuilder,
             CustomStyleBuilder<T>? customStyleBuilder,
+            bool? iconsTappable,
           }) =>
               AnimatedToggleSwitch<T>.rolling(
                 current: current,
@@ -194,6 +200,7 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                iconsTappable: iconsTappable ?? true,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.size)',
@@ -211,6 +218,7 @@ void testAllSwitches<T>(
             ToggleStyle? style,
             StyleBuilder<T>? styleBuilder,
             CustomStyleBuilder<T>? customStyleBuilder,
+            bool? iconsTappable,
           }) =>
               AnimatedToggleSwitch<T>.size(
                 current: current,
@@ -227,6 +235,7 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                iconsTappable: iconsTappable ?? true,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
@@ -244,6 +253,7 @@ void testAllSwitches<T>(
             ToggleStyle? style,
             StyleBuilder<T>? styleBuilder,
             CustomStyleBuilder<T>? customStyleBuilder,
+            bool? iconsTappable,
           }) =>
               AnimatedToggleSwitch<T>.rollingByHeight(
                 current: current,
@@ -261,6 +271,7 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                iconsTappable: iconsTappable ?? true,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.sizeByHeight)',
@@ -278,6 +289,7 @@ void testAllSwitches<T>(
             ToggleStyle? style,
             StyleBuilder<T>? styleBuilder,
             CustomStyleBuilder<T>? customStyleBuilder,
+            bool? iconsTappable,
           }) =>
               AnimatedToggleSwitch<T>.sizeByHeight(
                 current: current,
@@ -294,6 +306,7 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                iconsTappable: iconsTappable ?? true,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.custom)',
@@ -311,6 +324,7 @@ void testAllSwitches<T>(
             ToggleStyle? style,
             StyleBuilder<T>? styleBuilder,
             CustomStyleBuilder<T>? customStyleBuilder,
+            bool? iconsTappable,
           }) =>
               AnimatedToggleSwitch<T>.custom(
                 current: current,
@@ -328,6 +342,7 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                iconsTappable: iconsTappable ?? true,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.customByHeight)',
@@ -345,6 +360,7 @@ void testAllSwitches<T>(
             ToggleStyle? style,
             StyleBuilder<T>? styleBuilder,
             CustomStyleBuilder<T>? customStyleBuilder,
+            bool? iconsTappable,
           }) =>
               AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
@@ -362,5 +378,6 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                iconsTappable: iconsTappable ?? true,
               )));
 }

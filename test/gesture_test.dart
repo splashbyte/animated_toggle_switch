@@ -90,4 +90,33 @@ void main() {
     verifyNoMoreInteractions(changedFunction);
     verifyNoMoreInteractions(tapFunction);
   });
+
+  defaultTestAllSwitches('Switch respects iconsTappable parameter',
+      (tester, buildSwitch, values) async {
+    final current = values.first;
+    final next = values.last;
+    final tapFunction = MockFunction();
+    final changedFunction = MockOnChangedFunction();
+
+    await tester.pumpWidget(TestWrapper(
+      child: buildSwitch(
+        current: current,
+        iconBuilder: iconBuilder,
+        onTap: tapFunction,
+        onChanged: changedFunction,
+        iconsTappable: false,
+      ),
+    ));
+    verifyNever(() => tapFunction.call());
+    final currentFinder = find.byKey(iconKey(current));
+    final nextFinder = find.byKey(iconKey(next));
+
+    await tester.tap(currentFinder, warnIfMissed: false);
+    verify(() => tapFunction()).called(1);
+
+    await tester.tap(nextFinder, warnIfMissed: false);
+    verify(() => tapFunction()).called(1);
+
+    verifyNoMoreInteractions(changedFunction);
+  }, testDual: false);
 }
