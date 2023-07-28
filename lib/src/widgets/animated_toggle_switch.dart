@@ -34,9 +34,9 @@ typedef IconBuilder<T> = Widget Function(
   DetailedGlobalToggleProperties<T> global,
 );
 
-typedef StyleBuilder<T> = ToggleStyle? Function(T value);
+typedef StyleBuilder<T> = ToggleStyle Function(T value);
 
-typedef CustomStyleBuilder<T> = ToggleStyle? Function(
+typedef CustomStyleBuilder<T> = ToggleStyle Function(
   BuildContext context,
   StyledToggleProperties<T> local,
   GlobalToggleProperties<T> global,
