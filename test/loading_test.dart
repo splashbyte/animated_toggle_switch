@@ -14,8 +14,8 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        onTap: () => Future.delayed(loadingDuration),
-        onChanged: (_) => Future.delayed(loadingDuration),
+        onTap: () => Future<dynamic>.delayed(loadingDuration),
+        onChanged: (_) => Future<dynamic>.delayed(loadingDuration),
       ),
     ));
     final currentFinder = find.byKey(iconKey(current));
@@ -104,8 +104,8 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        onTap: () => Future.delayed(loadingDuration),
-        onChanged: (_) => Future.delayed(loadingDuration),
+        onTap: () => Future<dynamic>.delayed(loadingDuration),
+        onChanged: (_) => Future<dynamic>.delayed(loadingDuration),
         loading: false,
       ),
     ));

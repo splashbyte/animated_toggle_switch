@@ -14,7 +14,7 @@ typedef CustomWrapperBuilder<T> = Widget Function(
 
 /// Custom builder for the dif section between the icons.
 typedef CustomSeparatorBuilder<T> = Widget Function(BuildContext context,
-    DifProperties<T> local, DetailedGlobalToggleProperties<T> global);
+    SeparatorProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
 /// Custom builder for the appearing animation of the indicator.
 ///
@@ -233,7 +233,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  _CustomAnimatedToggleSwitchState createState() =>
+  State<CustomAnimatedToggleSwitch<T>> createState() =>
       _CustomAnimatedToggleSwitchState<T>();
 
   bool get _isCurrentUnlisted => !values.contains(current);
@@ -344,7 +344,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _onChanged(T value) {
     if (!_isActive) return;
-    var result = widget.onChanged?.call(value);
+    dynamic result = widget.onChanged?.call(value);
     if (result is Future && widget.loading == null) {
       _loading(true);
       result.whenComplete(() => _loading(false));
@@ -353,7 +353,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _onTap() {
     if (!_isActive) return;
-    var result = widget.onTap?.call();
+    dynamic result = widget.onTap?.call();
     if (result is Future && widget.loading == null) {
       _loading(true);
       result.whenComplete(() => _loading(false));
@@ -385,27 +385,29 @@ class _CustomAnimatedToggleSwitchState<T>
   /// Returns the value position by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
   double _doubleFromPosition(
-      double x, DetailedGlobalToggleProperties properties) {
+      double x, DetailedGlobalToggleProperties<T> properties) {
     double result = (x.clamp(
                 properties.indicatorSize.width / 2,
                 properties.switchSize.width -
                     properties.indicatorSize.width / 2) -
             properties.indicatorSize.width / 2) /
         (properties.indicatorSize.width + properties.dif);
-    if (properties.textDirection == TextDirection.rtl)
+    if (properties.textDirection == TextDirection.rtl) {
       result = widget.values.length - 1 - result;
+    }
     return result;
   }
 
   /// Returns the value index by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
-  int _indexFromPosition(double x, DetailedGlobalToggleProperties properties) {
+  int _indexFromPosition(
+      double x, DetailedGlobalToggleProperties<T> properties) {
     return _doubleFromPosition(x, properties).round();
   }
 
   /// Returns the value by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
-  T _valueFromPosition(double x, DetailedGlobalToggleProperties properties) {
+  T _valueFromPosition(double x, DetailedGlobalToggleProperties<T> properties) {
     return widget.values[_indexFromPosition(x, properties)];
   }
 
@@ -606,8 +608,9 @@ class _CustomAnimatedToggleSwitchState<T>
                               _onChanged(newValue);
                             },
                             onHorizontalDragStart: (details) {
-                              if (!isHoveringIndicator(details.localPosition))
+                              if (!isHoveringIndicator(details.localPosition)) {
                                 return;
+                              }
                               _onDragged(
                                   _doubleFromPosition(
                                       details.localPosition.dx, properties),
@@ -686,7 +689,7 @@ class _CustomAnimatedToggleSwitchState<T>
                 width: properties.dif,
                 child: Center(
                   child: widget.separatorBuilder!(
-                      context, DifProperties(index: i), properties),
+                      context, SeparatorProperties(index: i), properties),
                 ),
               ),
           ]

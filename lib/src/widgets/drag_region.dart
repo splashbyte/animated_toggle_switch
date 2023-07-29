@@ -85,9 +85,9 @@ class DragRegion extends StatelessWidget {
     return _HoverRegion(
       cursor: dragging ? draggingCursor : null,
       hoverCursor: dragCursor,
-      child: child,
       hoverCheck: hoverCheck,
       defaultCursor: defaultCursor,
+      child: child,
     );
   }
 }
