@@ -37,38 +37,31 @@ void main() {
     final current = values[1];
     for (final dif in difs) {
       await tester.pumpWidget(
-          TestWrapper(
-            child: buildSwitch(
-              current: current,
-              dif: dif,
-              iconBuilder: iconBuilder,
-              separatorBuilder: separatorBuilder,
-            ),
+        TestWrapper(
+          child: buildSwitch(
+            current: current,
+            dif: dif,
+            iconBuilder: iconBuilder,
+            separatorBuilder: separatorBuilder,
           ),
-          const Duration(milliseconds: 500));
+        ),
+      );
       _checkValidSeparatorPositions(tester, values, dif);
     }
   }, testDual: false);
-  defaultTestAllSwitches(
-      'AnimatedToggleSwitch changes its state when current changes',
+  defaultTestAllSwitches('separatorBuilder does not support dif = 0.0',
       (tester, buildSwitch, values) async {
     final current = values.first;
-    final next = values.last;
-    await tester.pumpWidget(TestWrapper(
-      child: buildSwitch(
-        current: current,
-        iconBuilder: iconBuilder,
+    await tester.pumpWidget(
+      TestWrapper(
+        child: buildSwitch(
+          current: current,
+          dif: 0.0,
+          iconBuilder: iconBuilder,
+          separatorBuilder: separatorBuilder,
+        ),
       ),
-    ));
-    checkValidSwitchIconBuilderState(current, values);
-    await tester.pumpWidget(TestWrapper(
-      child: buildSwitch(
-        current: next,
-        iconBuilder: iconBuilder,
-      ),
-    ));
-    checkValidSwitchIconBuilderState(current, values);
-    await tester.pump(const Duration(seconds: 1));
-    checkValidSwitchIconBuilderState(next, values);
-  });
+    );
+    expect(tester.takeException(), isAssertionError);
+  }, testDual: false);
 }
