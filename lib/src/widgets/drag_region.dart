@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
-class HoverRegion extends StatefulWidget {
+class _HoverRegion extends StatefulWidget {
   final MouseCursor? cursor;
   final MouseCursor hoverCursor;
   final Widget child;
   final bool Function(Offset offset) hoverCheck;
   final MouseCursor defaultCursor;
 
-  const HoverRegion({
+  const _HoverRegion({
     Key? key,
     this.cursor,
     required this.hoverCursor,
@@ -19,10 +19,10 @@ class HoverRegion extends StatefulWidget {
   static bool _defaultHoverCheck(Offset offset) => true;
 
   @override
-  State<HoverRegion> createState() => _HoverRegionState();
+  State<_HoverRegion> createState() => _HoverRegionState();
 }
 
-class _HoverRegionState extends State<HoverRegion> {
+class _HoverRegionState extends State<_HoverRegion> {
   bool _hovering = false;
   Offset? _position;
 
@@ -74,7 +74,7 @@ class DragRegion extends StatelessWidget {
     Key? key,
     this.dragging = false,
     required this.child,
-    this.hoverCheck = HoverRegion._defaultHoverCheck,
+    this.hoverCheck = _HoverRegion._defaultHoverCheck,
     this.defaultCursor = MouseCursor.defer,
     this.dragCursor = SystemMouseCursors.grab,
     this.draggingCursor = SystemMouseCursors.grabbing,
@@ -82,7 +82,7 @@ class DragRegion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HoverRegion(
+    return _HoverRegion(
       cursor: dragging ? draggingCursor : null,
       hoverCursor: dragCursor,
       child: child,

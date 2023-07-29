@@ -10,7 +10,11 @@ typedef CustomIndicatorBuilder<T> = Widget Function(
 
 /// Custom builder for the wrapper of the switch.
 typedef CustomWrapperBuilder<T> = Widget Function(
-    BuildContext context, GlobalToggleProperties<T> local, Widget child);
+    BuildContext context, GlobalToggleProperties<T> global, Widget child);
+
+/// Custom builder for the dif section between the icons.
+typedef CustomSeparatorBuilder<T> = Widget Function(BuildContext context,
+    DifProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
 /// Custom builder for the appearing animation of the indicator.
 ///
@@ -19,6 +23,8 @@ typedef CustomWrapperBuilder<T> = Widget Function(
 /// If [value] is [1.0], the indicator is fully appeared.
 typedef IndicatorAppearingBuilder = Widget Function(
     BuildContext context, double value, Widget indicator);
+
+enum ToggleMode { animating, dragged, none }
 
 enum FittingMode { none, preventHorizontalOverlapping }
 
@@ -38,11 +44,11 @@ enum IconArrangement {
   row,
 
   /// Indicates that the icons should overlap.
-  /// Normally you don't need this setting unless you want the icons to overlap.
+  /// Normally you don't need this setting.
   ///
   /// This is used for example with [AnimatedToggleSwitch.dual],
   /// because the texts partially overlap here.
-  overlap
+  overlap,
 }
 
 /// With this widget you can implement your own switches with nice animations.
@@ -55,13 +61,13 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// [current] has to be in [values] for working correctly if [allowUnlistedValues] is false.
   final T current;
 
-  /// All possible values.
+  /// All selectable values.
   final List<T> values;
 
-  /// The IconBuilder for all icons with the specified size.
+  /// The builder for the wrapper around the switch.
   final CustomWrapperBuilder<T>? wrapperBuilder;
 
-  /// The IconBuilder for all icons with the specified size.
+  /// The builder for all icons.
   final CustomIconBuilder<T> iconBuilder;
 
   /// A builder for an indicator which is in front of the icons.
@@ -108,6 +114,13 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// Space between the "indicator rooms" of the adjacent icons.
   final double dif;
 
+  /// Builder for divider or other separators between the icons.
+  ///
+  /// The available width is specified by [dif].
+  ///
+  /// This builder is supported by [IconArrangement.row] only.
+  final CustomSeparatorBuilder<T>? separatorBuilder;
+
   /// Callback for tapping anywhere on the widget.
   final Function()? onTap;
 
@@ -122,7 +135,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
 
   /// The [FittingMode] of the switch.
   ///
-  /// Change this only if you don't want the switch to adjust when the constraints are too small.
+  /// Change this only if you don't want the switch to adjust if the constraints are too small.
   final FittingMode fittingMode;
 
   /// The height of the whole switch including wrapper.
@@ -174,6 +187,9 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// the indicator disappears with the specified [indicatorAppearingBuilder].
   final bool allowUnlistedValues;
 
+  /// Indicates if the switch is active.
+  final bool active = true;
+
   const CustomAnimatedToggleSwitch({
     Key? key,
     required this.current,
@@ -184,6 +200,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.indicatorSize = const Size(48.0, double.infinity),
     this.onChanged,
     this.dif = 0.0,
+    this.separatorBuilder,
     this.onTap,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
     this.wrapperBuilder,
@@ -211,6 +228,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.allowUnlistedValues = false,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
+        assert(separatorBuilder == null ||
+            (dif > 0 && iconArrangement == IconArrangement.row)),
         super(key: key);
 
   @override
@@ -229,10 +248,10 @@ class _CustomAnimatedToggleSwitchState<T>
   late final AnimationController _appearingController;
 
   /// The [Animation] for the movement of the indicator.
-  late CurvedAnimation _animation;
+  late final CurvedAnimation _animation;
 
   /// The [Animation] for the appearing of the indicator.
-  late CurvedAnimation _appearingAnimation;
+  late final CurvedAnimation _appearingAnimation;
 
   /// The current state of the movement of the indicator.
   late _AnimationInfo _animationInfo;
@@ -243,8 +262,10 @@ class _CustomAnimatedToggleSwitchState<T>
 
     final current = widget.current;
     final isValueSelected = widget.values.contains(current);
+    _checkForUnlistedValue();
     _animationInfo = _AnimationInfo(
-        isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0);
+            isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0)
+        .setLoading(widget.loading ?? false);
     _controller =
         AnimationController(vsync: this, duration: widget.animationDuration)
           ..addStatusListener((status) {
@@ -309,6 +330,9 @@ class _CustomAnimatedToggleSwitchState<T>
     if (oldWidget.animationCurve != widget.animationCurve) {
       _animation.curve = widget.animationCurve;
     }
+    if (oldWidget.active != widget.active && !widget.active) {
+      _onDragEnd();
+    }
 
     _checkValuePosition();
     if (oldWidget.loading != widget.loading) {
@@ -316,20 +340,23 @@ class _CustomAnimatedToggleSwitchState<T>
     }
   }
 
+  bool get _isActive => widget.active && !_animationInfo.loading;
+
   void _onChanged(T value) {
+    if (!_isActive) return;
     var result = widget.onChanged?.call(value);
     if (result is Future && widget.loading == null) {
       _loading(true);
-      result.onError((e, s) => null).then((value) => _loading(false));
+      result.whenComplete(() => _loading(false));
     }
   }
 
   void _onTap() {
-    if (_animationInfo.loading) return;
+    if (!_isActive) return;
     var result = widget.onTap?.call();
     if (result is Future && widget.loading == null) {
       _loading(true);
-      result.onError((e, s) => null).then((value) => _loading(false));
+      result.whenComplete(() => _loading(false));
     }
   }
 
@@ -421,13 +448,13 @@ class _CustomAnimatedToggleSwitchState<T>
                         constraints.maxWidth.isFinite ||
                             (widget.indicatorSize.width.isFinite &&
                                 dif.isFinite),
-                        "With unbound width constraints "
-                        "the width of the indicator and the dif "
+                        'With unbound width constraints '
+                        'the width of the indicator and the dif '
                         "can't be infinite");
                     assert(
                         widget.indicatorSize.width.isFinite || dif.isFinite,
-                        "The width of the indicator "
-                        "or the dif must be finite.");
+                        'The width of the indicator '
+                        'or the dif must be finite.');
 
                     // Recalculates the indicatorSize if its width or height is
                     // infinite.
@@ -488,8 +515,7 @@ class _CustomAnimatedToggleSwitchState<T>
                         : position;
 
                     bool isHoveringIndicator(Offset offset) {
-                      if (_animationInfo.loading || widget._isCurrentUnlisted)
-                        return false;
+                      if (!_isActive || widget._isCurrentUnlisted) return false;
                       double dx = textDirection == TextDirection.rtl
                           ? width - offset.dx
                           : offset.dx;
@@ -599,7 +625,9 @@ class _CustomAnimatedToggleSwitchState<T>
                                 position: DecorationPosition.background,
                                 decoration: const BoxDecoration(),
                                 child: Stack(
-                                    clipBehavior: Clip.none, children: stack)),
+                                  clipBehavior: Clip.none,
+                                  children: stack,
+                                )),
                           ),
                         ),
                       ),
@@ -627,9 +655,10 @@ class _CustomAnimatedToggleSwitchState<T>
                 properties.indicatorSize.width,
         height: properties.indicatorSize.height,
         child: widget.iconBuilder(
-            context,
-            LocalToggleProperties(value: widget.values[i], index: i),
-            properties),
+          context,
+          LocalToggleProperties(value: widget.values[i], index: i),
+          properties,
+        ),
       );
     }).toList();
   }
@@ -637,21 +666,31 @@ class _CustomAnimatedToggleSwitchState<T>
   /// The builder of the icons for [IconArrangement.row].
   List<Widget> _buildBackgroundRow(
       BuildContext context, DetailedGlobalToggleProperties<T> properties) {
+    final length = properties.values.length;
     return [
       Row(
         textDirection: _textDirectionOf(context),
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(
-          widget.values.length,
-          (i) => SizedBox(
-            width: properties.indicatorSize.width,
-            height: properties.indicatorSize.height,
-            child: widget.iconBuilder(
-                context,
-                LocalToggleProperties(value: widget.values[i], index: i),
-                properties),
-          ),
-        ),
+        children: [
+          for (int i = 0; i < length; i++) ...[
+            SizedBox(
+                width: properties.indicatorSize.width,
+                height: properties.indicatorSize.height,
+                child: widget.iconBuilder(
+                  context,
+                  LocalToggleProperties(value: widget.values[i], index: i),
+                  properties,
+                )),
+            if (i < length - 1 && widget.separatorBuilder != null)
+              SizedBox(
+                width: properties.dif,
+                child: Center(
+                  child: widget.separatorBuilder!(
+                      context, DifProperties(index: i), properties),
+                ),
+              ),
+          ]
+        ],
       ),
     ];
   }
@@ -676,7 +715,7 @@ class _CustomAnimatedToggleSwitchState<T>
   /// Starts the dragging of the indicator and starts the animation to
   /// the current cursor position.
   void _onDragged(double indexPosition, double pos) {
-    if (_animationInfo.loading) return;
+    if (!_isActive) return;
     _animationInfo = _animationInfo.dragged(indexPosition, pos: pos);
     _controller.duration = widget.dragStartDuration;
     _animation.curve = widget.dragStartCurve;
@@ -778,8 +817,12 @@ class _WidgetPart extends StatelessWidget {
 
 /// A class for holding the current state of [_CustomAnimatedToggleSwitchState].
 class _AnimationInfo {
+  /// The start position of the current animation.
   final double start;
+
+  /// The end position of the current animation.
   final double end;
+
   final ToggleMode toggleMode;
   final bool loading;
 

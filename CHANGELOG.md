@@ -1,3 +1,22 @@
+## 0.8.0-beta.0
+- adds tests for all `AnimatedToggleSwitch` constructors
+- adds `separatorBuilder`, `customSeparatorBuilder`, `style` and `styleAnimationType` to `AnimatedToggleSwitch`
+- adds `separatorBuilder` to `CustomAnimatedToggleSwitch`
+- fixes initial loading
+- BREAKING: moves many parameters to `style`:
+  - `innerColor` (renamed to `backgroundColor`)
+  - `innerGradient` (renamed to `backgroundGradient`)
+  - `borderColor`
+  - `indicatorColor`
+  - `borderRadius`
+  - `indicatorBorderColor`
+  - `indicatorBorder`
+  - `indicatorBorder`
+  - `foregroundBoxShadow` (renamed to `indicatorBoxShadow`)
+  - `boxShadow`
+- BREAKING: merges `borderColorBuilder` with `styleBuilder`
+- BREAKING: `indicatorAnimationType` handles `ToggleStyle.indicatorColor`, `ToggleStyle.indicatorBorderRadius`, `ToggleStyle.indicatorBorder` and `ToggleStyle.indicatorBoxShadow` now
+
 ## 0.7.0 (2023-06-19)
 
 - adds possibility that no valid value is selected (by setting `allowUnlistedValues` to `true`)

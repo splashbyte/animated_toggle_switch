@@ -1,3 +1,4 @@
+// coverage:ignore-file
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class GlobalToggleProperties<T> {
@@ -59,6 +60,8 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
   /// The size of the switch exclusive the outer wrapper
   final Size switchSize;
 
+  Size get difSize => Size(dif, switchSize.height);
+
   const DetailedGlobalToggleProperties({
     required this.dif,
     required this.indicatorSize,
@@ -87,14 +90,24 @@ class LocalToggleProperties<T> {
   });
 }
 
-class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
-  /// A value between 0 and 1.
+class StyledToggleProperties<T> extends LocalToggleProperties<T> {
+  //TODO: Add style to this class
+
+  const StyledToggleProperties({
+    required super.value,
+    required super.index,
+  });
+}
+
+class AnimatedToggleProperties<T> extends StyledToggleProperties<T> {
+  /// A value between [0] and [1].
   ///
-  /// 0 indicates that [value] is not selected.
-  /// 1 indicates that [value] is selected.
+  /// [0] indicates that [value] is not selected.
+  ///
+  /// [1] indicates that [value] is selected.
   final double animationValue;
 
-  AnimatedToggleProperties.fromLocal({
+  AnimatedToggleProperties._fromLocal({
     required this.animationValue,
     required LocalToggleProperties<T> properties,
   }) : super(value: properties.value, index: properties.index);
@@ -113,7 +126,7 @@ class AnimatedToggleProperties<T> extends LocalToggleProperties<T> {
   }
 }
 
-class RollingProperties<T> extends LocalToggleProperties<T> {
+class RollingProperties<T> extends StyledToggleProperties<T> {
   /// The size the icon should currently have.
   final Size iconSize;
 
@@ -123,7 +136,7 @@ class RollingProperties<T> extends LocalToggleProperties<T> {
   /// or in the background.
   final bool foreground;
 
-  RollingProperties.fromLocal({
+  RollingProperties._fromLocal({
     required Size iconSize,
     required bool foreground,
     required LocalToggleProperties<T> properties,
@@ -161,5 +174,19 @@ class SizeProperties<T> extends AnimatedToggleProperties<T> {
     required super.value,
     required super.index,
     required super.animationValue,
+  });
+}
+
+class DifProperties<T> {
+  /// Index of the separator.
+  ///
+  /// The separator is located  between the items at [index] and [index+1].
+  final int index;
+
+  /// The position of the separator relative to the indices of the values.
+  double get position => index + 0.5;
+
+  const DifProperties({
+    required this.index,
   });
 }

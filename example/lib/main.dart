@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -8,11 +9,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'AnimatedToggleSwitch Demo',
       theme: ThemeData(),
       home: MyHomePage(title: 'Example'),
     );
@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    const green = Color(0xFF45CC0D);
 
     return Scaffold(
       appBar: AppBar(
@@ -60,28 +61,212 @@ class _MyHomePageState extends State<MyHomePage> {
                 first: false,
                 second: true,
                 dif: 50.0,
-                borderColor: Colors.transparent,
+                style: const ToggleStyle(
+                  borderColor: Colors.transparent,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                ),
                 borderWidth: 5.0,
                 height: 55,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  ),
-                ],
-                onChanged: (b) {
-                  setState(() => positive = b);
-                  return Future.delayed(Duration(seconds: 2));
-                },
-                colorBuilder: (b) => b ? Colors.red : Colors.green,
+                onChanged: (b) => setState(() => positive = b),
+                styleBuilder: (b) =>
+                    ToggleStyle(indicatorColor: b ? Colors.red : Colors.green),
                 iconBuilder: (value) => value
                     ? Icon(Icons.coronavirus_rounded)
                     : Icon(Icons.tag_faces_rounded),
                 textBuilder: (value) => value
                     ? Center(child: Text('Oh no...'))
                     : Center(child: Text('Nice :)')),
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<bool>.dual(
+                current: positive,
+                first: false,
+                second: true,
+                dif: 50.0,
+                style: const ToggleStyle(
+                  borderColor: Colors.transparent,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                ),
+                borderWidth: 5.0,
+                height: 55,
+                onChanged: (b) => setState(() => positive = b),
+                styleBuilder: (b) => ToggleStyle(
+                  backgroundColor: b ? Colors.white : Colors.black,
+                  indicatorColor: b ? Colors.blue : Colors.red,
+                  borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(4.0), right: Radius.circular(50.0)),
+                  indicatorBorderRadius: BorderRadius.circular(b ? 50.0 : 4.0),
+                ),
+                iconBuilder: (value) => Icon(
+                  value
+                      ? Icons.access_time_rounded
+                      : Icons.power_settings_new_rounded,
+                  size: 32.0,
+                  color: value ? Colors.black : Colors.white,
+                ),
+                textBuilder: (value) => value
+                    ? const Center(
+                        child:
+                            Text('On', style: TextStyle(color: Colors.black)))
+                    : const Center(
+                        child:
+                            Text('Off', style: TextStyle(color: Colors.white))),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'AnimatedToggleSwitch.dual with loading animation:',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              DefaultTextStyle.merge(
+                style: const TextStyle(color: Colors.white),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: Colors.white),
+                  child: AnimatedToggleSwitch<bool>.dual(
+                    current: positive,
+                    first: false,
+                    second: true,
+                    dif: 45.0,
+                    style: const ToggleStyle(
+                      borderColor: Colors.transparent,
+                      backgroundColor: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.purple,
+                          spreadRadius: 1,
+                          blurRadius: 1,
+                          offset: Offset(0, 0.5),
+                        ),
+                      ],
+                    ),
+                    borderWidth: 10.0,
+                    height: 50,
+                    loadingIconBuilder: (context, global) =>
+                        const CupertinoActivityIndicator(color: Colors.white),
+                    onChanged: (b) {
+                      setState(() => positive = b);
+                      return Future.delayed(Duration(seconds: 2));
+                    },
+                    styleBuilder: (b) => ToggleStyle(
+                        indicatorColor: b ? Colors.purple : Colors.green),
+                    iconBuilder: (value) => value
+                        ? Icon(Icons.coronavirus_rounded)
+                        : Icon(Icons.tag_faces_rounded),
+                    textBuilder: (value) => value
+                        ? Center(
+                            child: Text('Oh no...',
+                                style: const TextStyle(color: Colors.white)))
+                        : Center(child: Text('Nice :)')),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              DefaultTextStyle.merge(
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: Colors.white),
+                  child: AnimatedToggleSwitch<bool>.dual(
+                    current: positive,
+                    first: false,
+                    second: true,
+                    dif: 45.0,
+                    animationCurve: Curves.easeInOut,
+                    animationDuration: const Duration(milliseconds: 600),
+                    style: ToggleStyle(
+                      borderColor: Colors.transparent,
+                      indicatorColor: Colors.white,
+                      backgroundColor: Colors.black,
+                    ),
+                    styleBuilder: (value) => ToggleStyle(
+                        backgroundColor: value ? green : Colors.red[800]),
+                    borderWidth: 6.0,
+                    height: 60.0,
+                    loadingIconBuilder: (context, global) =>
+                        CupertinoActivityIndicator(
+                            color: Color.lerp(
+                                Colors.red[800], green, global.position)),
+                    onChanged: (b) {
+                      setState(() => positive = b);
+                      return Future.delayed(Duration(seconds: 2));
+                    },
+                    iconBuilder: (value) => value
+                        ? Icon(Icons.power_outlined, color: green, size: 32.0)
+                        : Icon(Icons.power_settings_new_rounded,
+                            color: Colors.red[800], size: 32.0),
+                    textBuilder: (value) => value
+                        ? Center(child: Text('Active'))
+                        : Center(child: Text('Inactive')),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              DefaultTextStyle.merge(
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: Colors.white),
+                  child: AnimatedToggleSwitch<bool>.dual(
+                    current: positive,
+                    first: false,
+                    second: true,
+                    dif: 45.0,
+                    animationDuration: const Duration(milliseconds: 600),
+                    style: ToggleStyle(
+                      borderColor: Colors.transparent,
+                      indicatorColor: Colors.white,
+                      backgroundColor: Colors.black,
+                    ),
+                    customStyleBuilder: (context, local, global) {
+                      if (global.position <= 0.0)
+                        return ToggleStyle(backgroundColor: Colors.red[800]);
+                      return ToggleStyle(
+                          backgroundGradient: LinearGradient(
+                        colors: [green, Colors.red[800]!],
+                        stops: [
+                          global.position -
+                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
+                          global.position +
+                              max(0, 2 * (global.position - 0.5)) * 0.2,
+                        ],
+                      ));
+                    },
+                    borderWidth: 6.0,
+                    height: 60.0,
+                    loadingIconBuilder: (context, global) =>
+                        CupertinoActivityIndicator(
+                            color: Color.lerp(
+                                Colors.red[800], green, global.position)),
+                    onChanged: (b) => setState(() => positive = b),
+                    iconBuilder: (value) => value
+                        ? Icon(Icons.power_outlined, color: green, size: 32.0)
+                        : Icon(Icons.power_settings_new_rounded,
+                            color: Colors.red[800], size: 32.0),
+                    textBuilder: (value) => value
+                        ? Center(child: Text('Active'))
+                        : Center(child: Text('Inactive')),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -133,23 +318,73 @@ class _MyHomePageState extends State<MyHomePage> {
                       .then((_) => setState(() => loading = false));
                 },
                 iconBuilder: rollingIconBuilder,
-                borderColor: Colors.transparent,
-                foregroundBoxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  )
-                ],
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: Offset(0, 1.5),
-                  )
-                ],
+                style: ToggleStyle(
+                  borderColor: Colors.transparent,
+                  indicatorBoxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    )
+                  ],
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 16.0),
+              IconTheme.merge(
+                data: IconThemeData(color: Colors.white),
+                child: AnimatedToggleSwitch<int>.rolling(
+                  current: value,
+                  values: const [0, 1, 2, 3],
+                  onChanged: (i) => setState(() => value = i),
+                  style: ToggleStyle(
+                    indicatorColor: Colors.white,
+                    borderColor: Colors.transparent,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 1.5),
+                      )
+                    ],
+                  ),
+                  iconBuilder: coloredRollingIconBuilder,
+                  borderWidth: 3.0,
+                  styleAnimationType: AnimationType.onHover,
+                  styleBuilder: (value) => ToggleStyle(
+                    backgroundColor: colorBuilder(value),
+                    borderRadius: BorderRadius.circular(value * 10.0),
+                    indicatorBorderRadius: BorderRadius.circular(value * 10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.rolling(
+                current: value,
+                allowUnlistedValues: true,
+                values: const [0, 1, 2, 3],
+                onChanged: (i) => setState(() => value = i),
+                iconBuilder: rollingIconBuilder,
+                separatorBuilder: (context, index) => const VerticalDivider(),
+                borderWidth: 4.5,
+                style: ToggleStyle(
+                  indicatorColor: Colors.white,
+                  backgroundColor: Colors.amber,
+                  borderColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                height: 55,
+                dif: 20.0,
+                loading: loading,
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int?>.rolling(
@@ -160,13 +395,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
-                indicatorColor: Colors.white,
-                innerGradient:
-                    const LinearGradient(colors: [Colors.red, Colors.blue]),
-                innerColor: Colors.amber,
+                style: ToggleStyle(
+                  indicatorColor: Colors.white,
+                  backgroundGradient:
+                      const LinearGradient(colors: [Colors.red, Colors.blue]),
+                  borderColor: Colors.transparent,
+                ),
                 height: 55,
                 dif: 20.0,
-                borderColor: Colors.transparent,
                 loading: loading,
               ),
               Padding(
@@ -245,7 +481,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconOpacity: 0.2,
                 indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
-                indicatorAnimationType: AnimationType.onHover,
+                styleAnimationType: AnimationType.onHover,
                 iconBuilder: (value, size) {
                   IconData data = Icons.access_time_rounded;
                   if (value.isEven) data = Icons.cancel;
@@ -254,14 +490,51 @@ class _MyHomePageState extends State<MyHomePage> {
                     size: min(size.width, size.height),
                   );
                 },
+                style: const ToggleStyle(borderColor: Colors.transparent),
                 borderWidth: 0.0,
-                borderColor: Colors.transparent,
-                colorBuilder: (i) =>
-                    i.isEven == true ? Colors.amber : Colors.red,
+                styleBuilder: (i) => ToggleStyle(
+                    indicatorColor:
+                        i.isEven == true ? Colors.amber : Colors.red),
                 onChanged: (i) {
                   setState(() => value = i);
                   return Future.delayed(Duration(seconds: 3));
                 },
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.size(
+                current: min(value, 2),
+                style: ToggleStyle(
+                  backgroundColor: Color(0xFF919191),
+                  indicatorColor: Color(0xFFEC3345),
+                  borderColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(10.0),
+                  indicatorBorderRadius: BorderRadius.zero,
+                ),
+                values: const [0, 1, 2],
+                iconOpacity: 1.0,
+                indicatorSize: const Size.fromWidth(100),
+                iconAnimationType: AnimationType.onHover,
+                styleAnimationType: AnimationType.onHover,
+                dif: 2.0,
+                customSeparatorBuilder: (context, local, global) {
+                  final opacity =
+                      ((global.position - local.position).abs() - 0.5)
+                          .clamp(0.0, 1.0);
+                  return VerticalDivider(
+                      indent: 10.0,
+                      endIndent: 10.0,
+                      color: Colors.white38.withOpacity(opacity));
+                },
+                customIconBuilder: (context, local, global) {
+                  final text = const ['not', 'only', 'icons'][local.index];
+                  return Center(
+                      child: Text(text,
+                          style: TextStyle(
+                              color: Color.lerp(Colors.black, Colors.white,
+                                  local.animationValue))));
+                },
+                borderWidth: 0.0,
+                onChanged: (i) => setState(() => value = i),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -285,9 +558,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   );
                 },
-                borderColor: value.isEven == true ? Colors.blue : Colors.red,
-                colorBuilder: (i) =>
-                    i.isEven == true ? Colors.amber : Colors.red,
+                style: ToggleStyle(borderColor: Colors.transparent),
+                styleBuilder: (i) => ToggleStyle(
+                    indicatorColor:
+                        i.isEven == true ? Colors.amber : Colors.red),
                 onChanged: (i) => setState(() => value = i),
               ),
               Padding(
@@ -321,12 +595,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 selectedIconSize: const Size.square(20),
                 iconSize: const Size.square(20),
                 iconBuilder: iconBuilder,
-                colorBuilder: (i) =>
-                    i.isEven == true ? Colors.green : Colors.tealAccent,
+                style: const ToggleStyle(
+                  borderColor: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  indicatorBorderRadius: BorderRadius.zero,
+                ),
+                styleBuilder: (i) => ToggleStyle(
+                    indicatorColor:
+                        i.isEven == true ? Colors.green : Colors.tealAccent),
                 onChanged: (i) => setState(() => value = i),
-                borderRadius: BorderRadius.circular(8.0),
-                indicatorBorderRadius: BorderRadius.zero,
-                borderColor: Colors.red,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -343,23 +620,42 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconBuilder: rollingIconBuilder,
                 indicatorSize: const Size.fromWidth(2),
               ),
-              SizedBox(
-                height: 16.0,
-              ),
+              SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
                 current: value,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
-                borderRadius: BorderRadius.circular(75.0),
                 indicatorSize: const Size.square(1.5),
+                style: ToggleStyle(borderRadius: BorderRadius.circular(75.0)),
               ),
               SizedBox(height: MediaQuery.of(context).padding.bottom + 16.0),
             ],
           ),
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
+    );
+  }
+
+  Color colorBuilder(int value) => switch (value) {
+        0 => Colors.blueAccent,
+        1 => Colors.green,
+        2 => Colors.orangeAccent,
+        _ => Colors.red,
+      };
+
+  Widget coloredRollingIconBuilder(int value, Size iconSize, bool foreground) {
+    final color = foreground ? colorBuilder(value) : null;
+    return Icon(
+      switch (value) {
+        0 => Icons.access_time_rounded,
+        1 => Icons.check_circle_outline_rounded,
+        2 => Icons.power_settings_new_rounded,
+        _ => Icons.lightbulb_outline_rounded,
+      },
+      color: color,
+      size: iconSize.shortestSide,
     );
   }
 
