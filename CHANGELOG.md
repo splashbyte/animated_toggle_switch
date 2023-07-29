@@ -1,4 +1,4 @@
-## 0.8.0
+## 0.8.0-beta.0
 - adds tests for all `AnimatedToggleSwitch` constructors
 - adds `separatorBuilder`, `customSeparatorBuilder`, `style` and `styleAnimationType` to `AnimatedToggleSwitch`
 - adds `separatorBuilder` to `CustomAnimatedToggleSwitch`
