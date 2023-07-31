@@ -21,7 +21,7 @@ class _ConditionalWrapperState extends State<_ConditionalWrapper> {
   @override
   Widget build(BuildContext context) {
     final child = _EmptyWidget(key: _childKey, child: widget.child);
-    if(widget.condition) return widget.wrapper(context, child);
+    if (widget.condition) return widget.wrapper(context, child);
     return child;
   }
 }
