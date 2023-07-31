@@ -307,6 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
+                active: false,
                 current: value,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) {
@@ -424,7 +425,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconBuilder: (context, local, global) {
                   return const SizedBox();
                 },
-                defaultCursor: SystemMouseCursors.click,
+                cursors: ToggleCursors(defaultCursor: SystemMouseCursors.click),
                 onTap: () => setState(() => positive = !positive),
                 iconsTappable: false,
                 wrapperBuilder: (context, global, child) {

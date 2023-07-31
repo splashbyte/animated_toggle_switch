@@ -165,20 +165,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// If set to [null], the [TextDirection] is taken from the [BuildContext].
   final TextDirection? textDirection;
 
-  /// [MouseCursor] to show when not hovering an indicator.
-  ///
-  /// Defaults to [SystemMouseCursors.click] if [iconsTappable] is [true]
-  /// and to [MouseCursor.defer] otherwise.
-  final MouseCursor? defaultCursor;
-
-  /// [MouseCursor] to show when grabbing the indicators.
-  final MouseCursor draggingCursor;
-
-  /// [MouseCursor] to show when hovering the indicators.
-  final MouseCursor dragCursor;
-
-  /// [MouseCursor] to show during loading.
-  final MouseCursor loadingCursor;
+  /// The [MouseCursor] settings for this switch.
+  final ToggleCursors cursors;
 
   /// Indicates if the switch is currently loading.
   ///
@@ -220,10 +208,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.dragStartDuration = const Duration(milliseconds: 200),
     this.dragStartCurve = Curves.easeInOutCirc,
     this.textDirection,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
@@ -593,15 +578,17 @@ class _CustomAnimatedToggleSwitchState<T>
                         // manual check if cursor is above indicator
                         // to make sure that GestureDetector and MouseRegion match.
                         // TODO: one widget for DragRegion and GestureDetector to avoid redundancy
-                        child: DragRegion(
+                        child: _DragRegion(
                           dragging:
                               _animationInfo.toggleMode == ToggleMode.dragged,
-                          draggingCursor: widget.draggingCursor,
-                          dragCursor: widget.dragCursor,
+                          draggingCursor: widget.cursors.draggingCursor,
+                          dragCursor: widget.cursors.dragCursor,
                           hoverCheck: isHoveringIndicator,
-                          defaultCursor: _animationInfo.loading
-                              ? widget.loadingCursor
-                              : (widget.defaultCursor ??
+                          defaultCursor: !_isActive
+                              ? (_animationInfo.loading
+                                  ? widget.cursors.loadingCursor
+                                  : widget.cursors.inactiveCursor)
+                              : (widget.cursors.defaultCursor ??
                                   (widget.iconsTappable
                                       ? SystemMouseCursors.click
                                       : MouseCursor.defer)),

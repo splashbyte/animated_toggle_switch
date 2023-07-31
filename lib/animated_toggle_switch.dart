@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 part 'src/properties.dart';
 part 'src/style.dart';
+part 'src/cursors.dart';
 part 'src/widgets/animated_toggle_switch.dart';
 part 'src/widgets/custom_animated_toggle_switch.dart';
 part 'src/widgets/drag_region.dart';

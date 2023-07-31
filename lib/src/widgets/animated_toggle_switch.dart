@@ -167,20 +167,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   final IconArrangement _iconArrangement;
 
-  /// [MouseCursor] to show when not hovering an indicator.
-  ///
-  /// Defaults to [SystemMouseCursors.click] if [iconsTappable] is [true]
-  /// and to [MouseCursor.defer] otherwise.
-  final MouseCursor? defaultCursor;
-
-  /// [MouseCursor] to show when grabbing the indicators.
-  final MouseCursor draggingCursor;
-
-  /// [MouseCursor] to show when hovering the indicators.
-  final MouseCursor dragCursor;
-
-  /// [MouseCursor] to show during loading.
-  final MouseCursor loadingCursor;
+  /// The [MouseCursor] settings for this switch.
+  final ToggleCursors cursors;
 
   /// The [FittingMode] of the switch.
   ///
@@ -306,10 +294,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loadingIconBuilder = _defaultLoadingIconBuilder,
     this.loading,
     this.loadingAnimationDuration,
@@ -363,10 +348,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loadingIconBuilder = _defaultLoadingIconBuilder,
     this.loading,
     this.loadingAnimationDuration,
@@ -423,10 +405,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loadingIconBuilder = _defaultLoadingIconBuilder,
     this.loading,
     this.loadingAnimationDuration,
@@ -513,10 +492,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loadingIconBuilder = _defaultLoadingIconBuilder,
     this.loading,
     this.loadingAnimationDuration,
@@ -574,10 +550,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loadingIconBuilder = _defaultLoadingIconBuilder,
     this.loading,
     this.loadingAnimationDuration,
@@ -650,10 +623,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.iconsTappable = true,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loadingIconBuilder = _defaultLoadingIconBuilder,
     this.loading,
     this.loadingAnimationDuration,
@@ -803,10 +773,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     Function()? onTap,
     this.minTouchTargetSize = 48.0,
     this.textDirection,
-    this.defaultCursor = SystemMouseCursors.click,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     EdgeInsetsGeometry textMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     Offset animationOffset = const Offset(20.0, 0),
     bool clipAnimation = true,
@@ -963,10 +930,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         indicatorSize: indicatorSize,
         iconArrangement: _iconArrangement,
         iconsTappable: iconsTappable,
-        defaultCursor: defaultCursor,
-        dragCursor: dragCursor,
-        draggingCursor: draggingCursor,
-        loadingCursor: loadingCursor,
+        cursors: cursors,
         minTouchTargetSize: minTouchTargetSize,
         textDirection: textDirection,
         loading: loading,
@@ -991,7 +955,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         iconBuilder: (context, local, global) => _animatedOpacityIcon(
             _animatedSizeIcon(context, local, global), local.value == current),
         padding: EdgeInsets.all(borderWidth),
-        active: false,
+        active: active,
         wrapperBuilder: (context, global, child) {
           return _ConditionalWrapper(
             condition: inactiveOpacity < 1.0,

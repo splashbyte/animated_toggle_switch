@@ -62,7 +62,7 @@ class _HoverRegionState extends State<_HoverRegion> {
   }
 }
 
-class DragRegion extends StatelessWidget {
+class _DragRegion extends StatelessWidget {
   final bool dragging;
   final Widget child;
   final bool Function(Offset offset) hoverCheck;
@@ -70,7 +70,7 @@ class DragRegion extends StatelessWidget {
   final MouseCursor dragCursor;
   final MouseCursor draggingCursor;
 
-  const DragRegion({
+  const _DragRegion({
     Key? key,
     this.dragging = false,
     required this.child,
