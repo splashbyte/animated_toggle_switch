@@ -26,8 +26,6 @@ void main() {
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
 
-    debugDumpApp();
-
     await tester.tap(currentFinder, warnIfMissed: false);
     verify(() => tapFunction()).called(1);
 
