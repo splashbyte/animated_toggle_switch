@@ -1,3 +1,4 @@
+// coverage:ignore-file
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class ToggleCursors {
@@ -26,6 +27,13 @@ class ToggleCursors {
     this.loadingCursor = MouseCursor.defer,
     this.inactiveCursor = SystemMouseCursors.forbidden,
   });
+
+  const ToggleCursors.all(MouseCursor cursor)
+      : defaultCursor = cursor,
+        draggingCursor = cursor,
+        dragCursor = cursor,
+        loadingCursor = cursor,
+        inactiveCursor = cursor;
 
   @override
   bool operator ==(Object other) =>
