@@ -1,4 +1,11 @@
-## 0.8.0-beta.0
+## 0.8.0-beta.1 (2023-07-31)
+- adds `active` to all constructors
+- closes [#30](https://github.com/splashbyte/animated_toggle_switch/issues/30)
+- minor improvements
+- BREAKING: changes `separatorBuilder` parameters
+- BREAKING: moves all cursor parameters to `cursors`
+
+## 0.8.0-beta.0 (2023-07-29)
 - adds tests for all `AnimatedToggleSwitch` constructors
 - adds `separatorBuilder`, `customSeparatorBuilder`, `style` and `styleAnimationType` to `AnimatedToggleSwitch`
 - adds `separatorBuilder` to `CustomAnimatedToggleSwitch`

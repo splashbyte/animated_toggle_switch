@@ -1,4 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -11,7 +12,7 @@ void main() {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();
-    final changedFunction = MockOnChangedFunction();
+    final changedFunction = MockOnChangedFunction<int>();
 
     await tester.pumpWidget(TestWrapper(
       child: buildSwitch(
@@ -24,6 +25,8 @@ void main() {
     verifyNever(() => tapFunction.call());
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
+
+    debugDumpApp();
 
     await tester.tap(currentFinder, warnIfMissed: false);
     verify(() => tapFunction()).called(1);
@@ -40,7 +43,7 @@ void main() {
     final values = defaultValues.sublist(0, 2);
     final current = values.first;
     final next = values.last;
-    final changedFunction = MockOnChangedFunction();
+    final changedFunction = MockOnChangedFunction<int>();
 
     await tester.pumpWidget(TestWrapper(
       child: AnimatedToggleSwitch.dual(
@@ -65,7 +68,7 @@ void main() {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();
-    final changedFunction = MockOnChangedFunction();
+    final changedFunction = MockOnChangedFunction<int>();
 
     await tester.pumpWidget(TestWrapper(
       child: buildSwitch(
@@ -73,6 +76,8 @@ void main() {
         iconBuilder: iconBuilder,
         onTap: tapFunction,
         onChanged: changedFunction,
+        // Necessary for AnimatedToggleSwitch.dual
+        dif: 5.0,
       ),
     ));
     final currentFinder = find.byKey(iconKey(current));
@@ -96,7 +101,7 @@ void main() {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();
-    final changedFunction = MockOnChangedFunction();
+    final changedFunction = MockOnChangedFunction<int>();
 
     await tester.pumpWidget(TestWrapper(
       child: buildSwitch(

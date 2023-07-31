@@ -161,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         const CupertinoActivityIndicator(color: Colors.white),
                     onChanged: (b) {
                       setState(() => positive = b);
-                      return Future.delayed(Duration(seconds: 2));
+                      return Future<dynamic>.delayed(Duration(seconds: 2));
                     },
                     styleBuilder: (b) => ToggleStyle(
                         indicatorColor: b ? Colors.purple : Colors.green),
@@ -206,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) {
                       setState(() => positive = b);
-                      return Future.delayed(Duration(seconds: 2));
+                      return Future<dynamic>.delayed(Duration(seconds: 2));
                     },
                     iconBuilder: (value) => value
                         ? Icon(Icons.power_outlined, color: green, size: 32.0)
@@ -280,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: const [0, 1, 2, 3],
                 onChanged: (i) {
                   setState(() => value = i);
-                  return Future.delayed(Duration(seconds: 3));
+                  return Future<dynamic>.delayed(Duration(seconds: 3));
                 },
                 iconBuilder: rollingIconBuilder,
               ),
@@ -307,6 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
+                active: false,
                 current: value,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) {
@@ -314,7 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     value = i;
                     loading = true;
                   });
-                  return Future.delayed(Duration(seconds: 3))
+                  return Future<Object?>.delayed(Duration(seconds: 3))
                       .then((_) => setState(() => loading = false));
                 },
                 iconBuilder: rollingIconBuilder,
@@ -374,7 +375,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
-                separatorBuilder: (context, index) => const VerticalDivider(),
+                separatorBuilder: (index) =>
+                    SizedBox.expand(child: ColoredBox(color: Colors.red)),
                 borderWidth: 4.5,
                 style: ToggleStyle(
                   indicatorColor: Colors.white,
@@ -423,7 +425,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconBuilder: (context, local, global) {
                   return const SizedBox();
                 },
-                defaultCursor: SystemMouseCursors.click,
+                cursors: ToggleCursors(defaultCursor: SystemMouseCursors.click),
                 onTap: () => setState(() => positive = !positive),
                 iconsTappable: false,
                 wrapperBuilder: (context, global, child) {
@@ -497,7 +499,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         i.isEven == true ? Colors.amber : Colors.red),
                 onChanged: (i) {
                   setState(() => value = i);
-                  return Future.delayed(Duration(seconds: 3));
+                  return Future<dynamic>.delayed(Duration(seconds: 3));
                 },
               ),
               SizedBox(height: 16.0),

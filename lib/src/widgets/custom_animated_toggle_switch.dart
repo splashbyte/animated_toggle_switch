@@ -14,7 +14,7 @@ typedef CustomWrapperBuilder<T> = Widget Function(
 
 /// Custom builder for the dif section between the icons.
 typedef CustomSeparatorBuilder<T> = Widget Function(BuildContext context,
-    DifProperties<T> local, DetailedGlobalToggleProperties<T> global);
+    SeparatorProperties<T> local, DetailedGlobalToggleProperties<T> global);
 
 /// Custom builder for the appearing animation of the indicator.
 ///
@@ -23,6 +23,10 @@ typedef CustomSeparatorBuilder<T> = Widget Function(BuildContext context,
 /// If [value] is [1.0], the indicator is fully appeared.
 typedef IndicatorAppearingBuilder = Widget Function(
     BuildContext context, double value, Widget indicator);
+
+typedef ChangeCallback<T> = FutureOr<void> Function(T value);
+
+typedef TapCallback = FutureOr<void> Function();
 
 enum ToggleMode { animating, dragged, none }
 
@@ -109,11 +113,12 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final Size indicatorSize;
 
   /// Callback for selecting a new value. The new [current] should be set here.
-  final Function(T)? onChanged;
+  final ChangeCallback<T>? onChanged;
 
   /// Space between the "indicator rooms" of the adjacent icons.
   final double dif;
 
+  /// Builder for divider or other separators between the icons.
   /// Builder for divider or other separators between the icons.
   ///
   /// The available width is specified by [dif].
@@ -122,7 +127,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final CustomSeparatorBuilder<T>? separatorBuilder;
 
   /// Callback for tapping anywhere on the widget.
-  final Function()? onTap;
+  final TapCallback? onTap;
 
   /// Indicates if [onChanged] is called when an icon is tapped.
   /// If [false] the user can change the value only by dragging the indicator.
@@ -160,20 +165,8 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   /// If set to [null], the [TextDirection] is taken from the [BuildContext].
   final TextDirection? textDirection;
 
-  /// [MouseCursor] to show when not hovering an indicator.
-  ///
-  /// Defaults to [SystemMouseCursors.click] if [iconsTappable] is [true]
-  /// and to [MouseCursor.defer] otherwise.
-  final MouseCursor? defaultCursor;
-
-  /// [MouseCursor] to show when grabbing the indicators.
-  final MouseCursor draggingCursor;
-
-  /// [MouseCursor] to show when hovering the indicators.
-  final MouseCursor dragCursor;
-
-  /// [MouseCursor] to show during loading.
-  final MouseCursor loadingCursor;
+  /// The [MouseCursor] settings for this switch.
+  final ToggleCursors cursors;
 
   /// Indicates if the switch is currently loading.
   ///
@@ -188,7 +181,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final bool allowUnlistedValues;
 
   /// Indicates if the switch is active.
-  final bool active = true;
+  final bool active;
 
   const CustomAnimatedToggleSwitch({
     Key? key,
@@ -215,10 +208,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
     this.dragStartDuration = const Duration(milliseconds: 200),
     this.dragStartCurve = Curves.easeInOutCirc,
     this.textDirection,
-    this.defaultCursor,
-    this.draggingCursor = SystemMouseCursors.grabbing,
-    this.dragCursor = SystemMouseCursors.grab,
-    this.loadingCursor = MouseCursor.defer,
+    this.cursors = const ToggleCursors(),
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
@@ -226,6 +216,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
     this.allowUnlistedValues = false,
+    this.active = true,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         assert(separatorBuilder == null ||
@@ -233,7 +224,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  _CustomAnimatedToggleSwitchState createState() =>
+  State<CustomAnimatedToggleSwitch<T>> createState() =>
       _CustomAnimatedToggleSwitchState<T>();
 
   bool get _isCurrentUnlisted => !values.contains(current);
@@ -344,7 +335,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _onChanged(T value) {
     if (!_isActive) return;
-    var result = widget.onChanged?.call(value);
+    final result = widget.onChanged?.call(value);
     if (result is Future && widget.loading == null) {
       _loading(true);
       result.whenComplete(() => _loading(false));
@@ -353,7 +344,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _onTap() {
     if (!_isActive) return;
-    var result = widget.onTap?.call();
+    final result = widget.onTap?.call();
     if (result is Future && widget.loading == null) {
       _loading(true);
       result.whenComplete(() => _loading(false));
@@ -385,27 +376,29 @@ class _CustomAnimatedToggleSwitchState<T>
   /// Returns the value position by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
   double _doubleFromPosition(
-      double x, DetailedGlobalToggleProperties properties) {
+      double x, DetailedGlobalToggleProperties<T> properties) {
     double result = (x.clamp(
                 properties.indicatorSize.width / 2,
                 properties.switchSize.width -
                     properties.indicatorSize.width / 2) -
             properties.indicatorSize.width / 2) /
         (properties.indicatorSize.width + properties.dif);
-    if (properties.textDirection == TextDirection.rtl)
+    if (properties.textDirection == TextDirection.rtl) {
       result = widget.values.length - 1 - result;
+    }
     return result;
   }
 
   /// Returns the value index by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
-  int _indexFromPosition(double x, DetailedGlobalToggleProperties properties) {
+  int _indexFromPosition(
+      double x, DetailedGlobalToggleProperties<T> properties) {
     return _doubleFromPosition(x, properties).round();
   }
 
   /// Returns the value by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
-  T _valueFromPosition(double x, DetailedGlobalToggleProperties properties) {
+  T _valueFromPosition(double x, DetailedGlobalToggleProperties<T> properties) {
     return widget.values[_indexFromPosition(x, properties)];
   }
 
@@ -438,6 +431,7 @@ class _CustomAnimatedToggleSwitchState<T>
                 textDirection: textDirection,
                 mode: _animationInfo.toggleMode,
                 loadingAnimationValue: loadingValue,
+                active: widget.active,
               );
               Widget child = Padding(
                 padding: widget.padding,
@@ -541,6 +535,7 @@ class _CustomAnimatedToggleSwitchState<T>
                       textDirection: textDirection,
                       mode: _animationInfo.toggleMode,
                       loadingAnimationValue: loadingValue,
+                      active: widget.active,
                     );
 
                     List<Widget> stack = <Widget>[
@@ -583,15 +578,17 @@ class _CustomAnimatedToggleSwitchState<T>
                         // manual check if cursor is above indicator
                         // to make sure that GestureDetector and MouseRegion match.
                         // TODO: one widget for DragRegion and GestureDetector to avoid redundancy
-                        child: DragRegion(
+                        child: _DragRegion(
                           dragging:
                               _animationInfo.toggleMode == ToggleMode.dragged,
-                          draggingCursor: widget.draggingCursor,
-                          dragCursor: widget.dragCursor,
+                          draggingCursor: widget.cursors.draggingCursor,
+                          dragCursor: widget.cursors.dragCursor,
                           hoverCheck: isHoveringIndicator,
-                          defaultCursor: _animationInfo.loading
-                              ? widget.loadingCursor
-                              : (widget.defaultCursor ??
+                          defaultCursor: !_isActive
+                              ? (_animationInfo.loading
+                                  ? widget.cursors.loadingCursor
+                                  : widget.cursors.inactiveCursor)
+                              : (widget.cursors.defaultCursor ??
                                   (widget.iconsTappable
                                       ? SystemMouseCursors.click
                                       : MouseCursor.defer)),
@@ -606,8 +603,9 @@ class _CustomAnimatedToggleSwitchState<T>
                               _onChanged(newValue);
                             },
                             onHorizontalDragStart: (details) {
-                              if (!isHoveringIndicator(details.localPosition))
+                              if (!isHoveringIndicator(details.localPosition)) {
                                 return;
+                              }
                               _onDragged(
                                   _doubleFromPosition(
                                       details.localPosition.dx, properties),
@@ -686,7 +684,7 @@ class _CustomAnimatedToggleSwitchState<T>
                 width: properties.dif,
                 child: Center(
                   child: widget.separatorBuilder!(
-                      context, DifProperties(index: i), properties),
+                      context, SeparatorProperties(index: i), properties),
                 ),
               ),
           ]

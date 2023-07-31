@@ -34,6 +34,8 @@ class GlobalToggleProperties<T> {
   /// [0] means 'not loading' and [1] means 'loading'.
   final double loadingAnimationValue;
 
+  final bool active;
+
   const GlobalToggleProperties({
     required this.position,
     required this.current,
@@ -43,6 +45,7 @@ class GlobalToggleProperties<T> {
     required this.textDirection,
     required this.mode,
     required this.loadingAnimationValue,
+    required this.active,
   });
 }
 
@@ -74,6 +77,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required super.textDirection,
     required super.mode,
     required super.loadingAnimationValue,
+    required super.active,
   });
 }
 
@@ -177,7 +181,7 @@ class SizeProperties<T> extends AnimatedToggleProperties<T> {
   });
 }
 
-class DifProperties<T> {
+class SeparatorProperties<T> {
   /// Index of the separator.
   ///
   /// The separator is located  between the items at [index] and [index+1].
@@ -186,7 +190,7 @@ class DifProperties<T> {
   /// The position of the separator relative to the indices of the values.
   double get position => index + 0.5;
 
-  const DifProperties({
+  const SeparatorProperties({
     required this.index,
   });
 }
