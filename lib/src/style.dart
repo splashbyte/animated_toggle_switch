@@ -143,6 +143,6 @@ class ToggleStyle {
       indicatorBorder.hashCode ^
       indicatorBoxShadow.hashCode ^
       boxShadow.hashCode;
-  
+
   // coverage:ignore-end
 }
