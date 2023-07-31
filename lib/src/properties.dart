@@ -34,6 +34,8 @@ class GlobalToggleProperties<T> {
   /// [0] means 'not loading' and [1] means 'loading'.
   final double loadingAnimationValue;
 
+  final bool active;
+
   const GlobalToggleProperties({
     required this.position,
     required this.current,
@@ -43,6 +45,7 @@ class GlobalToggleProperties<T> {
     required this.textDirection,
     required this.mode,
     required this.loadingAnimationValue,
+    required this.active,
   });
 }
 
@@ -74,6 +77,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required super.textDirection,
     required super.mode,
     required super.loadingAnimationValue,
+    required super.active,
   });
 }
 

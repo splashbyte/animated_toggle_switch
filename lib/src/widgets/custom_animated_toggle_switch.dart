@@ -24,6 +24,10 @@ typedef CustomSeparatorBuilder<T> = Widget Function(BuildContext context,
 typedef IndicatorAppearingBuilder = Widget Function(
     BuildContext context, double value, Widget indicator);
 
+typedef ChangeCallback<T> = FutureOr<void> Function(T value);
+
+typedef TapCallback = FutureOr<void> Function();
+
 enum ToggleMode { animating, dragged, none }
 
 enum FittingMode { none, preventHorizontalOverlapping }
@@ -109,11 +113,12 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final Size indicatorSize;
 
   /// Callback for selecting a new value. The new [current] should be set here.
-  final Function(T)? onChanged;
+  final ChangeCallback<T>? onChanged;
 
   /// Space between the "indicator rooms" of the adjacent icons.
   final double dif;
 
+  /// Builder for divider or other separators between the icons.
   /// Builder for divider or other separators between the icons.
   ///
   /// The available width is specified by [dif].
@@ -122,7 +127,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final CustomSeparatorBuilder<T>? separatorBuilder;
 
   /// Callback for tapping anywhere on the widget.
-  final Function()? onTap;
+  final TapCallback? onTap;
 
   /// Indicates if [onChanged] is called when an icon is tapped.
   /// If [false] the user can change the value only by dragging the indicator.
@@ -188,7 +193,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final bool allowUnlistedValues;
 
   /// Indicates if the switch is active.
-  final bool active = true;
+  final bool active;
 
   const CustomAnimatedToggleSwitch({
     Key? key,
@@ -226,6 +231,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
         _defaultIndicatorAppearingAnimationDuration,
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
     this.allowUnlistedValues = false,
+    this.active = true,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         assert(separatorBuilder == null ||
@@ -344,7 +350,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _onChanged(T value) {
     if (!_isActive) return;
-    dynamic result = widget.onChanged?.call(value);
+    final result = widget.onChanged?.call(value);
     if (result is Future && widget.loading == null) {
       _loading(true);
       result.whenComplete(() => _loading(false));
@@ -353,7 +359,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _onTap() {
     if (!_isActive) return;
-    dynamic result = widget.onTap?.call();
+    final result = widget.onTap?.call();
     if (result is Future && widget.loading == null) {
       _loading(true);
       result.whenComplete(() => _loading(false));
@@ -440,6 +446,7 @@ class _CustomAnimatedToggleSwitchState<T>
                 textDirection: textDirection,
                 mode: _animationInfo.toggleMode,
                 loadingAnimationValue: loadingValue,
+                active: widget.active,
               );
               Widget child = Padding(
                 padding: widget.padding,
@@ -543,6 +550,7 @@ class _CustomAnimatedToggleSwitchState<T>
                       textDirection: textDirection,
                       mode: _animationInfo.toggleMode,
                       loadingAnimationValue: loadingValue,
+                      active: widget.active,
                     );
 
                     List<Widget> stack = <Widget>[
