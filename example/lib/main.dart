@@ -509,15 +509,47 @@ class _MyHomePageState extends State<MyHomePage> {
                     size: min(size.width, size.height),
                   );
                 },
-                style: const ToggleStyle(borderColor: Colors.transparent),
+                style: ToggleStyle(
+                  borderColor: Colors.transparent,
+                ),
                 borderWidth: 0.0,
-                styleBuilder: (i) => ToggleStyle(
-                    indicatorColor:
-                        i.isEven == true ? Colors.amber : Colors.red),
+                styleBuilder: (i) {
+                  final color = colorBuilder(i);
+                  return ToggleStyle(
+                    backgroundColor: color.withOpacity(0.3),
+                    indicatorColor: color,
+                  );
+                },
                 onChanged: (i) {
                   setState(() => value = i);
                   return Future<dynamic>.delayed(Duration(seconds: 3));
                 },
+              ),
+              const SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.size(
+                textDirection: TextDirection.rtl,
+                current: value,
+                values: const [0, 1, 2, 3],
+                iconOpacity: 0.2,
+                indicatorSize: const Size.fromWidth(100),
+                iconBuilder: iconBuilder,
+                borderWidth: 4.0,
+                iconAnimationType: AnimationType.onHover,
+                style: ToggleStyle(
+                  borderColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                ),
+                styleBuilder: (i) =>
+                    ToggleStyle(indicatorColor: colorBuilder(i)),
+                onChanged: (i) => setState(() => value = i),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -673,12 +705,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget coloredRollingIconBuilder(int value, Size iconSize, bool foreground) {
     final color = foreground ? colorBuilder(value) : null;
     return Icon(
-      switch (value) {
-        0 => Icons.access_time_rounded,
-        1 => Icons.check_circle_outline_rounded,
-        2 => Icons.power_settings_new_rounded,
-        _ => Icons.lightbulb_outline_rounded,
-      },
+      iconDataByValue(value),
       color: color,
       size: iconSize.shortestSide,
     );
@@ -689,13 +716,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget rollingIconBuilder(int? value, Size iconSize, bool foreground) {
-    IconData data = Icons.access_time_rounded;
-    if (value?.isEven ?? false) data = Icons.cancel;
     return Icon(
-      data,
+      iconDataByValue(value),
       size: iconSize.shortestSide,
     );
   }
+
+  IconData iconDataByValue(int? value) => switch (value) {
+        0 => Icons.access_time_rounded,
+        1 => Icons.check_circle_outline_rounded,
+        2 => Icons.power_settings_new_rounded,
+        _ => Icons.lightbulb_outline_rounded,
+      };
 
   Widget sizeIconBuilder(BuildContext context, SizeProperties<int> local,
       GlobalToggleProperties<int> global) {
