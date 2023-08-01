@@ -1,5 +1,4 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -25,8 +24,6 @@ void main() {
     verifyNever(() => tapFunction.call());
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
-
-    debugDumpApp();
 
     await tester.tap(currentFinder, warnIfMissed: false);
     verify(() => tapFunction()).called(1);

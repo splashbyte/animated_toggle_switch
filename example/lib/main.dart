@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:example/crazy_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -126,6 +127,56 @@ class _MyHomePageState extends State<MyHomePage> {
                         child:
                             Text('Off', style: TextStyle(color: Colors.white))),
               ),
+              SizedBox(height: 16.0),
+              DefaultTextStyle.merge(
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: Colors.white),
+                  child: AnimatedToggleSwitch<bool>.dual(
+                    current: positive,
+                    first: false,
+                    second: true,
+                    dif: 45.0,
+                    animationDuration: const Duration(milliseconds: 600),
+                    style: ToggleStyle(
+                      borderColor: Colors.transparent,
+                      indicatorColor: Colors.white,
+                      backgroundColor: Colors.black,
+                    ),
+                    customStyleBuilder: (context, local, global) {
+                      if (global.position <= 0.0)
+                        return ToggleStyle(backgroundColor: Colors.red[800]);
+                      return ToggleStyle(
+                          backgroundGradient: LinearGradient(
+                        colors: [green, Colors.red[800]!],
+                        stops: [
+                          global.position -
+                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
+                          global.position +
+                              max(0, 2 * (global.position - 0.5)) * 0.2,
+                        ],
+                      ));
+                    },
+                    borderWidth: 6.0,
+                    height: 60.0,
+                    loadingIconBuilder: (context, global) =>
+                        CupertinoActivityIndicator(
+                            color: Color.lerp(
+                                Colors.red[800], green, global.position)),
+                    onChanged: (b) => setState(() => positive = b),
+                    iconBuilder: (value) => value
+                        ? Icon(Icons.power_outlined, color: green, size: 32.0)
+                        : Icon(Icons.power_settings_new_rounded,
+                            color: Colors.red[800], size: 32.0),
+                    textBuilder: (value) => value
+                        ? Center(child: Text('Active'))
+                        : Center(child: Text('Inactive')),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -176,7 +227,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Switch inspired by package lite_rolling_switch',
+                  textAlign: TextAlign.center,
+                ),
+              ),
               DefaultTextStyle.merge(
                 style: const TextStyle(
                     color: Colors.white,
@@ -218,55 +275,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
-              DefaultTextStyle.merge(
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-                child: IconTheme.merge(
-                  data: IconThemeData(color: Colors.white),
-                  child: AnimatedToggleSwitch<bool>.dual(
-                    current: positive,
-                    first: false,
-                    second: true,
-                    dif: 45.0,
-                    animationDuration: const Duration(milliseconds: 600),
-                    style: ToggleStyle(
-                      borderColor: Colors.transparent,
-                      indicatorColor: Colors.white,
-                      backgroundColor: Colors.black,
-                    ),
-                    customStyleBuilder: (context, local, global) {
-                      if (global.position <= 0.0)
-                        return ToggleStyle(backgroundColor: Colors.red[800]);
-                      return ToggleStyle(
-                          backgroundGradient: LinearGradient(
-                        colors: [green, Colors.red[800]!],
-                        stops: [
-                          global.position -
-                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
-                          global.position +
-                              max(0, 2 * (global.position - 0.5)) * 0.2,
-                        ],
-                      ));
-                    },
-                    borderWidth: 6.0,
-                    height: 60.0,
-                    loadingIconBuilder: (context, global) =>
-                        CupertinoActivityIndicator(
-                            color: Color.lerp(
-                                Colors.red[800], green, global.position)),
-                    onChanged: (b) => setState(() => positive = b),
-                    iconBuilder: (value) => value
-                        ? Icon(Icons.power_outlined, color: green, size: 32.0)
-                        : Icon(Icons.power_settings_new_rounded,
-                            color: Colors.red[800], size: 32.0),
-                    textBuilder: (value) => value
-                        ? Center(child: Text('Active'))
-                        : Center(child: Text('Inactive')),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Switch inspired by CrazySwitch (https://github.com/pedromassango/crazy-switch)',
+                  textAlign: TextAlign.center,
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                child: const CrazySwitch(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -375,8 +393,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
-                separatorBuilder: (index) =>
-                    SizedBox.expand(child: ColoredBox(color: Colors.red)),
+                separatorBuilder: (index) => const VerticalDivider(),
                 borderWidth: 4.5,
                 style: ToggleStyle(
                   indicatorColor: Colors.white,
@@ -492,17 +509,55 @@ class _MyHomePageState extends State<MyHomePage> {
                     size: min(size.width, size.height),
                   );
                 },
-                style: const ToggleStyle(borderColor: Colors.transparent),
+                style: ToggleStyle(
+                  borderColor: Colors.transparent,
+                ),
                 borderWidth: 0.0,
-                styleBuilder: (i) => ToggleStyle(
-                    indicatorColor:
-                        i.isEven == true ? Colors.amber : Colors.red),
+                styleBuilder: (i) {
+                  final color = colorBuilder(i);
+                  return ToggleStyle(
+                    backgroundColor: color.withOpacity(0.3),
+                    indicatorColor: color,
+                  );
+                },
                 onChanged: (i) {
                   setState(() => value = i);
                   return Future<dynamic>.delayed(Duration(seconds: 3));
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
+              AnimatedToggleSwitch<int>.size(
+                textDirection: TextDirection.rtl,
+                current: value,
+                values: const [0, 1, 2, 3],
+                iconOpacity: 0.2,
+                indicatorSize: const Size.fromWidth(100),
+                iconBuilder: iconBuilder,
+                borderWidth: 4.0,
+                iconAnimationType: AnimationType.onHover,
+                style: ToggleStyle(
+                  borderColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                ),
+                styleBuilder: (i) =>
+                    ToggleStyle(indicatorColor: colorBuilder(i)),
+                onChanged: (i) => setState(() => value = i),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Switch inspired by package toggle_switch',
+                  textAlign: TextAlign.center,
+                ),
+              ),
               AnimatedToggleSwitch<int>.size(
                 current: min(value, 2),
                 style: ToggleStyle(
@@ -650,12 +705,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget coloredRollingIconBuilder(int value, Size iconSize, bool foreground) {
     final color = foreground ? colorBuilder(value) : null;
     return Icon(
-      switch (value) {
-        0 => Icons.access_time_rounded,
-        1 => Icons.check_circle_outline_rounded,
-        2 => Icons.power_settings_new_rounded,
-        _ => Icons.lightbulb_outline_rounded,
-      },
+      iconDataByValue(value),
       color: color,
       size: iconSize.shortestSide,
     );
@@ -666,13 +716,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget rollingIconBuilder(int? value, Size iconSize, bool foreground) {
-    IconData data = Icons.access_time_rounded;
-    if (value?.isEven ?? false) data = Icons.cancel;
     return Icon(
-      data,
+      iconDataByValue(value),
       size: iconSize.shortestSide,
     );
   }
+
+  IconData iconDataByValue(int? value) => switch (value) {
+        0 => Icons.access_time_rounded,
+        1 => Icons.check_circle_outline_rounded,
+        2 => Icons.power_settings_new_rounded,
+        _ => Icons.lightbulb_outline_rounded,
+      };
 
   Widget sizeIconBuilder(BuildContext context, SizeProperties<int> local,
       GlobalToggleProperties<int> global) {

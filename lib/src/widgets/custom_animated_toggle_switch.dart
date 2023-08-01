@@ -247,6 +247,9 @@ class _CustomAnimatedToggleSwitchState<T>
   /// The current state of the movement of the indicator.
   late _AnimationInfo _animationInfo;
 
+  /// This list contains the last [Future]s returned by [widget.onTap] and [widget.onChanged].
+  final List<Future<void>> _loadingFutures = [];
+
   @override
   void initState() {
     super.initState();
@@ -321,41 +324,50 @@ class _CustomAnimatedToggleSwitchState<T>
     if (oldWidget.animationCurve != widget.animationCurve) {
       _animation.curve = widget.animationCurve;
     }
-    if (oldWidget.active != widget.active && !widget.active) {
-      _onDragEnd();
+    if (oldWidget.active && !widget.active) {
+      _cancelDrag();
     }
 
     _checkValuePosition();
     if (oldWidget.loading != widget.loading) {
-      if (widget.loading != null) _loading(widget.loading!);
+      _loading(widget.loading ?? _loadingFutures.isNotEmpty);
     }
   }
 
   bool get _isActive => widget.active && !_animationInfo.loading;
 
+  void _addLoadingFuture(Future<void> future) {
+    _loadingFutures.add(future);
+    final futureLength = _loadingFutures.length;
+    if (widget.loading == null) _loading(true);
+    Future.wait(_loadingFutures).whenComplete(() {
+      // Check if new future is added since calling method
+      if (futureLength != _loadingFutures.length) return;
+      if (widget.loading == null) _loading(false);
+      _loadingFutures.clear();
+    });
+  }
+
   void _onChanged(T value) {
     if (!_isActive) return;
     final result = widget.onChanged?.call(value);
-    if (result is Future && widget.loading == null) {
-      _loading(true);
-      result.whenComplete(() => _loading(false));
+    if (result is Future) {
+      _addLoadingFuture(result);
     }
   }
 
   void _onTap() {
     if (!_isActive) return;
     final result = widget.onTap?.call();
-    if (result is Future && widget.loading == null) {
-      _loading(true);
-      result.whenComplete(() => _loading(false));
+    if (result is Future) {
+      _addLoadingFuture(result);
     }
   }
 
   void _loading(bool b) {
     if (b == _animationInfo.loading) return;
     if (_animationInfo.toggleMode == ToggleMode.dragged) {
-      _animationInfo = _animationInfo.none();
-      _checkValuePosition();
+      _cancelDrag();
     }
     setState(() => _animationInfo = _animationInfo.setLoading(b));
   }
@@ -736,6 +748,12 @@ class _CustomAnimatedToggleSwitchState<T>
     T newValue = widget.values[index];
     _animationInfo = _animationInfo.none(current: _animationInfo.end);
     if (widget.current != newValue) _onChanged(newValue);
+    _checkValuePosition();
+  }
+
+  /// Cancels drag because of loading or inactivity
+  void _cancelDrag() {
+    _animationInfo = _animationInfo.none();
     _checkValuePosition();
   }
 

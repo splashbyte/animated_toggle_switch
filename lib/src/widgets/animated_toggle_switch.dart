@@ -773,7 +773,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     Function()? onTap,
     this.minTouchTargetSize = 48.0,
     this.textDirection,
-    this.cursors = const ToggleCursors(),
+    this.cursors = const ToggleCursors(defaultCursor: SystemMouseCursors.click),
     EdgeInsetsGeometry textMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     Offset animationOffset = const Offset(20.0, 0),
     bool clipAnimation = true,
@@ -989,7 +989,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
                     borderRadius: style.borderRadius,
                   ),
                   child: ClipRRect(
-                    borderRadius: style.borderRadius,
+                    borderRadius: style.borderRadius!,
                     child: child,
                   ),
                 ),

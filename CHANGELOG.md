@@ -1,3 +1,7 @@
+## 0.8.0-beta.2 (2023-08-01)
+- minor fixes
+- updates README
+
 ## 0.8.0-beta.1 (2023-07-31)
 - adds `active` to all constructors
 - closes [#30](https://github.com/splashbyte/animated_toggle_switch/issues/30)

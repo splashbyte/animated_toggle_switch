@@ -25,7 +25,7 @@ For a slider with a similar look you can check out [action_slider](https://pub.d
 ## Examples
 `AnimatedToggleSwitch.dual()`  
 ![animated_toggle_switch_example_dual](https://user-images.githubusercontent.com/43761463/161432631-e6dd3d16-7b64-410b-a9fa-c956d3442598.gif)
-![animated_toggle_switch_example_borderradius_builder](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/985492df-82a4-4225-a0ad-500970ad692d)
+![animated_toggle_switch_example_borderradius_builder](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/ee615f64-d897-43f1-b508-0318805195e4)
 ![animated_toggle_switch_example_lite_rolling_gradient](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/6cd5d2d3-b4bd-4020-8568-354c71221e40)
 
 Switch inspired by [lite_rolling_switch](https://pub.dev/packages/lite_rolling_switch) (made with `AnimatedToggleSwitch.dual()`)  
@@ -36,6 +36,8 @@ Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made
 ![animated_toggle_switch_example_toggle_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/4812efdc-fe9a-4c34-808a-0983de65d2a4)
 
 
+Switch inspired by [crazy-switch](https://github.com/pedromassango/crazy-switch) (made with `CustomAnimatedToggleSwitch()`)  
+![animated_toggle_switch_example_crazy_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/106afaf5-88a0-4d4b-ad59-2b22182d18be)
 
 `AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/161432579-9fe81c57-6463-45c3-a48f-75db666a3a22.gif)
@@ -49,9 +51,8 @@ You can build any other switch with `CustomAnimatedToggleSwitch()`
 ![animated_toggle_switch_example_custom_1](https://user-images.githubusercontent.com/43761463/161433015-c3ec634a-38da-463d-a06e-4ae0b29f77ed.gif)  
 
 `AnimatedToggleSwitch.size()`  
-![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/161432714-435d8369-7e54-432a-8b9b-6b55a0764f4a.gif)
-![animated_toggle_switch_example_size_loading](https://user-images.githubusercontent.com/43761463/209121115-ed0f634b-0ec4-46b5-b030-21dbdde8cf07.gif)
-![animated_toggle_switch_example_5](https://user-images.githubusercontent.com/43761463/161432720-1d5fa49e-6d20-401a-9a90-a6df88873266.gif) 
+![animated_toggle_switch_example_size](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/805a0e3f-b3a2-4801-baf9-7a5509905452)
+![animated_toggle_switch_example_size_2](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/ed2c1e50-1012-41ef-8218-71c1144e514b)
 
 `AnimatedToggleSwitch.size()` with custom rolling animation  
 ![animated_toggle_switch_example_6](https://user-images.githubusercontent.com/43761463/161432744-f60b660d-30d9-4d1d-9b87-14b62bc54e39.gif) 
