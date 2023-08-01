@@ -51,9 +51,8 @@ You can build any other switch with `CustomAnimatedToggleSwitch()`
 ![animated_toggle_switch_example_custom_1](https://user-images.githubusercontent.com/43761463/161433015-c3ec634a-38da-463d-a06e-4ae0b29f77ed.gif)  
 
 `AnimatedToggleSwitch.size()`  
-![animated_toggle_switch_example_4](https://user-images.githubusercontent.com/43761463/161432714-435d8369-7e54-432a-8b9b-6b55a0764f4a.gif)
-![animated_toggle_switch_example_size_loading](https://user-images.githubusercontent.com/43761463/209121115-ed0f634b-0ec4-46b5-b030-21dbdde8cf07.gif)
-![animated_toggle_switch_example_5](https://user-images.githubusercontent.com/43761463/161432720-1d5fa49e-6d20-401a-9a90-a6df88873266.gif) 
+![animated_toggle_switch_example_size](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/805a0e3f-b3a2-4801-baf9-7a5509905452)
+![animated_toggle_switch_example_size_2](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/ed2c1e50-1012-41ef-8218-71c1144e514b)
 
 `AnimatedToggleSwitch.size()` with custom rolling animation  
 ![animated_toggle_switch_example_6](https://user-images.githubusercontent.com/43761463/161432744-f60b660d-30d9-4d1d-9b87-14b62bc54e39.gif) 
