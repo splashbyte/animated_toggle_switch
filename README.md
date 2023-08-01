@@ -33,7 +33,7 @@ Switch inspired by [lite_rolling_switch](https://pub.dev/packages/lite_rolling_s
 
 
 Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made with `AnimatedToggleSwitch.size()`)  
-![animated_toggle_switch_example_toggle_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/4812efdc-fe9a-4c34-808a-0983de65d2a4)
+![animated_toggle_switch_example_toggle_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/884c8433-3b11-4fe1-b2a8-c02599c56aee)
 
 
 Switch inspired by [crazy-switch](https://github.com/pedromassango/crazy-switch) (made with `CustomAnimatedToggleSwitch()`)  
