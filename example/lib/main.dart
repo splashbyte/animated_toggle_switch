@@ -375,8 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
-                separatorBuilder: (index) =>
-                    SizedBox.expand(child: ColoredBox(color: Colors.red)),
+                separatorBuilder: (index) => const VerticalDivider(),
                 borderWidth: 4.5,
                 style: ToggleStyle(
                   indicatorColor: Colors.white,
