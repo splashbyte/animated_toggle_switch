@@ -989,7 +989,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
                     borderRadius: style.borderRadius,
                   ),
                   child: ClipRRect(
-                    borderRadius: style.borderRadius,
+                    borderRadius: style.borderRadius!,
                     child: child,
                   ),
                 ),

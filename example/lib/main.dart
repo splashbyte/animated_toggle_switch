@@ -151,14 +151,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         return ToggleStyle(backgroundColor: Colors.red[800]);
                       return ToggleStyle(
                           backgroundGradient: LinearGradient(
-                            colors: [green, Colors.red[800]!],
-                            stops: [
-                              global.position -
-                                  (1 - 2 * max(0, global.position - 0.5)) * 0.2,
-                              global.position +
-                                  max(0, 2 * (global.position - 0.5)) * 0.2,
-                            ],
-                          ));
+                        colors: [green, Colors.red[800]!],
+                        stops: [
+                          global.position -
+                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
+                          global.position +
+                              max(0, 2 * (global.position - 0.5)) * 0.2,
+                        ],
+                      ));
                     },
                     borderWidth: 6.0,
                     height: 60.0,
@@ -170,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconBuilder: (value) => value
                         ? Icon(Icons.power_outlined, color: green, size: 32.0)
                         : Icon(Icons.power_settings_new_rounded,
-                        color: Colors.red[800], size: 32.0),
+                            color: Colors.red[800], size: 32.0),
                     textBuilder: (value) => value
                         ? Center(child: Text('Active'))
                         : Center(child: Text('Inactive')),
