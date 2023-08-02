@@ -628,9 +628,10 @@ class _CustomAnimatedToggleSwitchState<T>
                             child: _HoverRegion(
                               hoverCursor: widget.cursors.tapCursor,
                               hoverCheck: (pos) =>
+                                  widget.iconsTappable &&
                                   _doubleFromPosition(pos.dx, properties)
-                                      .round() !=
-                                  _currentIndex,
+                                          .round() !=
+                                      _currentIndex,
                               child: _DragRegion(
                                 dragging: _animationInfo.toggleMode ==
                                     ToggleMode.dragged,
