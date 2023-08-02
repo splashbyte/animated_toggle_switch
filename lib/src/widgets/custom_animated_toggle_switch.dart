@@ -130,7 +130,9 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final TapCallback? onTap;
 
   /// Indicates if [onChanged] is called when an icon is tapped.
-  /// If [false] the user can change the value only by dragging the indicator.
+  ///
+  /// If set to [false], the user can trigger [onChanged]
+  /// only by dragging the indicator.
   final bool iconsTappable;
 
   /// Indicates if the icons should overlap.
@@ -226,8 +228,6 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   @override
   State<CustomAnimatedToggleSwitch<T>> createState() =>
       _CustomAnimatedToggleSwitchState<T>();
-
-  bool get _isCurrentUnlisted => !values.contains(current);
 }
 
 class _CustomAnimatedToggleSwitchState<T>
@@ -250,16 +250,21 @@ class _CustomAnimatedToggleSwitchState<T>
   /// This list contains the last [Future]s returned by [widget.onTap] and [widget.onChanged].
   final List<Future<void>> _loadingFutures = [];
 
+  late int _currentIndex;
+
+  bool get _isCurrentUnlisted => _currentIndex < 0;
+
   @override
   void initState() {
     super.initState();
 
     final current = widget.current;
     final isValueSelected = widget.values.contains(current);
+    _currentIndex = widget.values.indexOf(current);
     _checkForUnlistedValue();
-    _animationInfo = _AnimationInfo(
-            isValueSelected ? widget.values.indexOf(current).toDouble() : 0.0)
-        .setLoading(widget.loading ?? false);
+    _animationInfo =
+        _AnimationInfo(isValueSelected ? _currentIndex.toDouble() : 0.0)
+            .setLoading(widget.loading ?? false);
     _controller =
         AnimationController(vsync: this, duration: widget.animationDuration)
           ..addStatusListener((status) {
@@ -292,7 +297,8 @@ class _CustomAnimatedToggleSwitchState<T>
 
   @pragma('vm:notify-debugger-on-exception')
   void _checkForUnlistedValue() {
-    if (!widget.allowUnlistedValues && widget._isCurrentUnlisted) {
+    if (!widget.allowUnlistedValues &&
+        !widget.values.contains(widget.current)) {
       try {
         throw ArgumentError(
             'The values in AnimatedToggleSwitch have to contain current if allowUnlistedValues is false.\n'
@@ -327,11 +333,11 @@ class _CustomAnimatedToggleSwitchState<T>
     if (oldWidget.active && !widget.active) {
       _cancelDrag();
     }
-
-    _checkValuePosition();
     if (oldWidget.loading != widget.loading) {
       _loading(widget.loading ?? _loadingFutures.isNotEmpty);
     }
+
+    _checkValuePosition();
   }
 
   bool get _isActive => widget.active && !_animationInfo.loading;
@@ -356,6 +362,8 @@ class _CustomAnimatedToggleSwitchState<T>
     }
   }
 
+  /// This method is called in two [GestureDetector]s because only one
+  /// [GestureDetector.onTapUp] will be triggered.
   void _onTap() {
     if (!_isActive) return;
     final result = widget.onTap?.call();
@@ -374,12 +382,14 @@ class _CustomAnimatedToggleSwitchState<T>
 
   /// Checks if the current value has a different position than the indicator
   /// and starts an animation if necessary.
+  ///
+  /// IMPORTANT: This must be called in [didUpdateWidget] because it updates
+  /// [_currentIndex] also.
   void _checkValuePosition() {
     if (_animationInfo.toggleMode == ToggleMode.dragged) return;
-    final current = widget.current;
-    if (widget.values.contains(widget.current)) {
-      int index = widget.values.indexOf(current);
-      _animateTo(index);
+    _currentIndex = widget.values.indexOf(widget.current);
+    if (_currentIndex >= 0) {
+      _animateTo(_currentIndex);
     } else {
       _appearingController.reverse();
     }
@@ -420,234 +430,265 @@ class _CustomAnimatedToggleSwitchState<T>
     final textDirection = _textDirectionOf(context);
     final loadingValue = _animationInfo.loading ? 1.0 : 0.0;
 
+    final defaultCursor = !_isActive
+        ? (_animationInfo.loading
+            ? widget.cursors.loadingCursor
+            : widget.cursors.inactiveCursor)
+        : (widget.cursors.defaultCursor ??
+            (widget.onTap == null
+                ? MouseCursor.defer
+                : SystemMouseCursors.click));
+
     return SizedBox(
       height: widget.height,
-      child: TweenAnimationBuilder<double>(
-        duration: widget.loadingAnimationDuration ?? widget.animationDuration,
-        curve: widget.loadingAnimationCurve ?? widget.animationCurve,
-        tween: Tween(begin: loadingValue, end: loadingValue),
-        builder: (context, loadingValue, child) => AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              double positionValue = _animationInfo
-                  .valueAt(_animation.value)
-                  .clamp(0, widget.values.length - 1);
-              GlobalToggleProperties<T> properties = GlobalToggleProperties(
-                position: positionValue,
-                current: widget.current,
-                previous: _animationInfo.start.toInt() == _animationInfo.start
-                    ? widget.values[_animationInfo.start.toInt()]
-                    : null,
-                values: widget.values,
-                previousPosition: _animationInfo.start,
-                textDirection: textDirection,
-                mode: _animationInfo.toggleMode,
-                loadingAnimationValue: loadingValue,
-                active: widget.active,
-              );
-              Widget child = Padding(
-                padding: widget.padding,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    double height = constraints.maxHeight;
-                    assert(
-                        constraints.maxWidth.isFinite ||
-                            (widget.indicatorSize.width.isFinite &&
-                                dif.isFinite),
-                        'With unbound width constraints '
-                        'the width of the indicator and the dif '
-                        "can't be infinite");
-                    assert(
-                        widget.indicatorSize.width.isFinite || dif.isFinite,
-                        'The width of the indicator '
-                        'or the dif must be finite.');
+      child: MouseRegion(
+        cursor: defaultCursor,
+        child: GestureDetector(
+          onTapUp: (_) => _onTap(),
+          child: TweenAnimationBuilder<double>(
+            duration:
+                widget.loadingAnimationDuration ?? widget.animationDuration,
+            curve: widget.loadingAnimationCurve ?? widget.animationCurve,
+            tween: Tween(begin: loadingValue, end: loadingValue),
+            builder: (context, loadingValue, child) => AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  double positionValue = _animationInfo
+                      .valueAt(_animation.value)
+                      .clamp(0, widget.values.length - 1);
+                  GlobalToggleProperties<T> properties = GlobalToggleProperties(
+                    position: positionValue,
+                    current: widget.current,
+                    currentIndex: _currentIndex,
+                    previous:
+                        _animationInfo.start.toInt() == _animationInfo.start
+                            ? widget.values[_animationInfo.start.toInt()]
+                            : null,
+                    values: widget.values,
+                    previousPosition: _animationInfo.start,
+                    textDirection: textDirection,
+                    mode: _animationInfo.toggleMode,
+                    loadingAnimationValue: loadingValue,
+                    active: widget.active,
+                  );
+                  Widget child = Padding(
+                    padding: widget.padding,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        double height = constraints.maxHeight;
+                        assert(
+                            constraints.maxWidth.isFinite ||
+                                (widget.indicatorSize.width.isFinite &&
+                                    dif.isFinite),
+                            'With unbound width constraints '
+                            'the width of the indicator and the dif '
+                            "can't be infinite");
+                        assert(
+                            widget.indicatorSize.width.isFinite || dif.isFinite,
+                            'The width of the indicator '
+                            'or the dif must be finite.');
 
-                    // Recalculates the indicatorSize if its width or height is
-                    // infinite.
-                    Size indicatorSize = Size(
-                        widget.indicatorSize.width.isInfinite
-                            ? (constraints.maxWidth -
-                                    dif * (widget.values.length - 1)) /
-                                widget.values.length
-                            : widget.indicatorSize.width,
-                        widget.indicatorSize.height.isInfinite
-                            ? height
-                            : widget.indicatorSize.height);
+                        // Recalculates the indicatorSize if its width or height is
+                        // infinite.
+                        Size indicatorSize = Size(
+                            widget.indicatorSize.width.isInfinite
+                                ? (constraints.maxWidth -
+                                        dif * (widget.values.length - 1)) /
+                                    widget.values.length
+                                : widget.indicatorSize.width,
+                            widget.indicatorSize.height.isInfinite
+                                ? height
+                                : widget.indicatorSize.height);
 
-                    if (dif.isInfinite) {
-                      dif = (constraints.maxWidth -
-                              widget.indicatorSize.width *
-                                  widget.values.length) /
-                          (widget.values.length - 1);
-                    }
+                        if (dif.isInfinite) {
+                          dif = (constraints.maxWidth -
+                                  widget.indicatorSize.width *
+                                      widget.values.length) /
+                              (widget.values.length - 1);
+                        }
 
-                    // Calculates the required width of the widget.
-                    double width = indicatorSize.width * widget.values.length +
-                        (widget.values.length - 1) * dif;
+                        // Calculates the required width of the widget.
+                        double width =
+                            indicatorSize.width * widget.values.length +
+                                (widget.values.length - 1) * dif;
 
-                    // Handles the case that the required width of the widget
-                    // cannot be used due to the given BoxConstraints.
-                    if (widget.fittingMode ==
-                            FittingMode.preventHorizontalOverlapping &&
-                        width > constraints.maxWidth) {
-                      double factor = constraints.maxWidth / width;
-                      dif *= factor;
-                      width = constraints.maxWidth;
-                      indicatorSize = Size(
-                          indicatorSize.width.isInfinite
-                              ? width / widget.values.length
-                              : factor * indicatorSize.width,
-                          indicatorSize.height);
-                    } else if (constraints.minWidth > width) {
-                      dif += (constraints.minWidth - width) /
-                          (widget.values.length - 1);
-                      width = constraints.minWidth;
-                    }
+                        // Handles the case that the required width of the widget
+                        // cannot be used due to the given BoxConstraints.
+                        if (widget.fittingMode ==
+                                FittingMode.preventHorizontalOverlapping &&
+                            width > constraints.maxWidth) {
+                          double factor = constraints.maxWidth / width;
+                          dif *= factor;
+                          width = constraints.maxWidth;
+                          indicatorSize = Size(
+                              indicatorSize.width.isInfinite
+                                  ? width / widget.values.length
+                                  : factor * indicatorSize.width,
+                              indicatorSize.height);
+                        } else if (constraints.minWidth > width) {
+                          dif += (constraints.minWidth - width) /
+                              (widget.values.length - 1);
+                          width = constraints.minWidth;
+                        }
 
-                    // The additional width of the indicator's hitbox needed
-                    // to reach the minTouchTargetSize.
-                    double dragDif =
-                        indicatorSize.width < widget.minTouchTargetSize
+                        // The additional width of the indicator's hitbox needed
+                        // to reach the minTouchTargetSize.
+                        double dragDif = indicatorSize.width <
+                                widget.minTouchTargetSize
                             ? (widget.minTouchTargetSize - indicatorSize.width)
                             : 0;
 
-                    // The local position of the indicator.
-                    double position =
-                        (indicatorSize.width + dif) * positionValue +
-                            indicatorSize.width / 2;
+                        // The local position of the indicator.
+                        double position =
+                            (indicatorSize.width + dif) * positionValue +
+                                indicatorSize.width / 2;
 
-                    double leftPosition = textDirection == TextDirection.rtl
-                        ? width - position
-                        : position;
+                        double leftPosition = textDirection == TextDirection.rtl
+                            ? width - position
+                            : position;
 
-                    bool isHoveringIndicator(Offset offset) {
-                      if (!_isActive || widget._isCurrentUnlisted) return false;
-                      double dx = textDirection == TextDirection.rtl
-                          ? width - offset.dx
-                          : offset.dx;
-                      return position - (indicatorSize.width + dragDif) / 2 <=
-                              dx &&
-                          dx <=
-                              (position + (indicatorSize.width + dragDif) / 2);
-                    }
+                        bool isHoveringIndicator(Offset offset) {
+                          if (!_isActive || _isCurrentUnlisted) {
+                            return false;
+                          }
+                          double dx = textDirection == TextDirection.rtl
+                              ? width - offset.dx
+                              : offset.dx;
+                          return position -
+                                      (indicatorSize.width + dragDif) / 2 <=
+                                  dx &&
+                              dx <=
+                                  (position +
+                                      (indicatorSize.width + dragDif) / 2);
+                        }
 
-                    DetailedGlobalToggleProperties<T> properties =
-                        DetailedGlobalToggleProperties(
-                      dif: dif,
-                      position: positionValue,
-                      indicatorSize: indicatorSize,
-                      switchSize: Size(width, height),
-                      current: widget.current,
-                      previous:
-                          _animationInfo.start.toInt() == _animationInfo.start
+                        DetailedGlobalToggleProperties<T> properties =
+                            DetailedGlobalToggleProperties(
+                          dif: dif,
+                          position: positionValue,
+                          indicatorSize: indicatorSize,
+                          switchSize: Size(width, height),
+                          current: widget.current,
+                          currentIndex: _currentIndex,
+                          previous: _animationInfo.start.toInt() ==
+                                  _animationInfo.start
                               ? widget.values[_animationInfo.start.toInt()]
                               : null,
-                      values: widget.values,
-                      previousPosition: _animationInfo.start,
-                      textDirection: textDirection,
-                      mode: _animationInfo.toggleMode,
-                      loadingAnimationValue: loadingValue,
-                      active: widget.active,
-                    );
-
-                    List<Widget> stack = <Widget>[
-                      if (widget.backgroundIndicatorBuilder != null)
-                        _Indicator(
+                          values: widget.values,
+                          previousPosition: _animationInfo.start,
                           textDirection: textDirection,
-                          height: height,
-                          indicatorSize: indicatorSize,
-                          position: position,
-                          appearingAnimation: _appearingAnimation,
-                          appearingBuilder: widget.indicatorAppearingBuilder,
-                          child: widget.backgroundIndicatorBuilder!(
-                              context, properties),
-                        ),
-                      ...(widget.iconArrangement == IconArrangement.overlap
-                          ? _buildBackgroundStack(context, properties)
-                          : _buildBackgroundRow(context, properties)),
-                      if (widget.foregroundIndicatorBuilder != null)
-                        _Indicator(
-                          textDirection: textDirection,
-                          height: height,
-                          indicatorSize: indicatorSize,
-                          position: position,
-                          appearingAnimation: _appearingAnimation,
-                          appearingBuilder: widget.indicatorAppearingBuilder,
-                          child: widget.foregroundIndicatorBuilder!(
-                              context, properties),
-                        ),
-                    ];
+                          mode: _animationInfo.toggleMode,
+                          loadingAnimationValue: loadingValue,
+                          active: widget.active,
+                        );
 
-                    return _WidgetPart(
-                      left: loadingValue *
-                          (leftPosition - 0.5 * indicatorSize.width),
-                      width: indicatorSize.width +
-                          (1 - loadingValue) * (width - indicatorSize.width),
-                      height: height,
-                      child: SizedBox(
-                        width: width,
-                        height: height,
-                        // manual check if cursor is above indicator
-                        // to make sure that GestureDetector and MouseRegion match.
-                        // TODO: one widget for DragRegion and GestureDetector to avoid redundancy
-                        child: _DragRegion(
-                          dragging:
-                              _animationInfo.toggleMode == ToggleMode.dragged,
-                          draggingCursor: widget.cursors.draggingCursor,
-                          dragCursor: widget.cursors.dragCursor,
-                          hoverCheck: isHoveringIndicator,
-                          defaultCursor: !_isActive
-                              ? (_animationInfo.loading
-                                  ? widget.cursors.loadingCursor
-                                  : widget.cursors.inactiveCursor)
-                              : (widget.cursors.defaultCursor ??
-                                  (widget.iconsTappable
-                                      ? SystemMouseCursors.click
-                                      : MouseCursor.defer)),
-                          child: GestureDetector(
-                            dragStartBehavior: DragStartBehavior.down,
-                            onTapUp: (details) {
-                              _onTap();
-                              if (!widget.iconsTappable) return;
-                              T newValue = _valueFromPosition(
-                                  details.localPosition.dx, properties);
-                              if (newValue == widget.current) return;
-                              _onChanged(newValue);
-                            },
-                            onHorizontalDragStart: (details) {
-                              if (!isHoveringIndicator(details.localPosition)) {
-                                return;
-                              }
-                              _onDragged(
-                                  _doubleFromPosition(
-                                      details.localPosition.dx, properties),
-                                  positionValue);
-                            },
-                            onHorizontalDragUpdate: (details) {
-                              _onDragUpdate(_doubleFromPosition(
-                                  details.localPosition.dx, properties));
-                            },
-                            onHorizontalDragEnd: (details) {
-                              _onDragEnd();
-                            },
-                            // DecoratedBox for gesture detection
-                            child: DecoratedBox(
-                                position: DecorationPosition.background,
-                                decoration: const BoxDecoration(),
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  children: stack,
-                                )),
+                        List<Widget> stack = <Widget>[
+                          if (widget.backgroundIndicatorBuilder != null)
+                            _Indicator(
+                              textDirection: textDirection,
+                              height: height,
+                              indicatorSize: indicatorSize,
+                              position: position,
+                              appearingAnimation: _appearingAnimation,
+                              appearingBuilder:
+                                  widget.indicatorAppearingBuilder,
+                              child: widget.backgroundIndicatorBuilder!(
+                                  context, properties),
+                            ),
+                          ...(widget.iconArrangement == IconArrangement.overlap
+                              ? _buildBackgroundStack(context, properties)
+                              : _buildBackgroundRow(context, properties)),
+                          if (widget.foregroundIndicatorBuilder != null)
+                            _Indicator(
+                              textDirection: textDirection,
+                              height: height,
+                              indicatorSize: indicatorSize,
+                              position: position,
+                              appearingAnimation: _appearingAnimation,
+                              appearingBuilder:
+                                  widget.indicatorAppearingBuilder,
+                              child: widget.foregroundIndicatorBuilder!(
+                                  context, properties),
+                            ),
+                        ];
+
+                        return _WidgetPart(
+                          left: loadingValue *
+                              (leftPosition - 0.5 * indicatorSize.width),
+                          width: indicatorSize.width +
+                              (1 - loadingValue) *
+                                  (width - indicatorSize.width),
+                          height: height,
+                          child: SizedBox(
+                            width: width,
+                            height: height,
+                            // manual check if cursor is above indicator
+                            // to make sure that GestureDetector and MouseRegion match.
+                            // TODO: one widget for _DragRegion and GestureDetector to avoid redundancy
+                            child: _HoverRegion(
+                              hoverCursor: widget.cursors.tapCursor,
+                              hoverCheck: (pos) =>
+                                  _doubleFromPosition(pos.dx, properties)
+                                      .round() !=
+                                  _currentIndex,
+                              child: _DragRegion(
+                                dragging: _animationInfo.toggleMode ==
+                                    ToggleMode.dragged,
+                                draggingCursor: widget.cursors.draggingCursor,
+                                dragCursor: widget.cursors.dragCursor,
+                                hoverCheck: isHoveringIndicator,
+                                defaultCursor: defaultCursor,
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  dragStartBehavior: DragStartBehavior.down,
+                                  onTapUp: (details) {
+                                    _onTap();
+                                    if (!widget.iconsTappable) return;
+                                    T newValue = _valueFromPosition(
+                                        details.localPosition.dx, properties);
+                                    if (newValue == widget.current) return;
+                                    _onChanged(newValue);
+                                  },
+                                  onHorizontalDragStart: (details) {
+                                    if (!isHoveringIndicator(
+                                        details.localPosition)) {
+                                      return;
+                                    }
+                                    _onDragged(
+                                        _doubleFromPosition(
+                                            details.localPosition.dx,
+                                            properties),
+                                        positionValue);
+                                  },
+                                  onHorizontalDragUpdate: (details) {
+                                    _onDragUpdate(_doubleFromPosition(
+                                        details.localPosition.dx, properties));
+                                  },
+                                  onHorizontalDragEnd: (details) {
+                                    _onDragEnd();
+                                  },
+                                  // DecoratedBox for gesture detection
+                                  child: DecoratedBox(
+                                      position: DecorationPosition.background,
+                                      decoration: const BoxDecoration(),
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: stack,
+                                      )),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-              return widget.wrapperBuilder?.call(context, properties, child) ??
-                  child;
-            }),
+                        );
+                      },
+                    ),
+                  );
+                  return widget.wrapperBuilder
+                          ?.call(context, properties, child) ??
+                      child;
+                }),
+          ),
+        ),
       ),
     );
   }

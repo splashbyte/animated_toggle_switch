@@ -11,6 +11,9 @@ class GlobalToggleProperties<T> {
   /// when the switch constructor is called.
   final T current;
 
+  /// The index of [current] in [values].
+  final int currentIndex;
+
   /// The previous value of the switch.
   final T? previous;
 
@@ -39,6 +42,7 @@ class GlobalToggleProperties<T> {
   const GlobalToggleProperties({
     required this.position,
     required this.current,
+    required this.currentIndex,
     required this.previous,
     required this.values,
     required this.previousPosition,
@@ -71,6 +75,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required this.switchSize,
     required super.position,
     required super.current,
+    required super.currentIndex,
     required super.previous,
     required super.values,
     required super.previousPosition,

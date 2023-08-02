@@ -2,11 +2,14 @@
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class ToggleCursors {
-  /// [MouseCursor] to show when not hovering an indicator.
+  /// [MouseCursor] to show when not hovering an indicator or a tappable icon.
   ///
-  /// Defaults to [SystemMouseCursors.click] if [iconsTappable] is [true]
-  /// and to [MouseCursor.defer] otherwise.
+  /// This defaults to [MouseCursor.defer] if [onTap] is [null]
+  /// and to [SystemMouseCursors.click] otherwise.
   final MouseCursor? defaultCursor;
+
+  /// [MouseCursor] to show when hovering an tappable icon.
+  final MouseCursor tapCursor;
 
   /// [MouseCursor] to show when grabbing the indicators.
   final MouseCursor draggingCursor;
@@ -22,6 +25,7 @@ class ToggleCursors {
 
   const ToggleCursors({
     this.defaultCursor,
+    this.tapCursor = SystemMouseCursors.click,
     this.draggingCursor = SystemMouseCursors.grabbing,
     this.dragCursor = SystemMouseCursors.grab,
     this.loadingCursor = MouseCursor.defer,
@@ -30,6 +34,7 @@ class ToggleCursors {
 
   const ToggleCursors.all(MouseCursor cursor)
       : defaultCursor = cursor,
+        tapCursor = cursor,
         draggingCursor = cursor,
         dragCursor = cursor,
         loadingCursor = cursor,
@@ -41,6 +46,7 @@ class ToggleCursors {
       other is ToggleCursors &&
           runtimeType == other.runtimeType &&
           defaultCursor == other.defaultCursor &&
+          tapCursor == other.tapCursor &&
           draggingCursor == other.draggingCursor &&
           dragCursor == other.dragCursor &&
           loadingCursor == other.loadingCursor &&
@@ -49,6 +55,7 @@ class ToggleCursors {
   @override
   int get hashCode =>
       defaultCursor.hashCode ^
+      tapCursor.hashCode ^
       draggingCursor.hashCode ^
       dragCursor.hashCode ^
       loadingCursor.hashCode ^
