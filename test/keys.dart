@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-//TODO: Replace with record after Dart SDK upgrade
 class IconKey<T> extends LocalKey {
   final bool foreground;
   final T value;

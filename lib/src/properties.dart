@@ -136,9 +136,6 @@ class AnimatedToggleProperties<T> extends StyledToggleProperties<T> {
 }
 
 class RollingProperties<T> extends StyledToggleProperties<T> {
-  /// The size the icon should currently have.
-  final Size iconSize;
-
   /// Indicates if the icon is in the foreground.
   ///
   /// For [RollingIconBuilder] it indicates if the icon will be on the indicator
@@ -146,43 +143,18 @@ class RollingProperties<T> extends StyledToggleProperties<T> {
   final bool foreground;
 
   RollingProperties._fromLocal({
-    required Size iconSize,
     required bool foreground,
     required LocalToggleProperties<T> properties,
   }) : this(
-          iconSize: iconSize,
           foreground: foreground,
           value: properties.value,
           index: properties.index,
         );
 
   const RollingProperties({
-    required this.iconSize,
     required this.foreground,
     required super.value,
     required super.index,
-  });
-}
-
-class SizeProperties<T> extends AnimatedToggleProperties<T> {
-  /// The size the icon should currently have.
-  final Size iconSize;
-
-  SizeProperties.fromAnimated({
-    required Size iconSize,
-    required AnimatedToggleProperties<T> properties,
-  }) : this(
-          iconSize: iconSize,
-          value: properties.value,
-          index: properties.index,
-          animationValue: properties.animationValue,
-        );
-
-  const SizeProperties({
-    required this.iconSize,
-    required super.value,
-    required super.index,
-    required super.animationValue,
   });
 }
 
