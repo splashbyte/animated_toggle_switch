@@ -264,6 +264,7 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: dif ?? 0.0,
                 separatorBuilder: separatorBuilder,
+                selectedIconScale: 1.0,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
@@ -340,6 +341,7 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
                 separatorBuilder: separatorBuilder,
+                selectedIconScale: 1.0,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.custom)',

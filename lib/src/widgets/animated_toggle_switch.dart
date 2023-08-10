@@ -621,7 +621,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       //TODO: Replace with pattern matching after upgrade to Dart 3
       if (transition is _RollingForegroundIndicatorTransition) {
         angleDistance = distance /
-            (transition.rollingRadius ?? iconSize) *
+            (transition.rollingRadius ?? (iconSize / 2)) *
             (global.textDirection == TextDirection.rtl ? -1.0 : 1.0);
       } else if (transition is _FadingForegroundIndicatorTransition) {
       } else {
@@ -1148,11 +1148,16 @@ class _MyLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).iconTheme.color;
+    final size = IconTheme.of(context).size;
     return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Theme.of(context).platform.isApple
-            ? CupertinoActivityIndicator(color: color)
-            : CircularProgressIndicator(color: color));
+      padding: const EdgeInsets.all(8.0),
+      child: Theme.of(context).platform.isApple
+          ? CupertinoActivityIndicator(color: color)
+          : SizedBox.square(
+              dimension: size,
+              child: CircularProgressIndicator(color: color, strokeWidth: 3.0),
+            ),
+    );
   }
 }
 
