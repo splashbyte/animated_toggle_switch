@@ -1,3 +1,6 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'helper.dart';
@@ -122,4 +125,39 @@ void main() {
 
     await tester.pump(loadingDuration);
   });
+
+  testWidgets(
+    'Default loading animation switches between OS',
+    (tester) async {
+      const values = defaultValues;
+      final current = values.first;
+
+      final circularProgressIndicatorFinder =
+          find.byType(CircularProgressIndicator);
+      final cupertinoActivityIndicatorFinder =
+          find.byType(CupertinoActivityIndicator);
+
+      await tester.pumpWidget(TestWrapper(
+        platform: TargetPlatform.android,
+        child: AnimatedToggleSwitch.rolling(
+          current: current,
+          values: values,
+          loading: true,
+        ),
+      ));
+      expect(circularProgressIndicatorFinder, findsOneWidget);
+      expect(cupertinoActivityIndicatorFinder, findsNothing);
+
+      await tester.pumpWidget(TestWrapper(
+        platform: TargetPlatform.iOS,
+        child: AnimatedToggleSwitch.rolling(
+          current: current,
+          values: values,
+          loading: true,
+        ),
+      ));
+      expect(circularProgressIndicatorFinder, findsNothing);
+      expect(cupertinoActivityIndicatorFinder, findsOneWidget);
+    },
+  );
 }

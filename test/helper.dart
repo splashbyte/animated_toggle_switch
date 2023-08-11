@@ -11,18 +11,24 @@ const defaultValues = [0, 1, 2, 3];
 class TestWrapper extends StatelessWidget {
   final Widget child;
   final TextDirection textDirection;
+  final TargetPlatform platform;
 
   const TestWrapper({
     Key? key,
     required this.child,
     this.textDirection = TextDirection.ltr,
+    this.platform = TargetPlatform.android,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: textDirection,
-      child: Center(child: child),
+    final theme = Theme.of(context);
+    return Theme(
+      data: theme.copyWith(platform: platform),
+      child: Directionality(
+        textDirection: textDirection,
+        child: Center(child: child),
+      ),
     );
   }
 }
@@ -73,6 +79,7 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   bool? iconsTappable,
   double? dif,
   SeparatorBuilder? separatorBuilder,
+  FittingMode? fittingMode,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
@@ -89,6 +96,7 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   bool? iconsTappable,
   double? dif,
   SeparatorBuilder? separatorBuilder,
+  FittingMode? fittingMode,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
@@ -116,6 +124,7 @@ void defaultTestAllSwitches(
               bool? iconsTappable,
               double? dif,
               SeparatorBuilder? separatorBuilder,
+              FittingMode? fittingMode,
             }) =>
                 buildSwitch(
               current: current,
@@ -132,6 +141,7 @@ void defaultTestAllSwitches(
               iconsTappable: iconsTappable,
               dif: dif,
               separatorBuilder: separatorBuilder,
+              fittingMode: fittingMode,
             ),
             defaultValues,
           ));
@@ -155,6 +165,7 @@ void defaultTestAllSwitches(
           bool? iconsTappable,
           double? dif,
           SeparatorBuilder? separatorBuilder,
+          FittingMode? fittingMode,
         }) =>
             AnimatedToggleSwitch<int>.dual(
           current: current,
@@ -175,6 +186,7 @@ void defaultTestAllSwitches(
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           dif: dif ?? 40,
+          fittingMode: fittingMode ?? FittingMode.preventHorizontalOverlapping,
         ),
         values,
       ),
@@ -206,6 +218,7 @@ void testAllSwitches<T>(
             bool? iconsTappable,
             double? dif,
             SeparatorBuilder? separatorBuilder,
+            FittingMode? fittingMode,
           }) =>
               AnimatedToggleSwitch<T>.rolling(
                 current: current,
@@ -225,6 +238,8 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: dif ?? 0.0,
                 separatorBuilder: separatorBuilder,
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.size)',
@@ -245,6 +260,7 @@ void testAllSwitches<T>(
             bool? iconsTappable,
             double? dif,
             SeparatorBuilder? separatorBuilder,
+            FittingMode? fittingMode,
           }) =>
               AnimatedToggleSwitch<T>.size(
                 current: current,
@@ -265,6 +281,8 @@ void testAllSwitches<T>(
                 dif: dif ?? 0.0,
                 separatorBuilder: separatorBuilder,
                 selectedIconScale: 1.0,
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
@@ -285,6 +303,7 @@ void testAllSwitches<T>(
             bool? iconsTappable,
             double? dif,
             SeparatorBuilder? separatorBuilder,
+            FittingMode? fittingMode,
           }) =>
               AnimatedToggleSwitch<T>.rollingByHeight(
                 current: current,
@@ -302,6 +321,8 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
                 separatorBuilder: separatorBuilder,
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.sizeByHeight)',
@@ -322,6 +343,7 @@ void testAllSwitches<T>(
             bool? iconsTappable,
             double? dif,
             SeparatorBuilder? separatorBuilder,
+            FittingMode? fittingMode,
           }) =>
               AnimatedToggleSwitch<T>.sizeByHeight(
                 current: current,
@@ -342,6 +364,8 @@ void testAllSwitches<T>(
                 dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
                 separatorBuilder: separatorBuilder,
                 selectedIconScale: 1.0,
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.custom)',
@@ -362,6 +386,7 @@ void testAllSwitches<T>(
             bool? iconsTappable,
             double? dif,
             SeparatorBuilder? separatorBuilder,
+            FittingMode? fittingMode,
           }) =>
               AnimatedToggleSwitch<T>.custom(
                 current: current,
@@ -382,6 +407,8 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: dif ?? 0.0,
                 separatorBuilder: separatorBuilder,
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.customByHeight)',
@@ -402,6 +429,7 @@ void testAllSwitches<T>(
             bool? iconsTappable,
             double? dif,
             SeparatorBuilder? separatorBuilder,
+            FittingMode? fittingMode,
           }) =>
               AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
@@ -422,6 +450,8 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
                 separatorBuilder: separatorBuilder,
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
               )));
 }
 

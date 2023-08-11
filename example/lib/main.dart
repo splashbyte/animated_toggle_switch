@@ -642,7 +642,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: iconBuilder(pos.ceil()))
                       ]));
                 },
-                selectedIconScale: 1.0,
                 iconBuilder: iconBuilder,
                 style: const ToggleStyle(
                   borderColor: Colors.red,

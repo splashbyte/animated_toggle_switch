@@ -585,6 +585,7 @@ class _CustomAnimatedToggleSwitchState<T>
                         List<Widget> stack = <Widget>[
                           if (widget.backgroundIndicatorBuilder != null)
                             _Indicator(
+                              key: const ValueKey(0),
                               textDirection: textDirection,
                               height: height,
                               indicatorSize: indicatorSize,
@@ -595,11 +596,13 @@ class _CustomAnimatedToggleSwitchState<T>
                               child: widget.backgroundIndicatorBuilder!(
                                   context, properties),
                             ),
-                          ...(widget.iconArrangement == IconArrangement.overlap
-                              ? _buildBackgroundStack(context, properties)
-                              : _buildBackgroundRow(context, properties)),
+                          if (widget.iconArrangement == IconArrangement.overlap)
+                            ..._buildBackgroundStack(context, properties)
+                          else
+                            ..._buildBackgroundRow(context, properties),
                           if (widget.foregroundIndicatorBuilder != null)
                             _Indicator(
+                              key: const ValueKey(1),
                               textDirection: textDirection,
                               height: height,
                               indicatorSize: indicatorSize,
@@ -619,63 +622,67 @@ class _CustomAnimatedToggleSwitchState<T>
                               (1 - loadingValue) *
                                   (width - indicatorSize.width),
                           height: height,
-                          child: SizedBox(
-                            width: width,
-                            height: height,
-                            // manual check if cursor is above indicator
-                            // to make sure that GestureDetector and MouseRegion match.
-                            // TODO: one widget for _DragRegion and GestureDetector to avoid redundancy
-                            child: _HoverRegion(
-                              hoverCursor: widget.cursors.tapCursor,
-                              hoverCheck: (pos) =>
-                                  widget.iconsTappable &&
-                                  _doubleFromPosition(pos.dx, properties)
-                                          .round() !=
-                                      _currentIndex,
-                              child: _DragRegion(
-                                dragging: _animationInfo.toggleMode ==
-                                    ToggleMode.dragged,
-                                draggingCursor: widget.cursors.draggingCursor,
-                                dragCursor: widget.cursors.dragCursor,
-                                hoverCheck: isHoveringIndicator,
-                                defaultCursor: defaultCursor,
-                                child: GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  dragStartBehavior: DragStartBehavior.down,
-                                  onTapUp: (details) {
-                                    _onTap();
-                                    if (!widget.iconsTappable) return;
-                                    T newValue = _valueFromPosition(
-                                        details.localPosition.dx, properties);
-                                    if (newValue == widget.current) return;
-                                    _onChanged(newValue);
-                                  },
-                                  onHorizontalDragStart: (details) {
-                                    if (!isHoveringIndicator(
-                                        details.localPosition)) {
-                                      return;
-                                    }
-                                    _onDragged(
-                                        _doubleFromPosition(
-                                            details.localPosition.dx,
-                                            properties),
-                                        positionValue);
-                                  },
-                                  onHorizontalDragUpdate: (details) {
-                                    _onDragUpdate(_doubleFromPosition(
-                                        details.localPosition.dx, properties));
-                                  },
-                                  onHorizontalDragEnd: (details) {
-                                    _onDragEnd();
-                                  },
-                                  // DecoratedBox for gesture detection
-                                  child: DecoratedBox(
-                                      position: DecorationPosition.background,
-                                      decoration: const BoxDecoration(),
-                                      child: Stack(
-                                        clipBehavior: Clip.none,
-                                        children: stack,
-                                      )),
+                          child: ConstrainedBox(
+                            constraints: constraints.loosen(),
+                            child: SizedBox(
+                              width: width,
+                              height: height,
+                              // manual check if cursor is above indicator
+                              // to make sure that GestureDetector and MouseRegion match.
+                              // TODO: one widget for _DragRegion and GestureDetector to avoid redundancy
+                              child: _HoverRegion(
+                                hoverCursor: widget.cursors.tapCursor,
+                                hoverCheck: (pos) =>
+                                    widget.iconsTappable &&
+                                    _doubleFromPosition(pos.dx, properties)
+                                            .round() !=
+                                        _currentIndex,
+                                child: _DragRegion(
+                                  dragging: _animationInfo.toggleMode ==
+                                      ToggleMode.dragged,
+                                  draggingCursor: widget.cursors.draggingCursor,
+                                  dragCursor: widget.cursors.dragCursor,
+                                  hoverCheck: isHoveringIndicator,
+                                  defaultCursor: defaultCursor,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    dragStartBehavior: DragStartBehavior.down,
+                                    onTapUp: (details) {
+                                      _onTap();
+                                      if (!widget.iconsTappable) return;
+                                      T newValue = _valueFromPosition(
+                                          details.localPosition.dx, properties);
+                                      if (newValue == widget.current) return;
+                                      _onChanged(newValue);
+                                    },
+                                    onHorizontalDragStart: (details) {
+                                      if (!isHoveringIndicator(
+                                          details.localPosition)) {
+                                        return;
+                                      }
+                                      _onDragged(
+                                          _doubleFromPosition(
+                                              details.localPosition.dx,
+                                              properties),
+                                          positionValue);
+                                    },
+                                    onHorizontalDragUpdate: (details) {
+                                      _onDragUpdate(_doubleFromPosition(
+                                          details.localPosition.dx,
+                                          properties));
+                                    },
+                                    onHorizontalDragEnd: (details) {
+                                      _onDragEnd();
+                                    },
+                                    // DecoratedBox for gesture detection
+                                    child: DecoratedBox(
+                                        position: DecorationPosition.background,
+                                        decoration: const BoxDecoration(),
+                                        child: Stack(
+                                          clipBehavior: Clip.none,
+                                          children: stack,
+                                        )),
+                                  ),
                                 ),
                               ),
                             ),
@@ -695,24 +702,35 @@ class _CustomAnimatedToggleSwitchState<T>
   }
 
   /// The builder of the icons for [IconArrangement.overlap].
-  List<Positioned> _buildBackgroundStack(
+  List<Widget> _buildBackgroundStack(
       BuildContext context, DetailedGlobalToggleProperties<T> properties) {
-    return List.generate(widget.values.length, (i) {
-      double position = i * (properties.indicatorSize.width + properties.dif);
-      return Positioned.directional(
-        textDirection: _textDirectionOf(context),
-        start: i == 0 ? position : position - properties.dif,
-        width:
-            (i == 0 || i == widget.values.length - 1 ? 1 : 2) * properties.dif +
-                properties.indicatorSize.width,
-        height: properties.indicatorSize.height,
-        child: widget.iconBuilder(
-          context,
-          LocalToggleProperties(value: widget.values[i], index: i),
-          properties,
-        ),
-      );
-    }).toList();
+    return [
+      ...Iterable.generate(widget.values.length, (i) {
+        double position = i * (properties.indicatorSize.width + properties.dif);
+        return Positioned.directional(
+          textDirection: _textDirectionOf(context),
+          start: i == 0 ? position : position - properties.dif,
+          width: (i == 0 || i == widget.values.length - 1 ? 1 : 2) *
+                  properties.dif +
+              properties.indicatorSize.width,
+          height: properties.indicatorSize.height,
+          child: widget.iconBuilder(
+            context,
+            LocalToggleProperties(value: widget.values[i], index: i),
+            properties,
+          ),
+        );
+      }),
+      // shows horizontal overlapping for FittingMode.none in debug mode
+      Row(
+        children: [
+          SizedBox(
+            width: properties.switchSize.width,
+            height: 1.0,
+          ),
+        ],
+      ),
+    ];
   }
 
   /// The builder of the icons for [IconArrangement.row].
@@ -819,6 +837,7 @@ class _Indicator extends StatelessWidget {
   final IndicatorAppearingBuilder appearingBuilder;
 
   const _Indicator({
+    super.key,
     required this.height,
     required this.indicatorSize,
     required this.position,
