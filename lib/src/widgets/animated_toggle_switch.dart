@@ -851,6 +851,9 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   // END OF CONSTRUCTOR SECTION
 
+  BorderRadiusGeometry get _indicatorBorderRadiusDifference =>
+      BorderRadius.circular(borderWidth);
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -862,11 +865,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       backgroundGradient: null,
       borderColor: theme.colorScheme.secondary,
       borderRadius: defaultBorderRadius,
-      indicatorBorderRadius: defaultBorderRadius,
+      indicatorBorderRadius: null,
       indicatorBorder: null,
       indicatorBoxShadow: null,
       boxShadow: null,
-    )._merge(this.style);
+    )._merge(this.style, _indicatorBorderRadiusDifference);
 
     return CustomAnimatedToggleSwitch<T>(
         animationCurve: animationCurve,
@@ -919,7 +922,10 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
             child: _animationTypeBuilder<ToggleStyle>(
               context,
               styleAnimationType,
-              (local) => style._merge(_styleBuilder(context, local, global)),
+              (local) => style._merge(
+                _styleBuilder(context, local, global),
+                _indicatorBorderRadiusDifference,
+              ),
               ToggleStyle._lerp,
               (style) => DecoratedBox(
                 decoration: BoxDecoration(
@@ -990,7 +996,10 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     return _animationTypeBuilder<ToggleStyle>(
       context,
       indicatorAnimationType,
-      (local) => style._merge(_styleBuilder(context, local, properties)),
+      (local) => style._merge(
+        _styleBuilder(context, local, properties),
+        _indicatorBorderRadiusDifference,
+      ),
       ToggleStyle._lerp,
       (style) => _customIndicatorBuilder(context, style, child, properties),
       properties,
