@@ -212,8 +212,7 @@ void testAllSwitches<T>(
                 values: values,
                 iconBuilder: iconBuilder == null
                     ? null
-                    : (value, size, foreground) =>
-                        iconBuilder(value, foreground),
+                    : (value, foreground) => iconBuilder(value, foreground),
                 textDirection: textDirection,
                 onTap: onTap,
                 onChanged: onChanged,
@@ -252,7 +251,7 @@ void testAllSwitches<T>(
                 values: values,
                 iconBuilder: iconBuilder == null
                     ? null
-                    : (value, size) => iconBuilder(value, false),
+                    : (value) => iconBuilder(value, false),
                 textDirection: textDirection,
                 onChanged: onChanged,
                 onTap: onTap,
@@ -265,6 +264,7 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: dif ?? 0.0,
                 separatorBuilder: separatorBuilder,
+                selectedIconScale: 1.0,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
@@ -289,10 +289,7 @@ void testAllSwitches<T>(
               AnimatedToggleSwitch<T>.rollingByHeight(
                 current: current,
                 values: values,
-                iconBuilder: iconBuilder == null
-                    ? null
-                    : (value, size, foreground) =>
-                        iconBuilder(value, foreground),
+                iconBuilder: iconBuilder,
                 textDirection: textDirection,
                 onChanged: onChanged,
                 onTap: onTap,
@@ -331,7 +328,7 @@ void testAllSwitches<T>(
                 values: values,
                 iconBuilder: iconBuilder == null
                     ? null
-                    : (value, size) => iconBuilder(value, false),
+                    : (value) => iconBuilder(value, false),
                 textDirection: textDirection,
                 onChanged: onChanged,
                 onTap: onTap,
@@ -344,6 +341,7 @@ void testAllSwitches<T>(
                 iconsTappable: iconsTappable ?? true,
                 dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
                 separatorBuilder: separatorBuilder,
+                selectedIconScale: 1.0,
               )));
   testWidgets(
       '$description (AnimatedToggleSwitch.custom)',

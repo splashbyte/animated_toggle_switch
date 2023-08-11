@@ -23,35 +23,33 @@ class _CrazySwitchState extends State<CrazySwitch> {
 
     return CustomAnimatedToggleSwitch(
       current: current,
-      dif: 24.0,
+      dif: 36.0,
       values: [false, true],
       animationDuration: const Duration(milliseconds: 350),
       animationCurve: Curves.bounceOut,
       iconBuilder: (context, local, global) => const SizedBox(),
+      onTap: () => setState(() => current = !current),
+      iconsTappable: false,
       onChanged: (b) => setState(() => current = b),
       height: height,
-      indicatorSize: Size.square(height),
+      padding: const EdgeInsets.all(borderWidth),
+      indicatorSize: const Size.square(height - 2 * borderWidth),
       foregroundIndicatorBuilder: (context, global) {
         final color = Color.lerp(red, green, global.position)!;
-        return Padding(
-          padding: EdgeInsets.all(borderWidth),
-          child: DecoratedBox(
-            decoration:
-                BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-            child: Container(
-              margin: const EdgeInsets.all(borderWidth),
-              child: Center(
-                child: Container(
-                    width: innerIndicatorSize * 0.4 +
-                        global.position * innerIndicatorSize * 0.6,
-                    height: innerIndicatorSize,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: color,
-                    )),
-              ),
-            ),
-          ),
+        // You can replace the Containers with DecoratedBox/SizedBox/Center
+        // for slightly better performance
+        return Container(
+          alignment: Alignment.center,
+          decoration:
+              BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+          child: Container(
+              width: innerIndicatorSize * 0.4 +
+                  global.position * innerIndicatorSize * 0.6,
+              height: innerIndicatorSize,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: color,
+              )),
         );
       },
       wrapperBuilder: (context, global, child) {

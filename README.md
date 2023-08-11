@@ -33,7 +33,7 @@ Switch inspired by [lite_rolling_switch](https://pub.dev/packages/lite_rolling_s
 
 
 Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made with `AnimatedToggleSwitch.size()`)  
-![animated_toggle_switch_example_toggle_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/4812efdc-fe9a-4c34-808a-0983de65d2a4)
+![animated_toggle_switch_example_toggle_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/884c8433-3b11-4fe1-b2a8-c02599c56aee)
 
 
 Switch inspired by [crazy-switch](https://github.com/pedromassango/crazy-switch) (made with `CustomAnimatedToggleSwitch()`)  
@@ -157,7 +157,7 @@ AnimatedToggleSwitch<int>.size(
   },
   style: const ToggleStyle(borderColor: Colors.transparent),
   borderWidth: 0.0,
-styleBuilder: (i) => ToggleStyle(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
+  styleBuilder: (i) => ToggleStyle(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
   onChanged: (i) => setState(() => value = i),
 )
 ```
@@ -169,6 +169,7 @@ AnimatedToggleSwitch<int>.size(
   current: value,
   values: const [0, 1, 2, 3],
   iconOpacity: 1.0,
+  selectedIconScale: 1.0,
   indicatorSize: const Size.fromWidth(25),
   foregroundIndicatorIconBuilder: (context, global) {
     double pos = global.position;
@@ -184,8 +185,6 @@ AnimatedToggleSwitch<int>.size(
           child: iconBuilder(pos.ceil(), global.indicatorSize))
         ]));
   },
-  selectedIconSize: const Size.square(20),
-  iconSize: const Size.square(20),
   iconBuilder: iconBuilder,
   style: ToggleStyle(
     borderColor: Colors.red,

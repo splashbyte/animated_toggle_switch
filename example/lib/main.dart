@@ -501,14 +501,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
                 styleAnimationType: AnimationType.onHover,
-                iconBuilder: (value, size) {
-                  IconData data = Icons.access_time_rounded;
-                  if (value.isEven) data = Icons.cancel;
-                  return Icon(
-                    data,
-                    size: min(size.width, size.height),
-                  );
-                },
+                iconBuilder: (value) => Icon(
+                    value.isEven ? Icons.cancel : Icons.access_time_rounded),
                 style: ToggleStyle(
                   borderColor: Colors.transparent,
                 ),
@@ -569,6 +563,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 values: const [0, 1, 2],
                 iconOpacity: 1.0,
+                selectedIconScale: 1.0,
                 indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
                 styleAnimationType: AnimationType.onHover,
@@ -641,16 +636,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Stack(children: [
                         Opacity(
                             opacity: 1 - transitionValue,
-                            child:
-                                iconBuilder(pos.floor(), global.indicatorSize)),
+                            child: iconBuilder(pos.floor())),
                         Opacity(
                             opacity: transitionValue,
-                            child:
-                                iconBuilder(pos.ceil(), global.indicatorSize))
+                            child: iconBuilder(pos.ceil()))
                       ]));
                 },
-                selectedIconSize: const Size.square(20),
-                iconSize: const Size.square(20),
+                selectedIconScale: 1.0,
                 iconBuilder: iconBuilder,
                 style: const ToggleStyle(
                   borderColor: Colors.red,
@@ -702,24 +694,20 @@ class _MyHomePageState extends State<MyHomePage> {
         _ => Colors.red,
       };
 
-  Widget coloredRollingIconBuilder(int value, Size iconSize, bool foreground) {
+  Widget coloredRollingIconBuilder(int value, bool foreground) {
     final color = foreground ? colorBuilder(value) : null;
     return Icon(
       iconDataByValue(value),
       color: color,
-      size: iconSize.shortestSide,
     );
   }
 
-  Widget iconBuilder(int value, Size iconSize) {
-    return rollingIconBuilder(value, iconSize, false);
+  Widget iconBuilder(int value) {
+    return rollingIconBuilder(value, false);
   }
 
-  Widget rollingIconBuilder(int? value, Size iconSize, bool foreground) {
-    return Icon(
-      iconDataByValue(value),
-      size: iconSize.shortestSide,
-    );
+  Widget rollingIconBuilder(int? value, bool foreground) {
+    return Icon(iconDataByValue(value));
   }
 
   IconData iconDataByValue(int? value) => switch (value) {
@@ -729,13 +717,13 @@ class _MyHomePageState extends State<MyHomePage> {
         _ => Icons.lightbulb_outline_rounded,
       };
 
-  Widget sizeIconBuilder(BuildContext context, SizeProperties<int> local,
-      GlobalToggleProperties<int> global) {
-    return iconBuilder(local.value, local.iconSize);
+  Widget sizeIconBuilder(BuildContext context,
+      AnimatedToggleProperties<int> local, GlobalToggleProperties<int> global) {
+    return iconBuilder(local.value);
   }
 
-  Widget alternativeIconBuilder(BuildContext context, SizeProperties<int> local,
-      GlobalToggleProperties<int> global) {
+  Widget alternativeIconBuilder(BuildContext context,
+      AnimatedToggleProperties<int> local, GlobalToggleProperties<int> global) {
     IconData data = Icons.access_time_rounded;
     switch (local.value) {
       case 0:
@@ -751,9 +739,6 @@ class _MyHomePageState extends State<MyHomePage> {
         data = Icons.arrow_drop_down_circle_outlined;
         break;
     }
-    return Icon(
-      data,
-      size: local.iconSize.shortestSide,
-    );
+    return Icon(data);
   }
 }
