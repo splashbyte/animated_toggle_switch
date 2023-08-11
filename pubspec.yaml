@@ -25,5 +25,5 @@ funding:
   - https://ko-fi.com/splashbyte
 
 screenshots:
-  - description: 'This image shows three example usages of AnimatedToggleSwitch.'
+  - description: 'This image shows three examples of AnimatedToggleSwitch.'
     path: screenshots/preview.webp

@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AnimatedToggleSwitch Demo',
-      theme: ThemeData(),
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       home: MyHomePage(title: 'Example'),
     );
   }
@@ -226,6 +226,44 @@ class _MyHomePageState extends State<MyHomePage> {
                         : Center(child: Text('Nice :)')),
                   ),
                 ),
+              ),
+              SizedBox(height: 16.0),
+              AnimatedToggleSwitch<bool>.dual(
+                current: positive,
+                first: false,
+                second: true,
+                dif: 45.0,
+                animationCurve: Curves.easeInOut,
+                animationDuration: const Duration(milliseconds: 600),
+                style: ToggleStyle(
+                  borderColor: Colors.transparent,
+                  indicatorColor: Colors.white,
+                  backgroundColor: Colors.amber,
+                ),
+                styleBuilder: (value) => ToggleStyle(
+                    backgroundColor: value ? Colors.orange : Colors.red[800]),
+                borderWidth: 6.0,
+                height: 60.0,
+                loadingIconBuilder: (context, global) =>
+                    CupertinoActivityIndicator(
+                        color: Color.lerp(
+                            Colors.red[800], Colors.orange, global.position)),
+                onChanged: (b) {
+                  setState(() => positive = b);
+                  return Future<dynamic>.delayed(Duration(seconds: 2));
+                },
+                iconBuilder: (value) => value
+                    ? Icon(Icons.power_outlined, color: Colors.orange, size: 32.0)
+                    : Icon(Icons.power_settings_new_rounded,
+                        color: Colors.red[800], size: 32.0),
+                textBuilder: (value) => Center(
+                        child: Text(
+                        value ? 'Active' : 'Inactive',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600),
+                      )),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -544,6 +582,35 @@ class _MyHomePageState extends State<MyHomePage> {
                 styleBuilder: (i) =>
                     ToggleStyle(indicatorColor: colorBuilder(i)),
                 onChanged: (i) => setState(() => value = i),
+              ),
+              const SizedBox(height: 16.0),
+              AnimatedToggleSwitch<bool>.size(
+                current: positive,
+                values: const [false, true],
+                iconOpacity: 0.2,
+                indicatorSize: const Size.fromWidth(100),
+                customIconBuilder: (context, local, global) => Text(
+                    local.value ? 'RAM' : 'CPU',
+                    style: TextStyle(
+                        color: Color.lerp(
+                            Colors.black, Colors.white, local.animationValue))),
+                borderWidth: 4.0,
+                iconAnimationType: AnimationType.onHover,
+                style: ToggleStyle(
+                  indicatorColor: Colors.teal,
+                  borderColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 1.5),
+                    ),
+                  ],
+                ),
+                selectedIconScale: 1.0,
+                onChanged: (b) => setState(() => positive = b),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

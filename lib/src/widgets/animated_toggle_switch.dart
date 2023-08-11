@@ -1001,7 +1001,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       DetailedGlobalToggleProperties<T> global) {
     return Opacity(
         opacity: 1.0 - global.loadingAnimationValue,
-        child: animatedIconBuilder!(context, local, global));
+        child: Center(child: animatedIconBuilder!(context, local, global)));
   }
 
   Widget _animatedSizeIcon(BuildContext context, LocalToggleProperties<T> local,
