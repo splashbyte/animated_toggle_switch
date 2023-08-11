@@ -1,4 +1,4 @@
-## 0.8.0-beta.3
+## 0.8.0-beta.3 (2023-08-11)
 
 - BREAKING: replaces `transitionType` with `indicatorTransition` in `AnimatedToggleSwitch.rolling()`,
   `AnimatedToggleSwitch.rollingByHeight()` and `AnimatedToggleSwitch.dual()`
