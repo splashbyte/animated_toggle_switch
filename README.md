@@ -157,7 +157,7 @@ AnimatedToggleSwitch<int>.size(
   },
   style: const ToggleStyle(borderColor: Colors.transparent),
   borderWidth: 0.0,
-styleBuilder: (i) => ToggleStyle(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
+  styleBuilder: (i) => ToggleStyle(indicatorColor: i.isEven == true ? Colors.amber : Colors.red),
   onChanged: (i) => setState(() => value = i),
 )
 ```
@@ -169,6 +169,7 @@ AnimatedToggleSwitch<int>.size(
   current: value,
   values: const [0, 1, 2, 3],
   iconOpacity: 1.0,
+  selectedIconScale: 1.0,
   indicatorSize: const Size.fromWidth(25),
   foregroundIndicatorIconBuilder: (context, global) {
     double pos = global.position;
@@ -184,8 +185,6 @@ AnimatedToggleSwitch<int>.size(
           child: iconBuilder(pos.ceil(), global.indicatorSize))
         ]));
   },
-  selectedIconSize: const Size.square(20),
-  iconSize: const Size.square(20),
   iconBuilder: iconBuilder,
   style: ToggleStyle(
     borderColor: Colors.red,
