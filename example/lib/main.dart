@@ -253,17 +253,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Future<dynamic>.delayed(Duration(seconds: 2));
                 },
                 iconBuilder: (value) => value
-                    ? Icon(Icons.power_outlined, color: Colors.orange, size: 32.0)
+                    ? Icon(Icons.power_outlined,
+                        color: Colors.orange, size: 32.0)
                     : Icon(Icons.power_settings_new_rounded,
                         color: Colors.red[800], size: 32.0),
                 textBuilder: (value) => Center(
-                        child: Text(
-                        value ? 'Active' : 'Inactive',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w600),
-                      )),
+                    child: Text(
+                  value ? 'Active' : 'Inactive',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600),
+                )),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
