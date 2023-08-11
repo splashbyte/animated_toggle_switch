@@ -612,7 +612,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     if (customIconBuilder == null && iconBuilder != null) {
       customIconBuilder = (c, l, g) => iconBuilder(l.value, l.foreground);
     }
-    final iconSize = (height - 2 * borderWidth) * 0.7;
+    final iconSize = (height - 2 * borderWidth) * sqrt2 * 0.5;
     return (context, global) {
       if (customIconBuilder == null) return const SizedBox();
 
