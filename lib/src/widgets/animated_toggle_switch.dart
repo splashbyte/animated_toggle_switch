@@ -408,14 +408,19 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       AnimatedIconBuilder<T>? customIconBuilder,
       double selectedIconScale) {
     assert(iconBuilder == null || customIconBuilder == null);
-    if (customIconBuilder == null && iconBuilder != null) {
-      customIconBuilder = (c, l, g) => iconBuilder(l.value);
+
+    final AnimatedIconBuilder<T>? finalIconBuilder;
+    if (iconBuilder != null) {
+      finalIconBuilder = (c, l, g) => iconBuilder(l.value);
+    } else {
+      finalIconBuilder = customIconBuilder;
     }
-    return customIconBuilder == null
+
+    return finalIconBuilder == null
         ? null
         : (context, local, global) => Transform.scale(
               scale: 1.0 + local.animationValue * (selectedIconScale - 1.0),
-              child: customIconBuilder!(context, local, global),
+              child: finalIconBuilder!(context, local, global),
             );
   }
 
@@ -609,13 +614,17 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       double borderWidth,
       ForegroundIndicatorTransition transition) {
     assert(iconBuilder == null || customIconBuilder == null);
-    if (customIconBuilder == null && iconBuilder != null) {
-      customIconBuilder = (c, l, g) => iconBuilder(l.value, l.foreground);
-    }
-    final iconSize = (height - 2 * borderWidth) * sqrt2 * 0.5;
-    return (context, global) {
-      if (customIconBuilder == null) return const SizedBox();
 
+    final RollingIconBuilder<T>? finalIconBuilder;
+    if (iconBuilder != null) {
+      finalIconBuilder = (c, l, g) => iconBuilder(l.value, l.foreground);
+    } else {
+      finalIconBuilder = customIconBuilder;
+    }
+
+    final iconSize = (height - 2 * borderWidth) * sqrt2 * 0.5;
+    if (finalIconBuilder == null) return (context, global) => const SizedBox();
+    return (context, global) {
       double distance = global.dif + global.indicatorSize.width;
       double angleDistance = 0.0;
       //TODO: Replace with pattern matching after upgrade to Dart 3
@@ -634,37 +643,39 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       double transitionValue = pos - first;
       return _MergeIconTheme(
         data: IconThemeData(size: iconSize),
-        child: Stack(
-          children: [
-            Transform.rotate(
-              angle: transitionValue * angleDistance,
-              child: Opacity(
-                  opacity: 1 - transitionValue,
-                  child: customIconBuilder(
-                      context,
-                      RollingProperties(
-                        foreground: true,
-                        value: values[first],
-                        index: first,
-                      ),
-                      global)),
-            ),
-            if (first != pos)
+        child: Builder(builder: (context) {
+          return Stack(
+            children: [
               Transform.rotate(
-                angle: (transitionValue - 1) * angleDistance,
+                angle: transitionValue * angleDistance,
                 child: Opacity(
-                    opacity: transitionValue,
-                    child: customIconBuilder(
+                    opacity: 1 - transitionValue,
+                    child: finalIconBuilder!(
                         context,
                         RollingProperties(
                           foreground: true,
-                          value: values[pos.ceil()],
+                          value: values[first],
                           index: first,
                         ),
                         global)),
               ),
-          ],
-        ),
+              if (first != pos)
+                Transform.rotate(
+                  angle: (transitionValue - 1) * angleDistance,
+                  child: Opacity(
+                      opacity: transitionValue,
+                      child: finalIconBuilder(
+                          context,
+                          RollingProperties(
+                            foreground: true,
+                            value: values[pos.ceil()],
+                            index: first,
+                          ),
+                          global)),
+                ),
+            ],
+          );
+        }),
       );
     };
   }
@@ -676,22 +687,29 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     double borderWidth,
   ) {
     assert(iconBuilder == null || customIconBuilder == null);
-    if (customIconBuilder == null && iconBuilder != null) {
-      customIconBuilder = (c, l, g) => iconBuilder(l.value, l.foreground);
+
+    final RollingIconBuilder<T>? finalIconBuilder;
+    if (iconBuilder != null) {
+      finalIconBuilder = (c, l, g) => iconBuilder(l.value, l.foreground);
+    } else {
+      finalIconBuilder = customIconBuilder;
     }
+
     final realHeight = height - 2 * borderWidth;
-    return customIconBuilder == null
+    return finalIconBuilder == null
         ? null
-        : (t, local, global) => _MergeIconTheme(
+        : (_, local, global) => _MergeIconTheme(
               data: IconThemeData(
                   size:
                       min(global.indicatorSize.shortestSide, realHeight * 0.5)),
-              child: customIconBuilder!(
-                t,
-                RollingProperties._fromLocal(
-                    foreground: false, properties: local),
-                global,
-              ),
+              child: Builder(builder: (context) {
+                return finalIconBuilder!(
+                  context,
+                  RollingProperties._fromLocal(
+                      foreground: false, properties: local),
+                  global,
+                );
+              }),
             );
   }
 
