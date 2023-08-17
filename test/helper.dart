@@ -86,6 +86,7 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   double? dif,
   SeparatorBuilder? separatorBuilder,
   FittingMode? fittingMode,
+  Size? indicatorSize,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
@@ -105,6 +106,7 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   double? dif,
   SeparatorBuilder? separatorBuilder,
   FittingMode? fittingMode,
+  Size? indicatorSize,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
@@ -141,6 +143,7 @@ void defaultTestAllSwitches(
         double? dif,
         SeparatorBuilder? separatorBuilder,
         FittingMode? fittingMode,
+        Size? indicatorSize,
       }) =>
           buildSwitch(
         current: current,
@@ -160,6 +163,7 @@ void defaultTestAllSwitches(
         dif: dif,
         separatorBuilder: separatorBuilder,
         fittingMode: fittingMode,
+        indicatorSize: indicatorSize,
       ),
       type,
       defaultValues,
@@ -190,6 +194,7 @@ void defaultTestAllSwitches(
           double? dif,
           SeparatorBuilder? separatorBuilder,
           FittingMode? fittingMode,
+          Size? indicatorSize,
         }) =>
             AnimatedToggleSwitch<int>.dual(
           current: current,
@@ -212,6 +217,7 @@ void defaultTestAllSwitches(
           customStyleBuilder: customStyleBuilder,
           dif: dif ?? 40,
           fittingMode: fittingMode ?? FittingMode.preventHorizontalOverlapping,
+          indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
         ),
         ConstructorType.dual,
         values,
@@ -251,6 +257,7 @@ void testAllSwitches<T>(
               double? dif,
               SeparatorBuilder? separatorBuilder,
               FittingMode? fittingMode,
+              Size? indicatorSize,
             }) =>
                 AnimatedToggleSwitch<T>.rolling(
               current: current,
@@ -272,6 +279,7 @@ void testAllSwitches<T>(
               separatorBuilder: separatorBuilder,
               fittingMode:
                   fittingMode ?? FittingMode.preventHorizontalOverlapping,
+              indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
             ),
             ConstructorType.rolling,
           ));
@@ -298,6 +306,7 @@ void testAllSwitches<T>(
               double? dif,
               SeparatorBuilder? separatorBuilder,
               FittingMode? fittingMode,
+              Size? indicatorSize,
             }) =>
                 AnimatedToggleSwitch<T>.rollingByHeight(
               current: current,
@@ -319,6 +328,11 @@ void testAllSwitches<T>(
               separatorBuilder: separatorBuilder,
               fittingMode:
                   fittingMode ?? FittingMode.preventHorizontalOverlapping,
+              indicatorSize: indicatorSize == null
+                  ? const Size.square(1.0)
+                  : Size(
+                      _convertToByHeightValue(indicatorSize.width, 50.0, 2.0),
+                      _convertToByHeightValue(indicatorSize.height, 50.0, 2.0)),
             ),
             ConstructorType.rolling,
           ));
@@ -345,6 +359,7 @@ void testAllSwitches<T>(
                 double? dif,
                 SeparatorBuilder? separatorBuilder,
                 FittingMode? fittingMode,
+                Size? indicatorSize,
               }) =>
                   AnimatedToggleSwitch<T>.size(
                 current: current,
@@ -369,6 +384,7 @@ void testAllSwitches<T>(
                 selectedIconScale: 1.0,
                 fittingMode:
                     fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
               ),
               ConstructorType.size,
             ));
@@ -394,6 +410,7 @@ void testAllSwitches<T>(
                 double? dif,
                 SeparatorBuilder? separatorBuilder,
                 FittingMode? fittingMode,
+                Size? indicatorSize,
               }) =>
                   AnimatedToggleSwitch<T>.sizeByHeight(
                 current: current,
@@ -418,6 +435,12 @@ void testAllSwitches<T>(
                 selectedIconScale: 1.0,
                 fittingMode:
                     fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize == null
+                    ? const Size.square(1.0)
+                    : Size(
+                        _convertToByHeightValue(indicatorSize.width, 50.0, 2.0),
+                        _convertToByHeightValue(
+                            indicatorSize.height, 50.0, 2.0)),
               ),
               ConstructorType.size,
             ));
@@ -445,6 +468,7 @@ void testAllSwitches<T>(
                 double? dif,
                 SeparatorBuilder? separatorBuilder,
                 FittingMode? fittingMode,
+                Size? indicatorSize,
               }) =>
                   AnimatedToggleSwitch<T>.custom(
                 current: current,
@@ -468,6 +492,7 @@ void testAllSwitches<T>(
                 separatorBuilder: separatorBuilder,
                 fittingMode:
                     fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
               ),
               ConstructorType.custom,
             ));
@@ -493,6 +518,7 @@ void testAllSwitches<T>(
                 double? dif,
                 SeparatorBuilder? separatorBuilder,
                 FittingMode? fittingMode,
+                Size? indicatorSize,
               }) =>
                   AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
@@ -516,6 +542,12 @@ void testAllSwitches<T>(
                 separatorBuilder: separatorBuilder,
                 fittingMode:
                     fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize == null
+                    ? const Size.square(1.0)
+                    : Size(
+                        _convertToByHeightValue(indicatorSize.width, 50.0, 2.0),
+                        _convertToByHeightValue(
+                            indicatorSize.height, 50.0, 2.0)),
               ),
               ConstructorType.custom,
             ));
