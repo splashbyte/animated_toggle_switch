@@ -94,8 +94,7 @@ void main() {
     checkValidSwitchIconBuilderState(next, type, values);
   });
 
-  defaultTestAllSwitches(
-      'Switch shows two icons during animation (fading)',
+  defaultTestAllSwitches('Switch shows two icons during animation (fading)',
       (tester, buildSwitch, type, values) async {
     final current = values[0];
     final next = values[1];
