@@ -1,4 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -69,8 +70,8 @@ void main() {
   );
 
   defaultTestAllSwitches(
-    'Switch throws error when dif and indicatorSize.width are both infinite',
-    (tester, buildSwitch, type, values) async {
+    'Switch throws error when two of dif, indicatorSize.width and constraints are infinite',
+        (tester, buildSwitch, type, values) async {
       final current = values.first;
       const width = 500.0;
 
@@ -84,6 +85,32 @@ void main() {
                 dif: double.infinity,
               ),
             )),
+      ));
+      expect(tester.takeException(), isAssertionError);
+
+      await tester.pumpWidget(TestWrapper(
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            buildSwitch(
+              current: current,
+              dif: double.infinity,
+            ),
+          ],
+        ),
+      ));
+      expect(tester.takeException(), isAssertionError);
+
+      await tester.pumpWidget(TestWrapper(
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            buildSwitch(
+              current: current,
+              indicatorSize: Size.infinite,
+            ),
+          ],
+        ),
       ));
       expect(tester.takeException(), isAssertionError);
     },
