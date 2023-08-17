@@ -127,7 +127,7 @@ void main() {
   });
 
   testWidgets(
-    'Default loading animation switches between OS',
+    'Default loading animation switches between TargetPlatform',
     (tester) async {
       const values = defaultValues;
       final current = values.first;

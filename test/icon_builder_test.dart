@@ -95,7 +95,7 @@ void main() {
   });
 
   defaultTestAllSwitches(
-      'rolling switch shows two icons during animation (fading)',
+      'Switch shows two icons during animation (fading)',
       (tester, buildSwitch, type, values) async {
     final current = values[0];
     final next = values[1];

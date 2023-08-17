@@ -26,6 +26,24 @@ void main() {
   );
 
   defaultTestAllSwitches(
+    'Switch expands its size when forced by constraints',
+    (tester, buildSwitch, type, values) async {
+      final current = values.first;
+      final switchFinder = find.byType(AnimatedToggleSwitch<int>);
+      const width = 500.0;
+
+      await tester.pumpWidget(TestWrapper(
+          child: SizedBox(
+              width: width,
+              child: buildSwitch(
+                current: current,
+              ))));
+
+      expect(tester.getSize(switchFinder).width, width);
+    },
+  );
+
+  defaultTestAllSwitches(
     'Switch expands its size when dif is set to infinite',
     (tester, buildSwitch, type, values) async {
       final current = values.first;
