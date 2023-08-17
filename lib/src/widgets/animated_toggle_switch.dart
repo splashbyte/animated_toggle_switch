@@ -44,6 +44,21 @@ enum AnimationType {
   onHover,
 }
 
+/// Super class of [AnimatedToggleSwitch] for holding assertions.
+abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
+  const _AnimatedToggleSwitchParent({
+    super.key,
+    required StyleBuilder<T>? styleBuilder,
+    required CustomStyleBuilder<T>? customStyleBuilder,
+    required List<ToggleStyle>? styleList,
+  }) : assert(
+          (styleBuilder ?? customStyleBuilder) == null ||
+              (styleBuilder ?? styleList) == null ||
+              (customStyleBuilder ?? styleList) == null,
+          'Only one parameter from styleBuilder, customStyleBuilder and styleList can be set.',
+        );
+}
+
 /// A class with different constructors of different switches.
 /// The constructors have sensible default values for their parameters,
 /// but can also be customized.
@@ -51,7 +66,7 @@ enum AnimationType {
 /// If you want to implement a completely custom switch,
 /// you should use [CustomAnimatedToggleSwitch], which is used by
 /// [AnimatedToggleSwitch] in the background.
-class AnimatedToggleSwitch<T> extends StatelessWidget {
+class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly if [allowUnlistedValues] is false.
@@ -82,19 +97,24 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// For a simpler version of this builder, please use [styleBuilder].
   final CustomStyleBuilder<T>? customStyleBuilder;
 
+  /// List of the styles for all values.
+  ///
+  /// This list must have the same length as [values].
+  final List<ToggleStyle>? styleList;
+
   /// Duration of the motion animation.
   final Duration animationDuration;
 
   /// If null, [animationDuration] is taken.
   ///
-  /// [iconAnimationDuration] defines the duration of the Animation built in [animatedIconBuilder].
+  /// [iconAnimationDuration] defines the duration of the [Animation] built in [animatedIconBuilder].
   /// In some constructors this is the Duration of the size animation.
   final Duration? iconAnimationDuration;
 
   /// Curve of the motion animation.
   final Curve animationCurve;
 
-  /// [iconAnimationCurve] defines the duration of the Animation built in [animatedIconBuilder].
+  /// [iconAnimationCurve] defines the [Duration] of the [Animation] built in [animatedIconBuilder].
   /// In some constructors this is the [Curve] of the size animation.
   final Curve iconAnimationCurve;
 
@@ -245,6 +265,8 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   ///
   /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
   const AnimatedToggleSwitch.custom({
     super.key,
     required this.current,
@@ -258,6 +280,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
+    this.styleList,
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
@@ -290,17 +313,24 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
   })  : _iconArrangement = IconArrangement.row,
-        assert(styleBuilder == null || customStyleBuilder == null);
+        super(
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+        );
 
   /// Provides an [AnimatedToggleSwitch] with the standard size animation of the icons.
   ///
-  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one argument of [iconBuilder], [customIconBuilder] and [iconList] must be provided.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
   AnimatedToggleSwitch.size({
     super.key,
     required this.current,
     required this.values,
     SimpleIconBuilder<T>? iconBuilder,
     AnimatedIconBuilder<T>? customIconBuilder,
+    List<Widget>? iconList,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
     this.indicatorSize = const Size.fromWidth(48.0),
@@ -309,6 +339,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
+    this.styleList,
     double selectedIconScale = sqrt2,
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
@@ -342,14 +373,22 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
-            iconBuilder, customIconBuilder, selectedIconScale),
+            iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
-        assert(styleBuilder == null || customStyleBuilder == null);
+        super(
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+        );
 
-  /// All size values ([indicatorWidth], [iconSize]) are relative to the specified height.
-  /// (So an [indicatorWidth] of 1.0 means equality of [height] - 2*[borderWidth] and [indicatorWidth])
+  /// Special version of [AnimatedToggleSwitch.size].
   ///
-  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// All size values ([indicatorSize], [iconSize]) are relative to the specified height.
+  /// (So an [indicatorSize.width] of [1.0] means equality of [height] - 2*[borderWidth] and the width of the indicator)
+  ///
+  /// Maximum one argument of [iconBuilder], [customIconBuilder] and [iconList] must be provided.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
   AnimatedToggleSwitch.sizeByHeight({
     super.key,
     this.height = 50.0,
@@ -360,11 +399,13 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     Size indicatorSize = const Size(1.0, 1.0),
     SimpleIconBuilder<T>? iconBuilder,
     AnimatedIconBuilder<T>? customIconBuilder,
+    List<Widget>? iconList,
     this.onChanged,
     this.borderWidth = 2.0,
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
+    this.styleList,
     double selectedIconScale = sqrt2,
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
@@ -399,19 +440,31 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   })  : indicatorSize = indicatorSize * (height - 2 * borderWidth),
         dif = dif * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
-            iconBuilder, customIconBuilder, selectedIconScale),
+            iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
-        assert(styleBuilder == null || customStyleBuilder == null);
+        super(
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+        );
 
   static AnimatedIconBuilder<T>? _iconSizeBuilder<T>(
       SimpleIconBuilder<T>? iconBuilder,
       AnimatedIconBuilder<T>? customIconBuilder,
+      List<Widget>? iconList,
       double selectedIconScale) {
-    assert(iconBuilder == null || customIconBuilder == null);
+    assert(
+      (iconBuilder ?? customIconBuilder) == null ||
+          (iconBuilder ?? iconList) == null ||
+          (customIconBuilder ?? iconList) == null,
+      'Only one parameter from iconBuilder, customIconBuilder and iconList can be set.',
+    );
 
     final AnimatedIconBuilder<T>? finalIconBuilder;
     if (iconBuilder != null) {
       finalIconBuilder = (c, l, g) => iconBuilder(l.value);
+    } else if (iconList != null) {
+      finalIconBuilder = (c, l, g) => iconList[l.index];
     } else {
       finalIconBuilder = customIconBuilder;
     }
@@ -426,10 +479,12 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
 
   /// Another version of [AnimatedToggleSwitch.custom].
   ///
-  /// All size values ([indicatorWidth]) are relative to the specified height.
-  /// (So an [indicatorWidth] of 1.0 means equality of [height] - 2*[borderWidth] and [indicatorWidth])
+  /// All size values ([indicatorSize]) are relative to the specified height.
+  /// (So an [indicatorSize.width] of [1.0] means equality of [height] - 2*[borderWidth] and the width of the indicator)
   ///
   /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
   const AnimatedToggleSwitch.customByHeight({
     super.key,
     this.height = 50.0,
@@ -444,6 +499,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
+    this.styleList,
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
@@ -477,18 +533,23 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   })  : dif = dif * (height - 2 * borderWidth),
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
-        assert(styleBuilder == null || customStyleBuilder == null);
+        super(
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+        );
 
-  /// Special version of [AnimatedToggleSwitch.customByHeight].
+  /// Special version of [AnimatedToggleSwitch.rolling].
   ///
-  /// It is not recommended to use [iconRadius] and [selectedIconRadius]
-  /// but to use the [foreground] argument of [iconBuilder] to determine which size to use.
-  /// If you still want to get the sizes in the builder, you have to use the [customIconBuilder] instead of [iconBuilder].
+  /// All size values ([indicatorSize], [indicatorSize], [selectedIconSize]) are relative to the specified height.
+  /// (So an [indicatorSize.width] of [1.0] means equality of [height] - 2*[borderWidth] and the width of the indicator)
   ///
-  /// All size values ([indicatorWidth], [indicatorSize], [selectedIconSize]) are relative to the specified height.
-  /// (So an [indicatorWidth] of 1.0 means equality of [height] - 2*[borderWidth] and [indicatorWidth])
+  /// [indicatorIconScale] defines the scale of the indicator icon.
+  /// This is useful in combination with [iconList] if you want the icons in the foreground to be slightly bigger.
   ///
-  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one argument of [iconBuilder], [customIconBuilder] and [iconList] must be provided.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
   AnimatedToggleSwitch.rollingByHeight({
     super.key,
     this.height = 50.0,
@@ -496,6 +557,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     required this.values,
     SimpleRollingIconBuilder<T>? iconBuilder,
     RollingIconBuilder<T>? customIconBuilder,
+    List<Widget>? iconList,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
     Size indicatorSize = const Size(1.0, 1.0),
@@ -504,6 +566,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
+    this.styleList,
     this.iconOpacity = 0.5,
     double dif = 0.0,
     this.styleAnimationType = AnimationType.onSelected,
@@ -531,6 +594,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    double indicatorIconScale = 1.0,
   })  : iconAnimationCurve = Curves.linear,
         dif = dif * (height - 2 * borderWidth),
         iconAnimationDuration = Duration.zero,
@@ -538,26 +602,39 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         selectedIconOpacity = iconOpacity,
         iconAnimationType = AnimationType.onSelected,
         foregroundIndicatorIconBuilder =
-            _rollingForegroundIndicatorIconBuilder<T>(values, iconBuilder,
-                customIconBuilder, height, borderWidth, indicatorTransition),
+            _rollingForegroundIndicatorIconBuilder<T>(
+                values,
+                iconBuilder,
+                customIconBuilder,
+                iconList,
+                height,
+                borderWidth,
+                indicatorTransition,
+                indicatorIconScale),
         animatedIconBuilder = _standardIconBuilder(
-            iconBuilder, customIconBuilder, height, borderWidth),
+            iconBuilder, customIconBuilder, iconList, height, borderWidth),
         _iconArrangement = IconArrangement.row,
-        assert(styleBuilder == null || customStyleBuilder == null);
+        super(
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+        );
 
-  /// Defining a rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
+  /// This constructor defines a rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
   ///
-  /// It is not recommended to use [iconRadius] and [selectedIconRadius]
-  /// but to use the [foreground] argument of [iconBuilder] to determine which size to use.
-  /// If you still want to get the sizes in the builder, you have to use the [customIconBuilder] instead of [iconBuilder].
+  /// [indicatorIconScale] defines the scale of the indicator icon.
+  /// This is useful in combination with [iconList] if you want the icons in the foreground to be slightly bigger.
   ///
-  /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  /// Maximum one argument of [iconBuilder], [customIconBuilder] and [iconList] must be provided.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
   AnimatedToggleSwitch.rolling({
     super.key,
     required this.current,
     required this.values,
     SimpleRollingIconBuilder<T>? iconBuilder,
     RollingIconBuilder<T>? customIconBuilder,
+    List<Widget>? iconList,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
     this.indicatorSize = const Size.fromWidth(46.0),
@@ -566,6 +643,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
+    this.styleList,
     this.iconOpacity = 0.5,
     this.dif = 0.0,
     this.height = 50.0,
@@ -594,30 +672,52 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    double indicatorIconScale = 1.0,
   })  : iconAnimationCurve = Curves.linear,
         iconAnimationDuration = Duration.zero,
         selectedIconOpacity = iconOpacity,
         iconAnimationType = AnimationType.onSelected,
         foregroundIndicatorIconBuilder =
-            _rollingForegroundIndicatorIconBuilder<T>(values, iconBuilder,
-                customIconBuilder, height, borderWidth, indicatorTransition),
+            _rollingForegroundIndicatorIconBuilder<T>(
+                values,
+                iconBuilder,
+                customIconBuilder,
+                iconList,
+                height,
+                borderWidth,
+                indicatorTransition,
+                indicatorIconScale),
         animatedIconBuilder = _standardIconBuilder(
-            iconBuilder, customIconBuilder, height, borderWidth),
+            iconBuilder, customIconBuilder, iconList, height, borderWidth),
         _iconArrangement = IconArrangement.row,
-        assert(styleBuilder == null || customStyleBuilder == null);
+        super(
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+        );
 
   static CustomIndicatorBuilder<T> _rollingForegroundIndicatorIconBuilder<T>(
-      List<T> values,
-      SimpleRollingIconBuilder<T>? iconBuilder,
-      RollingIconBuilder<T>? customIconBuilder,
-      double height,
-      double borderWidth,
-      ForegroundIndicatorTransition transition) {
-    assert(iconBuilder == null || customIconBuilder == null);
+    List<T> values,
+    SimpleRollingIconBuilder<T>? iconBuilder,
+    RollingIconBuilder<T>? customIconBuilder,
+    List<Widget>? iconList,
+    double height,
+    double borderWidth,
+    ForegroundIndicatorTransition transition,
+    double iconScale,
+  ) {
+    assert(
+      (iconBuilder ?? customIconBuilder) == null ||
+          (iconBuilder ?? iconList) == null ||
+          (customIconBuilder ?? iconList) == null,
+      'Only one parameter from iconBuilder, customIconBuilder and iconList can be set.',
+    );
 
     final RollingIconBuilder<T>? finalIconBuilder;
     if (iconBuilder != null) {
       finalIconBuilder = (c, l, g) => iconBuilder(l.value, l.foreground);
+    } else if (iconList != null) {
+      finalIconBuilder = (c, l, g) => iconList[l.index];
     } else {
       finalIconBuilder = customIconBuilder;
     }
@@ -641,41 +741,39 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
       final pos = global.position;
       int first = pos.floor();
       double transitionValue = pos - first;
-      return _MergeIconTheme(
-        data: IconThemeData(size: iconSize),
-        child: Builder(builder: (context) {
-          return Stack(
-            children: [
+      return Transform.scale(
+        scale: iconScale,
+        child: Stack(
+          children: [
+            Transform.rotate(
+              angle: transitionValue * angleDistance,
+              child: Opacity(
+                  opacity: 1 - transitionValue,
+                  child: finalIconBuilder!(
+                      context,
+                      RollingProperties(
+                        foreground: true,
+                        value: values[first],
+                        index: first,
+                      ),
+                      global)),
+            ),
+            if (first != pos)
               Transform.rotate(
-                angle: transitionValue * angleDistance,
+                angle: (transitionValue - 1) * angleDistance,
                 child: Opacity(
-                    opacity: 1 - transitionValue,
-                    child: finalIconBuilder!(
+                    opacity: transitionValue,
+                    child: finalIconBuilder(
                         context,
                         RollingProperties(
                           foreground: true,
-                          value: values[first],
+                          value: values[pos.ceil()],
                           index: first,
                         ),
                         global)),
               ),
-              if (first != pos)
-                Transform.rotate(
-                  angle: (transitionValue - 1) * angleDistance,
-                  child: Opacity(
-                      opacity: transitionValue,
-                      child: finalIconBuilder(
-                          context,
-                          RollingProperties(
-                            foreground: true,
-                            value: values[pos.ceil()],
-                            index: first,
-                          ),
-                          global)),
-                ),
-            ],
-          );
-        }),
+          ],
+        ),
       );
     };
   }
@@ -683,40 +781,43 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
   static AnimatedIconBuilder<T>? _standardIconBuilder<T>(
     SimpleRollingIconBuilder<T>? iconBuilder,
     RollingIconBuilder<T>? customIconBuilder,
+    List<Widget>? iconList,
     double height,
     double borderWidth,
   ) {
-    assert(iconBuilder == null || customIconBuilder == null);
+    assert(
+      (iconBuilder ?? customIconBuilder) == null ||
+          (iconBuilder ?? iconList) == null ||
+          (customIconBuilder ?? iconList) == null,
+      'Only one parameter from iconBuilder, customIconBuilder and iconList can be set.',
+    );
 
     final RollingIconBuilder<T>? finalIconBuilder;
     if (iconBuilder != null) {
       finalIconBuilder = (c, l, g) => iconBuilder(l.value, l.foreground);
+    } else if (iconList != null) {
+      finalIconBuilder = (c, l, g) => iconList[l.index];
     } else {
       finalIconBuilder = customIconBuilder;
     }
 
-    final realHeight = height - 2 * borderWidth;
     return finalIconBuilder == null
         ? null
-        : (_, local, global) => _MergeIconTheme(
-              data: IconThemeData(
-                  size:
-                      min(global.indicatorSize.shortestSide, realHeight * 0.5)),
-              child: Builder(builder: (context) {
-                return finalIconBuilder!(
-                  context,
-                  RollingProperties._fromLocal(
-                      foreground: false, properties: local),
-                  global,
-                );
-              }),
+        : (context, local, global) => finalIconBuilder!(
+              context,
+              RollingProperties._fromLocal(
+                  foreground: false, properties: local),
+              global,
             );
   }
 
   /// Defining an rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
   ///
   /// Maximum one builder of [iconBuilder] and [customIconBuilder] must be provided.
+  ///
   /// Maximum one builder of [textBuilder] and [customTextBuilder] must be provided.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
   AnimatedToggleSwitch.dual({
     super.key,
     required this.current,
@@ -734,6 +835,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
+    this.styleList,
     this.dif = 40.0,
     this.height = 50.0,
     this.iconAnimationDuration = const Duration(milliseconds: 500),
@@ -770,9 +872,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
             [first, second],
             iconBuilder == null ? null : (v, f) => iconBuilder(v),
             customIconBuilder,
+            null,
             height,
             borderWidth,
-            indicatorTransition),
+            indicatorTransition,
+            1.0),
         animatedIconBuilder = _dualIconBuilder(
           textBuilder,
           customTextBuilder,
@@ -790,7 +894,11 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
         separatorBuilder = null,
         customSeparatorBuilder = null,
-        assert(styleBuilder == null || customStyleBuilder == null);
+        super(
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+        );
 
   static Function() _dualOnTap<T>(
       ChangeCallback<T>? onChanged, List<T> values, T? current) {
@@ -864,6 +972,10 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
     if (styleBuilder != null) {
       return styleBuilder!(local.value);
     }
+    if (styleList != null) {
+      if (local.index < 0) return null;
+      return styleList![local.index];
+    }
     return null;
   }
 
@@ -879,7 +991,7 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
         BorderRadius.circular(height / 2);
     final style = ToggleStyle._(
       indicatorColor: theme.colorScheme.secondary,
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: theme.colorScheme.background,
       backgroundGradient: null,
       borderColor: theme.colorScheme.secondary,
       borderRadius: defaultBorderRadius,
@@ -992,19 +1104,30 @@ class AnimatedToggleSwitch<T> extends StatelessWidget {
               value: current, index: values.indexOf(current)),
         );
         return TweenAnimationBuilder<V>(
-            duration: animationDuration,
-            tween: _CustomTween(lerp, begin: currentValue, end: currentValue),
-            builder: (context, v, _) => builder(v));
+          curve: animationCurve,
+          duration: animationDuration,
+          tween: _CustomTween(lerp, begin: currentValue, end: currentValue),
+          builder: (context, value, _) => builder(value),
+        );
       case AnimationType.onHover:
         final index1 = pos.floor();
         final index2 = pos.ceil();
-        return builder(lerp(
-          valueProvider(
-              StyledToggleProperties(value: values[index1], index: index1)),
-          valueProvider(
-              StyledToggleProperties(value: values[index2], index: index2)),
-          pos - pos.floor(),
-        ));
+        final currentValue = properties.currentIndex < 0
+            ? valueProvider(
+                StyledToggleProperties(value: properties.current, index: -1))
+            : lerp(
+                valueProvider(StyledToggleProperties(
+                    value: values[index1], index: index1)),
+                valueProvider(StyledToggleProperties(
+                    value: values[index2], index: index2)),
+                pos - pos.floor(),
+              );
+        return TweenAnimationBuilder<V>(
+          duration: animationDuration,
+          curve: animationCurve,
+          tween: _CustomTween(lerp, begin: currentValue, end: currentValue),
+          builder: (context, value, _) => builder(value),
+        );
     }
   }
 
@@ -1150,22 +1273,6 @@ class _WidgetWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return child;
-  }
-}
-
-class _MergeIconTheme extends StatelessWidget {
-  final IconThemeData data;
-  final Widget child;
-
-  const _MergeIconTheme({required this.data, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    return Theme(
-      data: themeData.copyWith(iconTheme: themeData.iconTheme.merge(data)),
-      child: child,
-    );
   }
 }
 

@@ -1,3 +1,8 @@
+## 0.8.0-beta.4
+
+- BREAKING: removes `IconTheme` for controlling default size of `Icon`s
+- BREAKING: changes default background color from `ThemeData.scaffoldBackgroundColor` to `ThemeData.colorScheme.background`
+
 ## 0.8.0-beta.3 (2023-08-11)
 
 - BREAKING: replaces `transitionType` with `indicatorTransition` in `AnimatedToggleSwitch.rolling()`,
