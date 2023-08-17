@@ -384,12 +384,12 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
         super(
-        values: values,
-        styleBuilder: styleBuilder,
-        customStyleBuilder: customStyleBuilder,
-        styleList: styleList,
-        iconList: null,
-      );
+          values: values,
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+          iconList: null,
+        );
 
   /// Provides an [AnimatedToggleSwitch] with the standard size animation of the icons.
   ///
@@ -593,7 +593,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
     ForegroundIndicatorTransition indicatorTransition =
-    const ForegroundIndicatorTransition.rolling(),
+        const ForegroundIndicatorTransition.rolling(),
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -611,25 +611,25 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
         selectedIconOpacity = iconOpacity,
         iconAnimationType = AnimationType.onSelected,
         foregroundIndicatorIconBuilder =
-        _rollingForegroundIndicatorIconBuilder<T>(
-            values,
-            iconBuilder,
-            customIconBuilder,
-            iconList,
-            height,
-            borderWidth,
-            indicatorTransition,
-            indicatorIconScale),
+            _rollingForegroundIndicatorIconBuilder<T>(
+                values,
+                iconBuilder,
+                customIconBuilder,
+                iconList,
+                height,
+                borderWidth,
+                indicatorTransition,
+                indicatorIconScale),
         animatedIconBuilder = _standardIconBuilder(
             iconBuilder, customIconBuilder, iconList, height, borderWidth),
         _iconArrangement = IconArrangement.row,
         super(
-        values: values,
-        styleBuilder: styleBuilder,
-        customStyleBuilder: customStyleBuilder,
-        styleList: styleList,
-        iconList: iconList,
-      );
+          values: values,
+          styleBuilder: styleBuilder,
+          customStyleBuilder: customStyleBuilder,
+          styleList: styleList,
+          iconList: iconList,
+        );
 
   /// Special version of [AnimatedToggleSwitch.rolling].
   ///

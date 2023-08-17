@@ -322,7 +322,7 @@ void testAllSwitches<T>(
             ),
             ConstructorType.rolling,
           ));
-  if(testSize) {
+  if (testSize) {
     testWidgets(
         '$description (AnimatedToggleSwitch.size)',
         (tester) async => await test(
