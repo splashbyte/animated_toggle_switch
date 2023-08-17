@@ -374,9 +374,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   void _loading(bool b) {
     if (b == _animationInfo.loading) return;
-    if (_animationInfo.toggleMode == ToggleMode.dragged) {
-      _cancelDrag();
-    }
+    _cancelDrag();
     setState(() => _animationInfo = _animationInfo.setLoading(b));
   }
 
