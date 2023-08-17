@@ -1,7 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'helper.dart';
@@ -71,7 +69,7 @@ void main() {
 
   defaultTestAllSwitches(
     'Switch throws error when two of dif, indicatorSize.width and constraints are infinite',
-        (tester, buildSwitch, type, values) async {
+    (tester, buildSwitch, type, values) async {
       final current = values.first;
       const width = 500.0;
 
