@@ -22,7 +22,7 @@ void _verifyTextDirection<T>(
 
 void main() {
   defaultTestAllSwitches('Switch respects TextDirection',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values[1];
     await tester.pumpWidget(TestWrapper(
       textDirection: TextDirection.ltr,

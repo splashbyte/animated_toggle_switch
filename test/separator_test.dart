@@ -32,7 +32,7 @@ void _checkValidSeparatorPositions<T>(
 
 void main() {
   defaultTestAllSwitches('Switch builds separator at correct position',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     const difs = [5.0, 10.0, 17.0];
     final current = values[1];
     for (final dif in difs) {
@@ -50,7 +50,7 @@ void main() {
     }
   }, testDual: false);
   defaultTestAllSwitches('separatorBuilder does not support dif = 0.0',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     await tester.pumpWidget(
       TestWrapper(

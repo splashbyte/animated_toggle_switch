@@ -6,7 +6,7 @@ import 'helper.dart';
 void main() {
   defaultTestAllSwitches(
       'Switch throws error if styleBuilder and customStyleBuilder are set both',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     expect(
       () => buildSwitch(
         current: 100,

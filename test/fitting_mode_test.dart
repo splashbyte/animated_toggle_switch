@@ -8,7 +8,7 @@ import 'helper.dart';
 void main() {
   defaultTestAllSwitches(
     'Switch overflows with FittingMode.none',
-    (tester, buildSwitch, values) async {
+    (tester, buildSwitch, type, values) async {
       final current = values.first;
 
       await tester.pumpWidget(TestWrapper(

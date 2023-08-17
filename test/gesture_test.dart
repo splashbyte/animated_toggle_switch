@@ -7,7 +7,7 @@ import 'mocks.dart';
 
 void main() {
   defaultTestAllSwitches('Switch handles taps correctly',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();
@@ -61,7 +61,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch handles drags correctly',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();
@@ -94,7 +94,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch respects iconsTappable parameter',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();

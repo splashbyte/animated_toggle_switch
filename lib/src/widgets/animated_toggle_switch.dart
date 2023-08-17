@@ -48,15 +48,21 @@ enum AnimationType {
 abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
   const _AnimatedToggleSwitchParent({
     super.key,
+    required List<T> values,
     required StyleBuilder<T>? styleBuilder,
     required CustomStyleBuilder<T>? customStyleBuilder,
     required List<ToggleStyle>? styleList,
-  }) : assert(
+    required List<Widget>? iconList,
+  })  : assert(
           (styleBuilder ?? customStyleBuilder) == null ||
               (styleBuilder ?? styleList) == null ||
               (customStyleBuilder ?? styleList) == null,
           'Only one parameter from styleBuilder, customStyleBuilder and styleList can be set.',
-        );
+        ),
+        assert(styleList == null || styleList.length == values.length,
+            'styleList must be null or have the same length as values'),
+        assert(iconList == null || iconList.length == values.length,
+            'iconList must be null or have the same length as values');
 }
 
 /// A class with different constructors of different switches.
@@ -99,7 +105,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
 
   /// List of the styles for all values.
   ///
-  /// This list must have the same length as [values].
+  /// [styleList] must have the same length as [values].
   final List<ToggleStyle>? styleList;
 
   /// Duration of the motion animation.
@@ -314,10 +320,76 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
   })  : _iconArrangement = IconArrangement.row,
         super(
+          values: values,
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
+          iconList: null,
         );
+
+  /// Special version of [AnimatedToggleSwitch.custom].
+  ///
+  /// All size values ([indicatorSize]) are relative to the specified height.
+  /// (So an [indicatorSize.width] of [1.0] means equality of [height] - 2*[borderWidth] and the width of the indicator)
+  ///
+  /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
+  ///
+  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
+  const AnimatedToggleSwitch.customByHeight({
+    super.key,
+    this.height = 50.0,
+    required this.current,
+    required this.values,
+    this.animatedIconBuilder,
+    this.animationDuration = const Duration(milliseconds: 500),
+    this.animationCurve = Curves.easeInOutCirc,
+    Size indicatorSize = const Size(1.0, 1.0),
+    this.onChanged,
+    this.borderWidth = 2.0,
+    this.style = const ToggleStyle(),
+    this.styleBuilder,
+    this.customStyleBuilder,
+    this.styleList,
+    this.iconAnimationCurve = Curves.easeOutBack,
+    this.iconAnimationDuration,
+    this.iconOpacity = 0.5,
+    double dif = 0.0,
+    this.foregroundIndicatorIconBuilder,
+    this.selectedIconOpacity = 1.0,
+    this.iconAnimationType = AnimationType.onSelected,
+    this.styleAnimationType = AnimationType.onSelected,
+    this.indicatorAnimationType = AnimationType.onHover,
+    this.onTap,
+    this.fittingMode = FittingMode.preventHorizontalOverlapping,
+    this.minTouchTargetSize = 48.0,
+    this.textDirection,
+    this.iconsTappable = true,
+    this.cursors = const ToggleCursors(),
+    this.loadingIconBuilder = _defaultLoadingIconBuilder,
+    this.loading,
+    this.loadingAnimationDuration,
+    this.loadingAnimationCurve,
+    this.allowUnlistedValues = false,
+    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
+    this.indicatorAppearingDuration =
+        _defaultIndicatorAppearingAnimationDuration,
+    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
+    this.separatorBuilder,
+    this.customSeparatorBuilder,
+    this.active = true,
+    this.inactiveOpacity = 0.6,
+    this.inactiveOpacityCurve = Curves.easeInOut,
+    this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+  })  : dif = dif * (height - 2 * borderWidth),
+        indicatorSize = indicatorSize * (height - 2 * borderWidth),
+        _iconArrangement = IconArrangement.row,
+        super(
+        values: values,
+        styleBuilder: styleBuilder,
+        customStyleBuilder: customStyleBuilder,
+        styleList: styleList,
+        iconList: null,
+      );
 
   /// Provides an [AnimatedToggleSwitch] with the standard size animation of the icons.
   ///
@@ -376,9 +448,11 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
         super(
+          values: values,
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
+          iconList: iconList,
         );
 
   /// Special version of [AnimatedToggleSwitch.size].
@@ -443,9 +517,11 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
         super(
+          values: values,
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
+          iconList: iconList,
         );
 
   static AnimatedIconBuilder<T>? _iconSizeBuilder<T>(
@@ -477,36 +553,33 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
             );
   }
 
-  /// Another version of [AnimatedToggleSwitch.custom].
+  /// This constructor defines a rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
   ///
-  /// All size values ([indicatorSize]) are relative to the specified height.
-  /// (So an [indicatorSize.width] of [1.0] means equality of [height] - 2*[borderWidth] and the width of the indicator)
+  /// [indicatorIconScale] defines the scale of the indicator icon.
+  /// This is useful in combination with [iconList] if you want the icons in the foreground to be slightly bigger.
   ///
-  /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
+  /// Maximum one argument of [iconBuilder], [customIconBuilder] and [iconList] must be provided.
   ///
   /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
-  const AnimatedToggleSwitch.customByHeight({
+  AnimatedToggleSwitch.rolling({
     super.key,
-    this.height = 50.0,
     required this.current,
     required this.values,
-    this.animatedIconBuilder,
+    SimpleRollingIconBuilder<T>? iconBuilder,
+    RollingIconBuilder<T>? customIconBuilder,
+    List<Widget>? iconList,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
-    Size indicatorSize = const Size(1.0, 1.0),
+    this.indicatorSize = const Size.fromWidth(46.0),
     this.onChanged,
     this.borderWidth = 2.0,
     this.style = const ToggleStyle(),
     this.styleBuilder,
     this.customStyleBuilder,
     this.styleList,
-    this.iconAnimationCurve = Curves.easeOutBack,
-    this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    double dif = 0.0,
-    this.foregroundIndicatorIconBuilder,
-    this.selectedIconOpacity = 1.0,
-    this.iconAnimationType = AnimationType.onSelected,
+    this.dif = 0.0,
+    this.height = 50.0,
     this.styleAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
@@ -519,6 +592,8 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.loading,
     this.loadingAnimationDuration,
     this.loadingAnimationCurve,
+    ForegroundIndicatorTransition indicatorTransition =
+    const ForegroundIndicatorTransition.rolling(),
     this.allowUnlistedValues = false,
     this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
     this.indicatorAppearingDuration =
@@ -530,14 +605,31 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-  })  : dif = dif * (height - 2 * borderWidth),
-        indicatorSize = indicatorSize * (height - 2 * borderWidth),
+    double indicatorIconScale = 1.0,
+  })  : iconAnimationCurve = Curves.linear,
+        iconAnimationDuration = Duration.zero,
+        selectedIconOpacity = iconOpacity,
+        iconAnimationType = AnimationType.onSelected,
+        foregroundIndicatorIconBuilder =
+        _rollingForegroundIndicatorIconBuilder<T>(
+            values,
+            iconBuilder,
+            customIconBuilder,
+            iconList,
+            height,
+            borderWidth,
+            indicatorTransition,
+            indicatorIconScale),
+        animatedIconBuilder = _standardIconBuilder(
+            iconBuilder, customIconBuilder, iconList, height, borderWidth),
         _iconArrangement = IconArrangement.row,
         super(
-          styleBuilder: styleBuilder,
-          customStyleBuilder: customStyleBuilder,
-          styleList: styleList,
-        );
+        values: values,
+        styleBuilder: styleBuilder,
+        customStyleBuilder: customStyleBuilder,
+        styleList: styleList,
+        iconList: iconList,
+      );
 
   /// Special version of [AnimatedToggleSwitch.rolling].
   ///
@@ -615,85 +707,11 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
             iconBuilder, customIconBuilder, iconList, height, borderWidth),
         _iconArrangement = IconArrangement.row,
         super(
+          values: values,
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
-        );
-
-  /// This constructor defines a rolling animation using the [foregroundIndicatorIconBuilder] of [AnimatedToggleSwitch].
-  ///
-  /// [indicatorIconScale] defines the scale of the indicator icon.
-  /// This is useful in combination with [iconList] if you want the icons in the foreground to be slightly bigger.
-  ///
-  /// Maximum one argument of [iconBuilder], [customIconBuilder] and [iconList] must be provided.
-  ///
-  /// Maximum one argument of [styleBuilder], [customStyleBuilder] and [styleList] must be provided.
-  AnimatedToggleSwitch.rolling({
-    super.key,
-    required this.current,
-    required this.values,
-    SimpleRollingIconBuilder<T>? iconBuilder,
-    RollingIconBuilder<T>? customIconBuilder,
-    List<Widget>? iconList,
-    this.animationDuration = const Duration(milliseconds: 500),
-    this.animationCurve = Curves.easeInOutCirc,
-    this.indicatorSize = const Size.fromWidth(46.0),
-    this.onChanged,
-    this.borderWidth = 2.0,
-    this.style = const ToggleStyle(),
-    this.styleBuilder,
-    this.customStyleBuilder,
-    this.styleList,
-    this.iconOpacity = 0.5,
-    this.dif = 0.0,
-    this.height = 50.0,
-    this.styleAnimationType = AnimationType.onSelected,
-    this.indicatorAnimationType = AnimationType.onHover,
-    this.onTap,
-    this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    this.minTouchTargetSize = 48.0,
-    this.textDirection,
-    this.iconsTappable = true,
-    this.cursors = const ToggleCursors(),
-    this.loadingIconBuilder = _defaultLoadingIconBuilder,
-    this.loading,
-    this.loadingAnimationDuration,
-    this.loadingAnimationCurve,
-    ForegroundIndicatorTransition indicatorTransition =
-        const ForegroundIndicatorTransition.rolling(),
-    this.allowUnlistedValues = false,
-    this.indicatorAppearingBuilder = _defaultIndicatorAppearingBuilder,
-    this.indicatorAppearingDuration =
-        _defaultIndicatorAppearingAnimationDuration,
-    this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
-    this.separatorBuilder,
-    this.customSeparatorBuilder,
-    this.active = true,
-    this.inactiveOpacity = 0.6,
-    this.inactiveOpacityCurve = Curves.easeInOut,
-    this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-    double indicatorIconScale = 1.0,
-  })  : iconAnimationCurve = Curves.linear,
-        iconAnimationDuration = Duration.zero,
-        selectedIconOpacity = iconOpacity,
-        iconAnimationType = AnimationType.onSelected,
-        foregroundIndicatorIconBuilder =
-            _rollingForegroundIndicatorIconBuilder<T>(
-                values,
-                iconBuilder,
-                customIconBuilder,
-                iconList,
-                height,
-                borderWidth,
-                indicatorTransition,
-                indicatorIconScale),
-        animatedIconBuilder = _standardIconBuilder(
-            iconBuilder, customIconBuilder, iconList, height, borderWidth),
-        _iconArrangement = IconArrangement.row,
-        super(
-          styleBuilder: styleBuilder,
-          customStyleBuilder: customStyleBuilder,
-          styleList: styleList,
+          iconList: iconList,
         );
 
   static CustomIndicatorBuilder<T> _rollingForegroundIndicatorIconBuilder<T>(
@@ -740,12 +758,14 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
 
       final pos = global.position;
       int first = pos.floor();
+      int second = pos.ceil();
       double transitionValue = pos - first;
       return Transform.scale(
         scale: iconScale,
         child: Stack(
           children: [
             Transform.rotate(
+              key: ValueKey(first),
               angle: transitionValue * angleDistance,
               child: Opacity(
                   opacity: 1 - transitionValue,
@@ -758,8 +778,9 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
                       ),
                       global)),
             ),
-            if (first != pos)
+            if (first != second)
               Transform.rotate(
+                key: ValueKey(second),
                 angle: (transitionValue - 1) * angleDistance,
                 child: Opacity(
                     opacity: transitionValue,
@@ -767,8 +788,8 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
                         context,
                         RollingProperties(
                           foreground: true,
-                          value: values[pos.ceil()],
-                          index: first,
+                          value: values[second],
+                          index: second,
                         ),
                         global)),
               ),
@@ -895,9 +916,11 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
         separatorBuilder = null,
         customSeparatorBuilder = null,
         super(
+          values: [first, second],
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
+          iconList: null,
         );
 
   static Function() _dualOnTap<T>(

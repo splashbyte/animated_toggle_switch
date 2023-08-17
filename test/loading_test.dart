@@ -8,7 +8,7 @@ import 'helper.dart';
 void main() {
   defaultTestAllSwitches(
       'Switch starts loading by returning Future in onTap or onChanged',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     const loadingDuration = Duration(seconds: 3);
@@ -45,7 +45,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch starts loading by setting loading parameter',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
 
     await tester.pumpWidget(TestWrapper(
@@ -80,7 +80,7 @@ void main() {
   }, testDual: false);
 
   defaultTestAllSwitches('Switch supports initial loading',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
 
     await tester.pumpWidget(TestWrapper(
@@ -98,7 +98,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch disables loading by setting loading to false',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     const loadingDuration = Duration(seconds: 3);
