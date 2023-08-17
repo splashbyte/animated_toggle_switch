@@ -28,7 +28,7 @@ void main() {
 
   defaultTestAllSwitches(
     'Switch expands its size when dif is set to infinite',
-        (tester, buildSwitch, type, values) async {
+    (tester, buildSwitch, type, values) async {
       final current = values.first;
       final switchFinder = find.byType(AnimatedToggleSwitch<int>);
       const width = 500.0;
@@ -70,9 +70,8 @@ void main() {
 
   defaultTestAllSwitches(
     'Switch throws error when dif and indicatorSize.width are both infinite',
-        (tester, buildSwitch, type, values) async {
+    (tester, buildSwitch, type, values) async {
       final current = values.first;
-      final switchFinder = find.byType(AnimatedToggleSwitch<int>);
       const width = 500.0;
 
       await tester.pumpWidget(Center(
