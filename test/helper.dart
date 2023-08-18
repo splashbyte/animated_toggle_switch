@@ -275,7 +275,7 @@ void testAllSwitches<T>(
               customStyleBuilder: customStyleBuilder,
               styleList: styleList,
               iconsTappable: iconsTappable ?? true,
-                  spacing: spacing ?? 0.0,
+              spacing: spacing ?? 0.0,
               separatorBuilder: separatorBuilder,
               fittingMode:
                   fittingMode ?? FittingMode.preventHorizontalOverlapping,

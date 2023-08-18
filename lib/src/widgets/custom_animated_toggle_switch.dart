@@ -482,7 +482,8 @@ class _CustomAnimatedToggleSwitchState<T>
                             'the width of the indicator and the spacing '
                             "can't be infinite");
                         assert(
-                            widget.indicatorSize.width.isFinite || spacing.isFinite,
+                            widget.indicatorSize.width.isFinite ||
+                                spacing.isFinite,
                             'The width of the indicator '
                             'or the spacing must be finite.');
 
@@ -704,7 +705,8 @@ class _CustomAnimatedToggleSwitchState<T>
       BuildContext context, DetailedGlobalToggleProperties<T> properties) {
     return [
       ...Iterable.generate(widget.values.length, (i) {
-        double position = i * (properties.indicatorSize.width + properties.spacing);
+        double position =
+            i * (properties.indicatorSize.width + properties.spacing);
         return Positioned.directional(
           textDirection: _textDirectionOf(context),
           start: i == 0 ? position : position - properties.spacing,
