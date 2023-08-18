@@ -317,19 +317,12 @@ class _CustomAnimatedToggleSwitchState<T>
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     _checkForUnlistedValue();
-    if (oldWidget.indicatorAppearingDuration !=
-        widget.indicatorAppearingDuration) {
-      _appearingController.duration = widget.indicatorAppearingDuration;
-    }
-    if (oldWidget.indicatorAppearingCurve != widget.indicatorAppearingCurve) {
-      _appearingAnimation.curve = widget.indicatorAppearingCurve;
-    }
-    if (oldWidget.animationDuration != widget.animationDuration) {
-      _controller.duration = widget.animationDuration;
-    }
-    if (oldWidget.animationCurve != widget.animationCurve) {
-      _animation.curve = widget.animationCurve;
-    }
+
+    _appearingController.duration = widget.indicatorAppearingDuration;
+    _appearingAnimation.curve = widget.indicatorAppearingCurve;
+    _controller.duration = widget.animationDuration;
+    _animation.curve = widget.animationCurve;
+
     if (oldWidget.active && !widget.active) {
       _cancelDrag();
     }

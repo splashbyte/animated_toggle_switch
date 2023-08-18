@@ -375,6 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 active: false,
                 current: value,
                 values: const [0, 1, 2, 3],
+                indicatorIconScale: sqrt2,
                 onChanged: (i) {
                   setState(() {
                     value = i;
@@ -423,6 +424,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     ],
                   ),
+                  indicatorIconScale: sqrt2,
                   iconBuilder: coloredRollingIconBuilder,
                   borderWidth: 3.0,
                   styleAnimationType: AnimationType.onHover,
@@ -703,6 +705,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: value,
                 values: const [0, 1, 2, 3],
                 iconOpacity: 1.0,
+                selectedIconScale: 1.0,
                 indicatorSize: const Size.fromWidth(25),
                 foregroundIndicatorIconBuilder: (context, global) {
                   double pos = global.position;
