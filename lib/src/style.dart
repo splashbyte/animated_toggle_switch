@@ -2,15 +2,21 @@ part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class ToggleStyle {
   /// Background color of the indicator.
+  ///
+  /// Defaults to [ThemeData.colorScheme.secondary].
   final Color? indicatorColor;
 
   /// Background color of the switch.
+  ///
+  /// Defaults to [ThemeData.colorScheme.surface].
   final Color? backgroundColor;
 
-  /// Gradient of the background. Overwrites [innerColor] if not [null].
+  /// Gradient of the background. Overwrites [backgroundColor] if not [null].
   final Gradient? backgroundGradient;
 
   /// Border color of the switch.
+  ///
+  /// Defaults to [ThemeData.colorScheme.secondary].
   ///
   /// For deactivating please set this to [Colors.transparent].
   final Color? borderColor;
@@ -20,7 +26,7 @@ class ToggleStyle {
 
   /// [BorderRadius] of the indicator.
   ///
-  /// Defaults to [borderRadius].
+  /// Defaults to [borderRadius] - [BorderRadius.circular(borderWidth)].
   final BorderRadiusGeometry? indicatorBorderRadius;
 
   /// [BorderRadius] of the indicator.
@@ -58,23 +64,30 @@ class ToggleStyle {
     required this.boxShadow,
   });
 
-  ToggleStyle _merge(ToggleStyle? other) => other == null
-      ? this
-      : ToggleStyle._(
-          indicatorColor: other.indicatorColor ?? indicatorColor,
-          backgroundColor: other.backgroundColor ?? backgroundColor,
-          backgroundGradient: other.backgroundGradient ??
-              (other.backgroundColor == null ? null : backgroundGradient),
-          borderColor: other.borderColor ?? borderColor,
-          borderRadius: other.borderRadius ?? borderRadius,
-          indicatorBorderRadius: other.indicatorBorderRadius ??
-              other.borderRadius ??
-              indicatorBorderRadius ??
-              borderRadius,
-          indicatorBorder: other.indicatorBorder ?? indicatorBorder,
-          indicatorBoxShadow: other.indicatorBoxShadow ?? indicatorBoxShadow,
-          boxShadow: other.boxShadow ?? boxShadow,
-        );
+  ToggleStyle _merge(
+    ToggleStyle? other,
+    BorderRadiusGeometry indicatorBorderRadiusDifference,
+  ) =>
+      other == null
+          ? this
+          : ToggleStyle._(
+              indicatorColor: other.indicatorColor ?? indicatorColor,
+              backgroundColor: other.backgroundColor ?? backgroundColor,
+              backgroundGradient: other.backgroundGradient ??
+                  (other.backgroundColor == null ? null : backgroundGradient),
+              borderColor: other.borderColor ?? borderColor,
+              borderRadius: other.borderRadius ?? borderRadius,
+              indicatorBorderRadius: other.indicatorBorderRadius ??
+                  other.borderRadius
+                      .subtractNullable(indicatorBorderRadiusDifference) ??
+                  indicatorBorderRadius ??
+                  borderRadius
+                      .subtractNullable(indicatorBorderRadiusDifference),
+              indicatorBorder: other.indicatorBorder ?? indicatorBorder,
+              indicatorBoxShadow:
+                  other.indicatorBoxShadow ?? indicatorBoxShadow,
+              boxShadow: other.boxShadow ?? boxShadow,
+            );
 
   static ToggleStyle _lerp(ToggleStyle style1, ToggleStyle style2, double t) =>
       ToggleStyle._(
@@ -144,5 +157,12 @@ class ToggleStyle {
       indicatorBoxShadow.hashCode ^
       boxShadow.hashCode;
 
-  // coverage:ignore-end
+// coverage:ignore-end
+}
+
+extension _XSubtractNullable on BorderRadiusGeometry? {
+  BorderRadiusGeometry? subtractNullable(BorderRadiusGeometry other) {
+    if (this == null) return null;
+    return this!.subtract(other);
+  }
 }

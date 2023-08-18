@@ -12,9 +12,9 @@
 
 ### If you like this package, please leave a like there on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
 
-Fully customizable, draggable and animated switch with multiple choices and [smooth loading animation](#simple-rolling-animation-with-loading). It has prebuilt constructors for rolling and size animations, but it also allows you to create your own switches with `CustomAnimatedToggleSwitch`.  
+Fully customizable, draggable and animated switch with multiple choices and [smooth loading animation](#loading-animation). It has prebuilt constructors for rolling and size animations, but it also allows you to create your own switches with `CustomAnimatedToggleSwitch`.  
 `LTR` and `RTL` are both supported.  
-[Switches without an (initial) selection](#simple-rolling-animation-with-nullable-selection) are also possible.  
+[Switches without an (initial) selection](#nullable-selection) are also possible.  
 Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom version. This ensures that you can get started easily and still customize a lot if necessary.
 
 For a slider with a similar look you can check out [action_slider](https://pub.dev/packages/action_slider).
@@ -91,7 +91,7 @@ AnimatedToggleSwitch<int>.rolling(
 )
 ```
 
-### Simple rolling animation with loading
+### Loading animation
 ![animated_toggle_switch_example_rolling_loading](https://user-images.githubusercontent.com/43761463/209121057-2ff2bfc3-063e-4704-a981-f5cc5f54720a.gif)  
 To use the loading animation, you simply have to return a `Future` in `onChanged` or `onTap`.
 You can alternatively control the loading manually with the `loading` parameter.  
@@ -111,7 +111,7 @@ AnimatedToggleSwitch<int>.rolling(
 )
 ```
 
-### Simple rolling animation with nullable selection
+### Nullable selection
 ![animated_toggle_switch_example_unlisted_value](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/570f39e8-bc5c-4a19-a91a-d186d4bbd8fe)  
 To use this feature, you simply have to set `allowUnlistedValues` to `true`.
 

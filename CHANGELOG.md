@@ -1,9 +1,15 @@
+## 0.8.0-beta.4 (2023-08-18)
+
+- BREAKING: removes `IconTheme` for controlling default size of `Icon`s
+- BREAKING: changes default background color from `ThemeData.scaffoldBackgroundColor` to `ThemeData.colorScheme.surface`
+- BREAKING: renames `dif` to `spacing` in all constructors
+
 ## 0.8.0-beta.3 (2023-08-11)
 
 - BREAKING: replaces `transitionType` with `indicatorTransition` in `AnimatedToggleSwitch.rolling()`,
   `AnimatedToggleSwitch.rollingByHeight()` and `AnimatedToggleSwitch.dual()`
-- BREAKING: replaces `iconSize` and `selectedIconSize`
-  - `rolling()`, `rollingByHeight()` and `dual()`: now uses IconTheme for controlling default size of Icons
+- BREAKING: replaces `iconSize` and `selectedIconSize` in `AnimatedToggleSwitch` constructors
+  - `rolling()`, `rollingByHeight()`, `dual()`: now uses IconTheme for controlling default size of `Icon`s
   - `size()`, `sizeByHeight()`: new parameter `selectedIconScale` controls scaling
 
 ## 0.8.0-beta.2 (2023-08-01)
@@ -22,11 +28,10 @@
 ## 0.8.0-beta.0 (2023-07-29)
 
 - adds tests for all `AnimatedToggleSwitch` constructors
-- adds `separatorBuilder`, `customSeparatorBuilder`, `style` and `styleAnimationType`
-  to `AnimatedToggleSwitch`
+- adds `separatorBuilder`, `customSeparatorBuilder`, `style` and `styleAnimationType` to `AnimatedToggleSwitch`
 - adds `separatorBuilder` to `CustomAnimatedToggleSwitch`
 - fixes initial loading
-- BREAKING: moves many parameters to `style`:
+- BREAKING: moves many parameters in `AnimatedToggleSwitch` to `style`:
     - `innerColor` (renamed to `backgroundColor`)
     - `innerGradient` (renamed to `backgroundGradient`)
     - `borderColor`
@@ -38,15 +43,12 @@
     - `foregroundBoxShadow` (renamed to `indicatorBoxShadow`)
     - `boxShadow`
 - BREAKING: merges `borderColorBuilder` with `styleBuilder`
-- BREAKING: `indicatorAnimationType`
-  handles `ToggleStyle.indicatorColor`, `ToggleStyle.indicatorBorderRadius`, `ToggleStyle.indicatorBorder`
-  and `ToggleStyle.indicatorBoxShadow` now
+- BREAKING: `indicatorAnimationType` handles `ToggleStyle.indicatorColor`, `ToggleStyle.indicatorBorderRadius`, `ToggleStyle.indicatorBorder` and `ToggleStyle.indicatorBoxShadow` now
 
 ## 0.7.0 (2023-06-19)
 
 - adds possibility that no valid value is selected (by setting `allowUnlistedValues` to `true`)
-- adds new parameters to almost all
-  constructors: `allowUnlistedValues`, `indicatorAppearingBuilder`, `indicatorAppearingDuration`, `indicatorAppearingCurve`
+- adds new parameters to almost all constructors: `allowUnlistedValues`, `indicatorAppearingBuilder`, `indicatorAppearingDuration`, `indicatorAppearingCurve`
 
 ## 0.6.2 (2023-03-09)
 
@@ -61,13 +63,10 @@
 - fixes README
 - fixes #28
 - BREAKING: Increases minimum SDK to 2.17
-- BREAKING: Renames `value` to `current` and `previousValue` to `previous`
-  in `DetailedGlobalToggleProperties`
-- BREAKING Feature: Adds loading animation to all switches. You can disable it by setting `loading`
-  to false.
+- BREAKING: Renames `value` to `current` and `previousValue` to `previous` in `DetailedGlobalToggleProperties`
+- BREAKING Feature: Adds loading animation to all switches. You can disable it by setting `loading` to false.
 - Adds `innerGradient` to `AnimatedToggleSwitch`
-- Adds `transitionType` to `AnimatedToggleSwitch.rolling`, `AnimatedToggleSwitch.rollingByHeight`
-  and `AnimatedToggleSwitch.dual`
+- Adds `transitionType` to `AnimatedToggleSwitch.rolling`, `AnimatedToggleSwitch.rollingByHeight` and `AnimatedToggleSwitch.dual`
 
 ## 0.5.2 (2022-04-22)
 
@@ -85,16 +84,14 @@
 
 - Minor performance improvement
 - Fixes problems with tight constraints
-- BREAKING: Changes default values of `animationOffset` and `clipAnimation`
-  in `AnimatedToggleSwitch.dual`
+- BREAKING: Changes default values of `animationOffset` and `clipAnimation` in `AnimatedToggleSwitch.dual`
 
 ## 0.4.0 (2022-04-03)
 
 - Minor fixes and performance improvements
 - Adds `indicatorBorderRadius` to `AnimatedToggleSwitch`
 - Adds `animationOffset`, `clipAnimation` and `opacityAnimation` to `AnimatedToggleSwitch.dual`
-- BREAKING: Sets default values of `animationOffset`, `clipAnimation` and `opacityAnimation`
-  in `AnimatedToggleSwitch.dual`
+- BREAKING: Sets default values of `animationOffset`, `clipAnimation` and `opacityAnimation` in `AnimatedToggleSwitch.dual`
 - BREAKING: Renames `foregroundBorder` to `indicatorBorder`
 
 ## 0.3.1 (2022-03-23)
@@ -104,12 +101,10 @@
 ## 0.3.0 (2022-03-21)
 
 - Introduces `CustomAnimatedToggleSwitch` for maximum customizability
-- Most constructors of `AnimatedToggleSwitch` have a standard and a more customizable parameter for
-  their builders now
+- Most constructors of `AnimatedToggleSwitch` have a standard and a more customizable parameter for their builders now
 - Full support of `TextDirection.rtl`
 - Adds animation when dragging the switch
-- Adds `minTouchTargetSize`, `dragStartDuration`, `dragStartCurve` and `textDirection`
-  to `AnimatedToggleSwitch`
+- Adds `minTouchTargetSize`, `dragStartDuration`, `dragStartCurve` and `textDirection` to `AnimatedToggleSwitch`
 - BREAKING: `TextDirection` is taken from `BuildContext` by default now!!!
 - BREAKING: Changes parameters and names of some builders
 - BREAKING: Renames `AnimatedToggleSwitch.byHeight` to `AnimatedToggleSwitch.customByHeight`

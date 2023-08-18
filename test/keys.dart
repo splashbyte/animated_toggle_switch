@@ -15,6 +15,11 @@ class IconKey<T> extends LocalKey {
 
   @override
   int get hashCode => foreground.hashCode ^ value.hashCode;
+
+  @override
+  String toString() {
+    return 'IconKey{foreground: $foreground, value: $value}';
+  }
 }
 
 class SeparatorKey extends LocalKey {
@@ -28,4 +33,9 @@ class SeparatorKey extends LocalKey {
 
   @override
   int get hashCode => index.hashCode;
+
+  @override
+  String toString() {
+    return 'SeparatorKey{index: $index}';
+  }
 }

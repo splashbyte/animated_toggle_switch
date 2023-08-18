@@ -8,3 +8,4 @@ analyzer:
 linter:
   rules:
     prefer_single_quotes: true
+    parameter_assignments: true

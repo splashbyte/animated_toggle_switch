@@ -12,6 +12,8 @@ class GlobalToggleProperties<T> {
   final T current;
 
   /// The index of [current] in [values].
+  ///
+  /// If [values] does not contain [current], this value is set to [-1].
   final int currentIndex;
 
   /// The previous value of the switch.
@@ -57,7 +59,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
   /// The final width of the space between the icons.
   ///
   /// May differ from the value passed to the switch.
-  final double dif;
+  final double spacing;
 
   /// The final size of the indicator.
   ///
@@ -67,10 +69,10 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
   /// The size of the switch exclusive the outer wrapper
   final Size switchSize;
 
-  Size get difSize => Size(dif, switchSize.height);
+  Size get spacingSize => Size(spacing, switchSize.height);
 
   const DetailedGlobalToggleProperties({
-    required this.dif,
+    required this.spacing,
     required this.indicatorSize,
     required this.switchSize,
     required super.position,
@@ -91,6 +93,8 @@ class LocalToggleProperties<T> {
   final T value;
 
   /// The index of [value].
+  ///
+  /// This value is [-1] if [values] does not contain [value].
   final int index;
 
   const LocalToggleProperties({

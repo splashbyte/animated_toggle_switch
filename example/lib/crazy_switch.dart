@@ -23,7 +23,7 @@ class _CrazySwitchState extends State<CrazySwitch> {
 
     return CustomAnimatedToggleSwitch(
       current: current,
-      dif: 36.0,
+      spacing: 36.0,
       values: [false, true],
       animationDuration: const Duration(milliseconds: 350),
       animationCurve: Curves.bounceOut,

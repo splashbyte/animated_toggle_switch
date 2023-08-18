@@ -1,3 +1,6 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'helper.dart';
@@ -5,7 +8,7 @@ import 'helper.dart';
 void main() {
   defaultTestAllSwitches(
       'Switch starts loading by returning Future in onTap or onChanged',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     const loadingDuration = Duration(seconds: 3);
@@ -42,7 +45,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch starts loading by setting loading parameter',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
 
     await tester.pumpWidget(TestWrapper(
@@ -77,7 +80,7 @@ void main() {
   }, testDual: false);
 
   defaultTestAllSwitches('Switch supports initial loading',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
 
     await tester.pumpWidget(TestWrapper(
@@ -95,7 +98,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch disables loading by setting loading to false',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     const loadingDuration = Duration(seconds: 3);
@@ -122,4 +125,39 @@ void main() {
 
     await tester.pump(loadingDuration);
   });
+
+  testWidgets(
+    'Default loading animation switches between TargetPlatform',
+    (tester) async {
+      const values = defaultValues;
+      final current = values.first;
+
+      final circularProgressIndicatorFinder =
+          find.byType(CircularProgressIndicator);
+      final cupertinoActivityIndicatorFinder =
+          find.byType(CupertinoActivityIndicator);
+
+      await tester.pumpWidget(TestWrapper(
+        platform: TargetPlatform.android,
+        child: AnimatedToggleSwitch.rolling(
+          current: current,
+          values: values,
+          loading: true,
+        ),
+      ));
+      expect(circularProgressIndicatorFinder, findsOneWidget);
+      expect(cupertinoActivityIndicatorFinder, findsNothing);
+
+      await tester.pumpWidget(TestWrapper(
+        platform: TargetPlatform.iOS,
+        child: AnimatedToggleSwitch.rolling(
+          current: current,
+          values: values,
+          loading: true,
+        ),
+      ));
+      expect(circularProgressIndicatorFinder, findsNothing);
+      expect(cupertinoActivityIndicatorFinder, findsOneWidget);
+    },
+  );
 }

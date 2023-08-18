@@ -25,7 +25,7 @@ class _RollingForegroundIndicatorTransition
     extends ForegroundIndicatorTransition {
   /// The radius which will be used for calculating the rotation.
   ///
-  /// If set to [null], a reasonable value is calculated from [indicatorSize] and [height].
+  /// If set to [null], a reasonable value is calculated from [indicatorSize], [borderWidth] and [height].
   final double? rollingRadius;
 
   const _RollingForegroundIndicatorTransition({this.rollingRadius}) : super._();

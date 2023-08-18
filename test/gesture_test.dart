@@ -7,7 +7,7 @@ import 'mocks.dart';
 
 void main() {
   defaultTestAllSwitches('Switch handles taps correctly',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();
@@ -61,7 +61,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch handles drags correctly',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();
@@ -74,7 +74,7 @@ void main() {
         onTap: tapFunction,
         onChanged: changedFunction,
         // Necessary for AnimatedToggleSwitch.dual
-        dif: 5.0,
+        spacing: 5.0,
       ),
     ));
     final currentFinder = find.byKey(iconKey(current));
@@ -94,7 +94,7 @@ void main() {
   });
 
   defaultTestAllSwitches('Switch respects iconsTappable parameter',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     final current = values.first;
     final next = values.last;
     final tapFunction = MockFunction();

@@ -11,31 +11,41 @@ const defaultValues = [0, 1, 2, 3];
 class TestWrapper extends StatelessWidget {
   final Widget child;
   final TextDirection textDirection;
+  final TargetPlatform platform;
 
   const TestWrapper({
     Key? key,
     required this.child,
     this.textDirection = TextDirection.ltr,
+    this.platform = TargetPlatform.android,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: textDirection,
-      child: Center(child: child),
+    final theme = Theme.of(context);
+    return Theme(
+      data: theme.copyWith(platform: platform),
+      child: Directionality(
+        textDirection: textDirection,
+        child: Center(child: child),
+      ),
     );
   }
 }
 
-void checkValidSwitchIconBuilderState<T>(T current, List<T> values) {
+void checkValidSwitchIconBuilderState<T>(
+    T current, ConstructorType type, List<T> values) {
   for (var value in values) {
     final iconFinder = find.byKey(iconKey(value));
     final iconForegroundFinder = find.byKey(iconKey(value, foreground: true));
     expect(iconFinder, findsOneWidget);
     expect(iconForegroundFinder,
-        current == value ? anyOf(findsNothing, findsOneWidget) : findsNothing);
+        current == value && type.isRolling ? findsOneWidget : findsNothing);
   }
 }
+
+List<Widget> iconList<T>(List<T> values) =>
+    values.map((value) => iconBuilder(value, false)).toList();
 
 Widget iconBuilder<T>(T value, bool foreground) => SizedBox.expand(
       key: iconKey(value, foreground: foreground),
@@ -62,6 +72,7 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   required T current,
   required List<T> values,
   TestIconBuilder<T>? iconBuilder,
+  List<Widget>? iconList,
   TextDirection? textDirection,
   ChangeCallback<T>? onChanged,
   TapCallback? onTap,
@@ -70,14 +81,18 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   ToggleStyle? style,
   StyleBuilder<T>? styleBuilder,
   CustomStyleBuilder<T>? customStyleBuilder,
+  List<ToggleStyle>? styleList,
   bool? iconsTappable,
-  double? dif,
+  double? spacing,
   SeparatorBuilder? separatorBuilder,
+  FittingMode? fittingMode,
+  Size? indicatorSize,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   required T current,
   TestIconBuilder<T>? iconBuilder,
+  List<Widget>? iconList,
   TextDirection? textDirection,
   ChangeCallback<T>? onChanged,
   TapCallback? onTap,
@@ -86,55 +101,76 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   ToggleStyle? style,
   StyleBuilder<T>? styleBuilder,
   CustomStyleBuilder<T>? customStyleBuilder,
+  List<ToggleStyle>? styleList,
   bool? iconsTappable,
-  double? dif,
+  double? spacing,
   SeparatorBuilder? separatorBuilder,
+  FittingMode? fittingMode,
+  Size? indicatorSize,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
 void defaultTestAllSwitches(
-    String description,
-    FutureOr<void> Function(WidgetTester tester,
-            SimpleSwitchBuilder<int> buildSwitch, List<int> values)
-        test,
-    {bool testDual = true}) {
+  String description,
+  FutureOr<void> Function(
+          WidgetTester tester,
+          SimpleSwitchBuilder<int> buildSwitch,
+          ConstructorType type,
+          List<int> values)
+      test, {
+  bool testDual = true,
+  bool testCustom = true,
+  bool testSize = true,
+}) {
   testAllSwitches<int>(
-      description,
-      (tester, buildSwitch) => test(
-            tester,
-            ({
-              required int current,
-              TestIconBuilder<int>? iconBuilder,
-              TextDirection? textDirection,
-              ChangeCallback<int>? onChanged,
-              TapCallback? onTap,
-              bool? loading,
-              bool allowUnlistedValues = false,
-              ToggleStyle? style,
-              StyleBuilder<int>? styleBuilder,
-              CustomStyleBuilder<int>? customStyleBuilder,
-              bool? iconsTappable,
-              double? dif,
-              SeparatorBuilder? separatorBuilder,
-            }) =>
-                buildSwitch(
-              current: current,
-              values: defaultValues,
-              iconBuilder: iconBuilder,
-              textDirection: textDirection,
-              onChanged: onChanged,
-              onTap: onTap,
-              loading: loading,
-              allowUnlistedValues: allowUnlistedValues,
-              style: style,
-              styleBuilder: styleBuilder,
-              customStyleBuilder: customStyleBuilder,
-              iconsTappable: iconsTappable,
-              dif: dif,
-              separatorBuilder: separatorBuilder,
-            ),
-            defaultValues,
-          ));
+    description,
+    (tester, buildSwitch, type) => test(
+      tester,
+      ({
+        required int current,
+        TestIconBuilder<int>? iconBuilder,
+        List<Widget>? iconList,
+        TextDirection? textDirection,
+        ChangeCallback<int>? onChanged,
+        TapCallback? onTap,
+        bool? loading,
+        bool allowUnlistedValues = false,
+        ToggleStyle? style,
+        StyleBuilder<int>? styleBuilder,
+        CustomStyleBuilder<int>? customStyleBuilder,
+        List<ToggleStyle>? styleList,
+        bool? iconsTappable,
+        double? spacing,
+        SeparatorBuilder? separatorBuilder,
+        FittingMode? fittingMode,
+        Size? indicatorSize,
+      }) =>
+          buildSwitch(
+        current: current,
+        values: defaultValues,
+        iconBuilder: iconBuilder,
+        iconList: iconList,
+        textDirection: textDirection,
+        onChanged: onChanged,
+        onTap: onTap,
+        loading: loading,
+        allowUnlistedValues: allowUnlistedValues,
+        style: style,
+        styleBuilder: styleBuilder,
+        customStyleBuilder: customStyleBuilder,
+        styleList: styleList,
+        iconsTappable: iconsTappable,
+        spacing: spacing,
+        separatorBuilder: separatorBuilder,
+        fittingMode: fittingMode,
+        indicatorSize: indicatorSize,
+      ),
+      type,
+      defaultValues,
+    ),
+    testCustom: testCustom,
+    testSize: testSize,
+  );
   if (testDual) {
     final values = defaultValues.sublist(0, 2);
     testWidgets(
@@ -144,6 +180,7 @@ void defaultTestAllSwitches(
         ({
           required int current,
           TestIconBuilder<int>? iconBuilder,
+          List<Widget>? iconList,
           TextDirection? textDirection,
           ChangeCallback<int>? onChanged,
           TapCallback? onTap,
@@ -152,9 +189,12 @@ void defaultTestAllSwitches(
           ToggleStyle? style,
           StyleBuilder<int>? styleBuilder,
           CustomStyleBuilder<int>? customStyleBuilder,
+          List<ToggleStyle>? styleList,
           bool? iconsTappable,
-          double? dif,
+          double? spacing,
           SeparatorBuilder? separatorBuilder,
+          FittingMode? fittingMode,
+          Size? indicatorSize,
         }) =>
             AnimatedToggleSwitch<int>.dual(
           current: current,
@@ -173,9 +213,13 @@ void defaultTestAllSwitches(
           loading: loading,
           style: style ?? const ToggleStyle(),
           styleBuilder: styleBuilder,
+          styleList: styleList,
           customStyleBuilder: customStyleBuilder,
-          dif: dif ?? 40,
+          spacing: spacing ?? 40,
+          fittingMode: fittingMode ?? FittingMode.preventHorizontalOverlapping,
+          indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
         ),
+        ConstructorType.dual,
         values,
       ),
     );
@@ -184,151 +228,146 @@ void defaultTestAllSwitches(
 
 /// Tests all AnimatedToggleSwitch constructors except [AnimatedToggleSwitch.dual]
 void testAllSwitches<T>(
-    String description,
-    FutureOr<void> Function(WidgetTester tester, SwitchBuilder<T> buildSwitch)
-        test) {
+  String description,
+  FutureOr<void> Function(WidgetTester tester, SwitchBuilder<T> buildSwitch,
+          ConstructorType type)
+      test, {
+  bool testCustom = true,
+  bool testSize = true,
+}) {
   testWidgets(
       '$description (AnimatedToggleSwitch.rolling)',
       (tester) async => await test(
-          tester,
-          ({
-            required T current,
-            required List<T> values,
-            TestIconBuilder<T>? iconBuilder,
-            TextDirection? textDirection,
-            ChangeCallback<T>? onChanged,
-            TapCallback? onTap,
-            bool? loading,
-            bool allowUnlistedValues = false,
-            ToggleStyle? style,
-            StyleBuilder<T>? styleBuilder,
-            CustomStyleBuilder<T>? customStyleBuilder,
-            bool? iconsTappable,
-            double? dif,
-            SeparatorBuilder? separatorBuilder,
-          }) =>
-              AnimatedToggleSwitch<T>.rolling(
-                current: current,
-                values: values,
-                iconBuilder: iconBuilder == null
-                    ? null
-                    : (value, foreground) => iconBuilder(value, foreground),
-                textDirection: textDirection,
-                onTap: onTap,
-                onChanged: onChanged,
-                loadingIconBuilder: _loadingIconBuilder,
-                loading: loading,
-                allowUnlistedValues: allowUnlistedValues,
-                style: style ?? const ToggleStyle(),
-                styleBuilder: styleBuilder,
-                customStyleBuilder: customStyleBuilder,
-                iconsTappable: iconsTappable ?? true,
-                dif: dif ?? 0.0,
-                separatorBuilder: separatorBuilder,
-              )));
-  testWidgets(
-      '$description (AnimatedToggleSwitch.size)',
-      (tester) async => await test(
-          tester,
-          ({
-            required T current,
-            required List<T> values,
-            TestIconBuilder<T>? iconBuilder,
-            TextDirection? textDirection,
-            ChangeCallback<T>? onChanged,
-            TapCallback? onTap,
-            bool? loading,
-            bool allowUnlistedValues = false,
-            ToggleStyle? style,
-            StyleBuilder<T>? styleBuilder,
-            CustomStyleBuilder<T>? customStyleBuilder,
-            bool? iconsTappable,
-            double? dif,
-            SeparatorBuilder? separatorBuilder,
-          }) =>
-              AnimatedToggleSwitch<T>.size(
-                current: current,
-                values: values,
-                iconBuilder: iconBuilder == null
-                    ? null
-                    : (value) => iconBuilder(value, false),
-                textDirection: textDirection,
-                onChanged: onChanged,
-                onTap: onTap,
-                loadingIconBuilder: _loadingIconBuilder,
-                loading: loading,
-                allowUnlistedValues: allowUnlistedValues,
-                style: style ?? const ToggleStyle(),
-                styleBuilder: styleBuilder,
-                customStyleBuilder: customStyleBuilder,
-                iconsTappable: iconsTappable ?? true,
-                dif: dif ?? 0.0,
-                separatorBuilder: separatorBuilder,
-                selectedIconScale: 1.0,
-              )));
+            tester,
+            ({
+              required T current,
+              required List<T> values,
+              TestIconBuilder<T>? iconBuilder,
+              List<Widget>? iconList,
+              TextDirection? textDirection,
+              ChangeCallback<T>? onChanged,
+              TapCallback? onTap,
+              bool? loading,
+              bool allowUnlistedValues = false,
+              ToggleStyle? style,
+              StyleBuilder<T>? styleBuilder,
+              CustomStyleBuilder<T>? customStyleBuilder,
+              List<ToggleStyle>? styleList,
+              bool? iconsTappable,
+              double? spacing,
+              SeparatorBuilder? separatorBuilder,
+              FittingMode? fittingMode,
+              Size? indicatorSize,
+            }) =>
+                AnimatedToggleSwitch<T>.rolling(
+              current: current,
+              values: values,
+              iconBuilder: iconBuilder,
+              iconList: iconList,
+              textDirection: textDirection,
+              onTap: onTap,
+              onChanged: onChanged,
+              loadingIconBuilder: _loadingIconBuilder,
+              loading: loading,
+              allowUnlistedValues: allowUnlistedValues,
+              style: style ?? const ToggleStyle(),
+              styleBuilder: styleBuilder,
+              customStyleBuilder: customStyleBuilder,
+              styleList: styleList,
+              iconsTappable: iconsTappable ?? true,
+              spacing: spacing ?? 0.0,
+              separatorBuilder: separatorBuilder,
+              fittingMode:
+                  fittingMode ?? FittingMode.preventHorizontalOverlapping,
+              indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
+            ),
+            ConstructorType.rolling,
+          ));
+
   testWidgets(
       '$description (AnimatedToggleSwitch.rollingByHeight)',
       (tester) async => await test(
-          tester,
-          ({
-            required T current,
-            required List<T> values,
-            TestIconBuilder<T>? iconBuilder,
-            TextDirection? textDirection,
-            ChangeCallback<T>? onChanged,
-            TapCallback? onTap,
-            bool? loading,
-            bool allowUnlistedValues = false,
-            ToggleStyle? style,
-            StyleBuilder<T>? styleBuilder,
-            CustomStyleBuilder<T>? customStyleBuilder,
-            bool? iconsTappable,
-            double? dif,
-            SeparatorBuilder? separatorBuilder,
-          }) =>
-              AnimatedToggleSwitch<T>.rollingByHeight(
-                current: current,
-                values: values,
-                iconBuilder: iconBuilder,
-                textDirection: textDirection,
-                onChanged: onChanged,
-                onTap: onTap,
-                loadingIconBuilder: _loadingIconBuilder,
-                loading: loading,
-                allowUnlistedValues: allowUnlistedValues,
-                style: style ?? const ToggleStyle(),
-                styleBuilder: styleBuilder,
-                customStyleBuilder: customStyleBuilder,
-                iconsTappable: iconsTappable ?? true,
-                dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
-                separatorBuilder: separatorBuilder,
-              )));
-  testWidgets(
-      '$description (AnimatedToggleSwitch.sizeByHeight)',
-      (tester) async => await test(
-          tester,
-          ({
-            required T current,
-            required List<T> values,
-            TestIconBuilder<T>? iconBuilder,
-            TextDirection? textDirection,
-            ChangeCallback<T>? onChanged,
-            TapCallback? onTap,
-            bool? loading,
-            bool allowUnlistedValues = false,
-            ToggleStyle? style,
-            StyleBuilder<T>? styleBuilder,
-            CustomStyleBuilder<T>? customStyleBuilder,
-            bool? iconsTappable,
-            double? dif,
-            SeparatorBuilder? separatorBuilder,
-          }) =>
-              AnimatedToggleSwitch<T>.sizeByHeight(
+            tester,
+            ({
+              required T current,
+              required List<T> values,
+              TestIconBuilder<T>? iconBuilder,
+              List<Widget>? iconList,
+              TextDirection? textDirection,
+              ChangeCallback<T>? onChanged,
+              TapCallback? onTap,
+              bool? loading,
+              bool allowUnlistedValues = false,
+              ToggleStyle? style,
+              StyleBuilder<T>? styleBuilder,
+              CustomStyleBuilder<T>? customStyleBuilder,
+              List<ToggleStyle>? styleList,
+              bool? iconsTappable,
+              double? spacing,
+              SeparatorBuilder? separatorBuilder,
+              FittingMode? fittingMode,
+              Size? indicatorSize,
+            }) =>
+                AnimatedToggleSwitch<T>.rollingByHeight(
+              current: current,
+              values: values,
+              iconBuilder: iconBuilder,
+              iconList: iconList,
+              textDirection: textDirection,
+              onChanged: onChanged,
+              onTap: onTap,
+              loadingIconBuilder: _loadingIconBuilder,
+              loading: loading,
+              allowUnlistedValues: allowUnlistedValues,
+              style: style ?? const ToggleStyle(),
+              styleBuilder: styleBuilder,
+              customStyleBuilder: customStyleBuilder,
+              styleList: styleList,
+              iconsTappable: iconsTappable ?? true,
+              spacing: _convertToByHeightValue(spacing ?? 0.0, 50.0, 2.0),
+              separatorBuilder: separatorBuilder,
+              fittingMode:
+                  fittingMode ?? FittingMode.preventHorizontalOverlapping,
+              indicatorSize: indicatorSize == null
+                  ? const Size.square(1.0)
+                  : Size(
+                      _convertToByHeightValue(indicatorSize.width, 50.0, 2.0),
+                      _convertToByHeightValue(indicatorSize.height, 50.0, 2.0)),
+            ),
+            ConstructorType.rolling,
+          ));
+  if (testSize) {
+    testWidgets(
+        '$description (AnimatedToggleSwitch.size)',
+        (tester) async => await test(
+              tester,
+              ({
+                required T current,
+                required List<T> values,
+                TestIconBuilder<T>? iconBuilder,
+                List<Widget>? iconList,
+                TextDirection? textDirection,
+                ChangeCallback<T>? onChanged,
+                TapCallback? onTap,
+                bool? loading,
+                bool allowUnlistedValues = false,
+                ToggleStyle? style,
+                StyleBuilder<T>? styleBuilder,
+                CustomStyleBuilder<T>? customStyleBuilder,
+                List<ToggleStyle>? styleList,
+                bool? iconsTappable,
+                double? spacing,
+                SeparatorBuilder? separatorBuilder,
+                FittingMode? fittingMode,
+                Size? indicatorSize,
+              }) =>
+                  AnimatedToggleSwitch<T>.size(
                 current: current,
                 values: values,
                 iconBuilder: iconBuilder == null
                     ? null
                     : (value) => iconBuilder(value, false),
+                iconList: iconList,
                 textDirection: textDirection,
                 onChanged: onChanged,
                 onTap: onTap,
@@ -338,32 +377,100 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                styleList: styleList,
                 iconsTappable: iconsTappable ?? true,
-                dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
+                spacing: spacing ?? 0.0,
                 separatorBuilder: separatorBuilder,
                 selectedIconScale: 1.0,
-              )));
-  testWidgets(
-      '$description (AnimatedToggleSwitch.custom)',
-      (tester) async => await test(
-          tester,
-          ({
-            required T current,
-            required List<T> values,
-            TestIconBuilder<T>? iconBuilder,
-            TextDirection? textDirection,
-            ChangeCallback<T>? onChanged,
-            TapCallback? onTap,
-            bool? loading,
-            bool allowUnlistedValues = false,
-            ToggleStyle? style,
-            StyleBuilder<T>? styleBuilder,
-            CustomStyleBuilder<T>? customStyleBuilder,
-            bool? iconsTappable,
-            double? dif,
-            SeparatorBuilder? separatorBuilder,
-          }) =>
-              AnimatedToggleSwitch<T>.custom(
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
+              ),
+              ConstructorType.size,
+            ));
+    testWidgets(
+        '$description (AnimatedToggleSwitch.sizeByHeight)',
+        (tester) async => await test(
+              tester,
+              ({
+                required T current,
+                required List<T> values,
+                TestIconBuilder<T>? iconBuilder,
+                List<Widget>? iconList,
+                TextDirection? textDirection,
+                ChangeCallback<T>? onChanged,
+                TapCallback? onTap,
+                bool? loading,
+                bool allowUnlistedValues = false,
+                ToggleStyle? style,
+                StyleBuilder<T>? styleBuilder,
+                CustomStyleBuilder<T>? customStyleBuilder,
+                List<ToggleStyle>? styleList,
+                bool? iconsTappable,
+                double? spacing,
+                SeparatorBuilder? separatorBuilder,
+                FittingMode? fittingMode,
+                Size? indicatorSize,
+              }) =>
+                  AnimatedToggleSwitch<T>.sizeByHeight(
+                current: current,
+                values: values,
+                iconBuilder: iconBuilder == null
+                    ? null
+                    : (value) => iconBuilder(value, false),
+                iconList: iconList,
+                textDirection: textDirection,
+                onChanged: onChanged,
+                onTap: onTap,
+                loadingIconBuilder: _loadingIconBuilder,
+                loading: loading,
+                allowUnlistedValues: allowUnlistedValues,
+                style: style ?? const ToggleStyle(),
+                styleBuilder: styleBuilder,
+                customStyleBuilder: customStyleBuilder,
+                styleList: styleList,
+                iconsTappable: iconsTappable ?? true,
+                spacing: _convertToByHeightValue(spacing ?? 0.0, 50.0, 2.0),
+                separatorBuilder: separatorBuilder,
+                selectedIconScale: 1.0,
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize == null
+                    ? const Size.square(1.0)
+                    : Size(
+                        _convertToByHeightValue(indicatorSize.width, 50.0, 2.0),
+                        _convertToByHeightValue(
+                            indicatorSize.height, 50.0, 2.0)),
+              ),
+              ConstructorType.size,
+            ));
+  }
+  if (testCustom) {
+    testWidgets(
+        '$description (AnimatedToggleSwitch.custom)',
+        (tester) async => await test(
+              tester,
+              ({
+                required T current,
+                required List<T> values,
+                TestIconBuilder<T>? iconBuilder,
+                List<Widget>? iconList,
+                TextDirection? textDirection,
+                ChangeCallback<T>? onChanged,
+                TapCallback? onTap,
+                bool? loading,
+                bool allowUnlistedValues = false,
+                ToggleStyle? style,
+                StyleBuilder<T>? styleBuilder,
+                CustomStyleBuilder<T>? customStyleBuilder,
+                List<ToggleStyle>? styleList,
+                bool? iconsTappable,
+                double? spacing,
+                SeparatorBuilder? separatorBuilder,
+                FittingMode? fittingMode,
+                Size? indicatorSize,
+              }) =>
+                  AnimatedToggleSwitch<T>.custom(
                 current: current,
                 values: values,
                 animatedIconBuilder: iconBuilder == null
@@ -379,31 +486,41 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                styleList: styleList,
                 iconsTappable: iconsTappable ?? true,
-                dif: dif ?? 0.0,
+                spacing: spacing ?? 0.0,
                 separatorBuilder: separatorBuilder,
-              )));
-  testWidgets(
-      '$description (AnimatedToggleSwitch.customByHeight)',
-      (tester) async => await test(
-          tester,
-          ({
-            required T current,
-            required List<T> values,
-            TestIconBuilder<T>? iconBuilder,
-            TextDirection? textDirection,
-            ChangeCallback<T>? onChanged,
-            TapCallback? onTap,
-            bool? loading,
-            bool allowUnlistedValues = false,
-            ToggleStyle? style,
-            StyleBuilder<T>? styleBuilder,
-            CustomStyleBuilder<T>? customStyleBuilder,
-            bool? iconsTappable,
-            double? dif,
-            SeparatorBuilder? separatorBuilder,
-          }) =>
-              AnimatedToggleSwitch<T>.customByHeight(
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
+              ),
+              ConstructorType.custom,
+            ));
+    testWidgets(
+        '$description (AnimatedToggleSwitch.customByHeight)',
+        (tester) async => await test(
+              tester,
+              ({
+                required T current,
+                required List<T> values,
+                TestIconBuilder<T>? iconBuilder,
+                List<Widget>? iconList,
+                TextDirection? textDirection,
+                ChangeCallback<T>? onChanged,
+                TapCallback? onTap,
+                bool? loading,
+                bool allowUnlistedValues = false,
+                ToggleStyle? style,
+                StyleBuilder<T>? styleBuilder,
+                CustomStyleBuilder<T>? customStyleBuilder,
+                List<ToggleStyle>? styleList,
+                bool? iconsTappable,
+                double? spacing,
+                SeparatorBuilder? separatorBuilder,
+                FittingMode? fittingMode,
+                Size? indicatorSize,
+              }) =>
+                  AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
                 values: values,
                 animatedIconBuilder: iconBuilder == null
@@ -419,12 +536,35 @@ void testAllSwitches<T>(
                 style: style ?? const ToggleStyle(),
                 styleBuilder: styleBuilder,
                 customStyleBuilder: customStyleBuilder,
+                styleList: styleList,
                 iconsTappable: iconsTappable ?? true,
-                dif: _convertToByHeightValue(dif ?? 0.0, 50.0, 2.0),
+                spacing: _convertToByHeightValue(spacing ?? 0.0, 50.0, 2.0),
                 separatorBuilder: separatorBuilder,
-              )));
+                fittingMode:
+                    fittingMode ?? FittingMode.preventHorizontalOverlapping,
+                indicatorSize: indicatorSize == null
+                    ? const Size.square(1.0)
+                    : Size(
+                        _convertToByHeightValue(indicatorSize.width, 50.0, 2.0),
+                        _convertToByHeightValue(
+                            indicatorSize.height, 50.0, 2.0)),
+              ),
+              ConstructorType.custom,
+            ));
+  }
 }
 
 double _convertToByHeightValue(
         double value, double height, double borderWidth) =>
     value / (height - 2 * borderWidth);
+
+enum ConstructorType {
+  custom,
+  size,
+  rolling(isRolling: true),
+  dual(isRolling: true);
+
+  final bool isRolling;
+
+  const ConstructorType({this.isRolling = false});
+}

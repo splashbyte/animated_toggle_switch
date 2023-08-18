@@ -4,7 +4,7 @@ import 'helper.dart';
 
 void main() {
   defaultTestAllSwitches('Switch does not allow unlisted values',
-      (tester, buildSwitch, values) async {
+      (tester, buildSwitch, type, values) async {
     await tester.pumpWidget(TestWrapper(
       child: buildSwitch(
         current: 100,
@@ -17,7 +17,7 @@ void main() {
 
   defaultTestAllSwitches(
     'Switch respects allowUnlistedValues',
-    (tester, buildSwitch, values) async {
+    (tester, buildSwitch, type, values) async {
       await tester.pumpWidget(TestWrapper(
         child: buildSwitch(
           current: 100,
