@@ -1,7 +1,8 @@
 ## 0.8.0-beta.4
 
 - BREAKING: removes `IconTheme` for controlling default size of `Icon`s
-- BREAKING: changes default background color from `ThemeData.scaffoldBackgroundColor` to `ThemeData.colorScheme.background`
+- BREAKING: changes default background color from `ThemeData.scaffoldBackgroundColor` to `ThemeData.colorScheme.surface`
+- BREAKING: renames `dif` to `spacing` in all constructors
 
 ## 0.8.0-beta.3 (2023-08-11)
 

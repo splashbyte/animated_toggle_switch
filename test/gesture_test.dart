@@ -74,7 +74,7 @@ void main() {
         onTap: tapFunction,
         onChanged: changedFunction,
         // Necessary for AnimatedToggleSwitch.dual
-        dif: 5.0,
+        spacing: 5.0,
       ),
     ));
     final currentFinder = find.byKey(iconKey(current));

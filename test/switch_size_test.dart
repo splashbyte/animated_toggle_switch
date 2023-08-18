@@ -44,7 +44,7 @@ void main() {
   );
 
   defaultTestAllSwitches(
-    'Switch expands its size when dif is set to infinite',
+    'Switch expands its size when spacing is set to infinite',
     (tester, buildSwitch, type, values) async {
       final current = values.first;
       final switchFinder = find.byType(AnimatedToggleSwitch<int>);
@@ -56,7 +56,7 @@ void main() {
             child: TestWrapper(
               child: buildSwitch(
                 current: current,
-                dif: double.infinity,
+                spacing: double.infinity,
               ),
             )),
       ));
@@ -86,7 +86,7 @@ void main() {
   );
 
   defaultTestAllSwitches(
-    'Switch throws error when two of dif, indicatorSize.width and constraints are infinite',
+    'Switch throws error when two of spacing, indicatorSize.width and constraints are infinite',
     (tester, buildSwitch, type, values) async {
       final current = values.first;
       const width = 500.0;
@@ -98,7 +98,7 @@ void main() {
               child: buildSwitch(
                 current: current,
                 indicatorSize: Size.infinite,
-                dif: double.infinity,
+                spacing: double.infinity,
               ),
             )),
       ));
@@ -110,7 +110,7 @@ void main() {
           children: [
             buildSwitch(
               current: current,
-              dif: double.infinity,
+              spacing: double.infinity,
             ),
           ],
         ),

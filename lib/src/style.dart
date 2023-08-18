@@ -2,15 +2,21 @@ part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class ToggleStyle {
   /// Background color of the indicator.
+  ///
+  /// Defaults to [ThemeData.colorScheme.secondary].
   final Color? indicatorColor;
 
   /// Background color of the switch.
+  ///
+  /// Defaults to [ThemeData.colorScheme.surface].
   final Color? backgroundColor;
 
-  /// Gradient of the background. Overwrites [innerColor] if not [null].
+  /// Gradient of the background. Overwrites [backgroundColor] if not [null].
   final Gradient? backgroundGradient;
 
   /// Border color of the switch.
+  ///
+  /// Defaults to [ThemeData.colorScheme.secondary].
   ///
   /// For deactivating please set this to [Colors.transparent].
   final Color? borderColor;

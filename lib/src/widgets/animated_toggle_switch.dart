@@ -65,7 +65,7 @@ abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
             'iconList must be null or have the same length as values');
 }
 
-/// A class with different constructors of different switches.
+/// A class with constructors for different switches.
 /// The constructors have sensible default values for their parameters,
 /// but can also be customized.
 ///
@@ -143,8 +143,8 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
   /// Please set [iconOpacity] and [selectedIconOpacity] to [1.0] for deactivating the AnimatedOpacity.
   final double selectedIconOpacity;
 
-  /// Space between the "indicator spaces" of the adjacent icons.
-  final double dif;
+  /// Space between adjacent icons.
+  final double spacing;
 
   /// Total height of the widget.
   final double height;
@@ -234,14 +234,14 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
 
   /// Builder for divider or other separators between the icons. Consider using [customSeparatorBuilder] for maximum customizability.
   ///
-  /// The available width is specified by [dif].
+  /// The available width is specified by [spacing].
   ///
   /// This builder is supported by [IconArrangement.row] only.
   final SeparatorBuilder? separatorBuilder;
 
   /// Builder for divider or other separators between the icons. Consider using [separatorBuilder] for a simpler builder function.
   ///
-  /// The available width is specified by [dif].
+  /// The available width is specified by [spacing].
   ///
   /// This builder is supported by [IconArrangement.row] only.
   final CustomSeparatorBuilder<T>? customSeparatorBuilder;
@@ -290,7 +290,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    this.dif = 0.0,
+    this.spacing = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
     this.height = 50.0,
@@ -329,7 +329,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
 
   /// Special version of [AnimatedToggleSwitch.custom].
   ///
-  /// All size values ([indicatorSize]) are relative to the specified height.
+  /// All size values ([indicatorSize], [spacing]) are relative to the specified height.
   /// (So an [indicatorSize.width] of [1.0] means equality of [height] - 2*[borderWidth] and the width of the indicator)
   ///
   /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
@@ -353,7 +353,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    double dif = 0.0,
+    double spacing = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
     this.iconAnimationType = AnimationType.onSelected,
@@ -380,7 +380,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-  })  : dif = dif * (height - 2 * borderWidth),
+  })  : spacing = spacing * (height - 2 * borderWidth),
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
         super(
@@ -417,7 +417,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
     this.selectedIconOpacity = 1.0,
-    this.dif = 0.0,
+    this.spacing = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.height = 50.0,
     this.iconAnimationType = AnimationType.onSelected,
@@ -484,7 +484,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.iconAnimationCurve = Curves.easeOutBack,
     this.iconAnimationDuration,
     this.iconOpacity = 0.5,
-    double dif = 0.0,
+    double spacing = 0.0,
     this.foregroundIndicatorIconBuilder,
     this.selectedIconOpacity = 1.0,
     this.iconAnimationType = AnimationType.onSelected,
@@ -512,7 +512,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
   })  : indicatorSize = indicatorSize * (height - 2 * borderWidth),
-        dif = dif * (height - 2 * borderWidth),
+        spacing = spacing * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
@@ -578,7 +578,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.customStyleBuilder,
     this.styleList,
     this.iconOpacity = 0.5,
-    this.dif = 0.0,
+    this.spacing = 0.0,
     this.height = 50.0,
     this.styleAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onHover,
@@ -633,7 +633,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
 
   /// Special version of [AnimatedToggleSwitch.rolling].
   ///
-  /// All size values ([indicatorSize], [indicatorSize], [selectedIconSize]) are relative to the specified height.
+  /// All size values ([spacing], [indicatorSize], [selectedIconSize]) are relative to the specified height.
   /// (So an [indicatorSize.width] of [1.0] means equality of [height] - 2*[borderWidth] and the width of the indicator)
   ///
   /// [indicatorIconScale] defines the scale of the indicator icon.
@@ -660,7 +660,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.customStyleBuilder,
     this.styleList,
     this.iconOpacity = 0.5,
-    double dif = 0.0,
+    double spacing = 0.0,
     this.styleAnimationType = AnimationType.onSelected,
     this.indicatorAnimationType = AnimationType.onHover,
     this.onTap,
@@ -688,7 +688,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     double indicatorIconScale = 1.0,
   })  : iconAnimationCurve = Curves.linear,
-        dif = dif * (height - 2 * borderWidth),
+        spacing = spacing * (height - 2 * borderWidth),
         iconAnimationDuration = Duration.zero,
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         selectedIconOpacity = iconOpacity,
@@ -743,7 +743,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     final iconSize = (height - 2 * borderWidth) * sqrt2 * 0.5;
     if (finalIconBuilder == null) return (context, global) => const SizedBox();
     return (context, global) {
-      double distance = global.dif + global.indicatorSize.width;
+      double distance = global.spacing + global.indicatorSize.width;
       double angleDistance = 0.0;
       //TODO: Replace with pattern matching after upgrade to Dart 3
       if (transition is _RollingForegroundIndicatorTransition) {
@@ -857,7 +857,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.styleBuilder,
     this.customStyleBuilder,
     this.styleList,
-    this.dif = 40.0,
+    this.spacing = 40.0,
     this.height = 50.0,
     this.iconAnimationDuration = const Duration(milliseconds: 500),
     this.iconAnimationCurve = Curves.easeInOut,
@@ -959,7 +959,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
                 1 -
                     local.animationValue +
                     global.indicatorSize.width /
-                        (2 * (global.indicatorSize.width + global.dif))),
+                        (2 * (global.indicatorSize.width + global.spacing))),
             child: Padding(
               padding: textMargin,
               child: Transform.translate(
@@ -1014,7 +1014,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
         BorderRadius.circular(height / 2);
     final style = ToggleStyle._(
       indicatorColor: theme.colorScheme.secondary,
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       backgroundGradient: null,
       borderColor: theme.colorScheme.secondary,
       borderRadius: defaultBorderRadius,
@@ -1028,7 +1028,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
         animationCurve: animationCurve,
         animationDuration: animationDuration,
         fittingMode: fittingMode,
-        dif: dif,
+        spacing: spacing,
         height: height,
         onTap: onTap,
         current: current,

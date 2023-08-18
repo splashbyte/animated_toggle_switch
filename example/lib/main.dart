@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: positive,
                 first: false,
                 second: true,
-                dif: 50.0,
+                spacing: 50.0,
                 style: const ToggleStyle(
                   borderColor: Colors.transparent,
                   boxShadow: const [
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: positive,
                 first: false,
                 second: true,
-                dif: 50.0,
+                spacing: 50.0,
                 style: const ToggleStyle(
                   borderColor: Colors.transparent,
                   boxShadow: const [
@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     current: positive,
                     first: false,
                     second: true,
-                    dif: 45.0,
+                    spacing: 45.0,
                     animationDuration: const Duration(milliseconds: 600),
                     style: ToggleStyle(
                       borderColor: Colors.transparent,
@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     current: positive,
                     first: false,
                     second: true,
-                    dif: 45.0,
+                    spacing: 45.0,
                     style: const ToggleStyle(
                       borderColor: Colors.transparent,
                       backgroundColor: Colors.black,
@@ -232,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: positive,
                 first: false,
                 second: true,
-                dif: 45.0,
+                spacing: 45.0,
                 animationCurve: Curves.easeInOut,
                 animationDuration: const Duration(milliseconds: 600),
                 style: ToggleStyle(
@@ -284,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     current: positive,
                     first: false,
                     second: true,
-                    dif: 45.0,
+                    spacing: 45.0,
                     animationCurve: Curves.easeInOut,
                     animationDuration: const Duration(milliseconds: 600),
                     style: ToggleStyle(
@@ -441,7 +441,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 height: 55,
-                dif: 20.0,
+                spacing: 20.0,
                 loading: loading,
               ),
               SizedBox(height: 16.0),
@@ -460,7 +460,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderColor: Colors.transparent,
                 ),
                 height: 55,
-                dif: 20.0,
+                spacing: 20.0,
                 loading: loading,
               ),
               Padding(
@@ -473,7 +473,7 @@ class _MyHomePageState extends State<MyHomePage> {
               CustomAnimatedToggleSwitch<bool>(
                 current: positive,
                 values: [false, true],
-                dif: 0.0,
+                spacing: 0.0,
                 indicatorSize: Size.square(30.0),
                 animationDuration: const Duration(milliseconds: 200),
                 animationCurve: Curves.linear,
@@ -635,7 +635,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
                 styleAnimationType: AnimationType.onHover,
-                dif: 2.0,
+                spacing: 2.0,
                 customSeparatorBuilder: (context, local, global) {
                   final opacity =
                       ((global.position - local.position).abs() - 0.5)
