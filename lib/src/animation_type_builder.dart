@@ -32,6 +32,14 @@ class _AnimationTypeHoverBuilderState<T, V>
   T? _lastUnlistedValue;
 
   @override
+  void initState() {
+    super.initState();
+    if (!widget.properties.isCurrentListed) {
+      _lastUnlistedValue = widget.properties.current;
+    }
+  }
+
+  @override
   void didUpdateWidget(covariant _AnimationTypeHoverBuilder<T, V> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!widget.properties.isCurrentListed) {

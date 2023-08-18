@@ -1,5 +1,7 @@
+// not covered because this widget is not used currently
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
+// coverage:ignore-start
 class _ConditionalWrapper extends StatefulWidget {
   final Widget Function(BuildContext context, Widget child) wrapper;
   final bool condition;
@@ -25,6 +27,7 @@ class _ConditionalWrapperState extends State<_ConditionalWrapper> {
     return child;
   }
 }
+// coverage:ignore-end
 
 class _EmptyWidget extends StatelessWidget {
   final Widget child;
