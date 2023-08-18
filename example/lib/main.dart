@@ -154,9 +154,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         colors: [green, Colors.red[800]!],
                         stops: [
                           global.position -
-                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
+                              (1 - 2 * max(0, global.position - 0.5)) * 0.7,
                           global.position +
-                              max(0, 2 * (global.position - 0.5)) * 0.2,
+                              max(0, 2 * (global.position - 0.5)) * 0.7,
                         ],
                       ));
                     },
@@ -269,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Switch inspired by package lite_rolling_switch',
+                  'Switch similar to package lite_rolling_switch',
                   textAlign: TextAlign.center,
                 ),
               ),
