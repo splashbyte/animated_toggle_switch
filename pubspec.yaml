@@ -27,3 +27,10 @@ funding:
 screenshots:
   - description: 'This image shows three examples of AnimatedToggleSwitch.'
     path: screenshots/preview.webp
+
+topics:
+  - ui
+  - switch
+  - toggle
+  - widget
+  - widgets
