@@ -1,6 +1,6 @@
-// not covered because this widget is not used currently
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
+// this widget is not covered because it is not used currently
 // coverage:ignore-start
 class _ConditionalWrapper extends StatefulWidget {
   final Widget Function(BuildContext context, Widget child) wrapper;
