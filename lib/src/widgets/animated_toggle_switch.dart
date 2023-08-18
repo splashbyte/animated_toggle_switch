@@ -1064,14 +1064,10 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
         padding: EdgeInsets.all(borderWidth),
         active: active,
         wrapperBuilder: (context, global, child) {
-          return _ConditionalWrapper(
-            condition: inactiveOpacity < 1.0,
-            wrapper: (context, child) => AnimatedOpacity(
-              opacity: global.active ? 1.0 : inactiveOpacity,
-              duration: inactiveOpacityDuration,
-              curve: inactiveOpacityCurve,
-              child: child,
-            ),
+          return AnimatedOpacity(
+            opacity: global.active ? 1.0 : inactiveOpacity,
+            duration: inactiveOpacityDuration,
+            curve: inactiveOpacityCurve,
             child: _animationTypeBuilder<ToggleStyle>(
               context,
               styleAnimationType,
@@ -1110,7 +1106,6 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
         });
   }
 
-  //TODO: extract this method to separate widget
   Widget _animationTypeBuilder<V>(
     BuildContext context,
     AnimationType animationType,
@@ -1119,7 +1114,6 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     Widget Function(V value) builder,
     GlobalToggleProperties<T> properties,
   ) {
-    double pos = properties.position;
     switch (animationType) {
       case AnimationType.onSelected:
         V currentValue = valueProvider(
@@ -1133,23 +1127,15 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
           builder: (context, value, _) => builder(value),
         );
       case AnimationType.onHover:
-        final index1 = pos.floor();
-        final index2 = pos.ceil();
-        final currentValue = properties.currentIndex < 0
-            ? valueProvider(
-                StyledToggleProperties(value: properties.current, index: -1))
-            : lerp(
-                valueProvider(StyledToggleProperties(
-                    value: values[index1], index: index1)),
-                valueProvider(StyledToggleProperties(
-                    value: values[index2], index: index2)),
-                pos - pos.floor(),
-              );
-        return TweenAnimationBuilder<V>(
-          duration: animationDuration,
-          curve: animationCurve,
-          tween: _CustomTween(lerp, begin: currentValue, end: currentValue),
-          builder: (context, value, _) => builder(value),
+        return _AnimationTypeHoverBuilder(
+          valueProvider: valueProvider,
+          lerp: lerp,
+          builder: builder,
+          properties: properties,
+          animationDuration: animationDuration,
+          animationCurve: animationCurve,
+          indicatorAppearingDuration: indicatorAppearingDuration,
+          indicatorAppearingCurve: indicatorAppearingCurve,
         );
     }
   }
@@ -1316,15 +1302,6 @@ class _MyLoading extends StatelessWidget {
             ),
     );
   }
-}
-
-class _CustomTween<V> extends Tween<V> {
-  final V Function(V value1, V value2, double t) lerpFunction;
-
-  _CustomTween(this.lerpFunction, {super.begin, super.end});
-
-  @override
-  V lerp(double t) => lerpFunction(begin as V, end as V, t);
 }
 
 extension _XTargetPlatform on TargetPlatform {

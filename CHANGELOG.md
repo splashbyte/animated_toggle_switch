@@ -1,3 +1,7 @@
+## 0.8.0-beta.5 (2023-08-18)
+
+- fixes `AnimationType.onHover`
+
 ## 0.8.0-beta.4 (2023-08-18)
 
 - BREAKING: removes `IconTheme` for controlling default size of `Icon`s
