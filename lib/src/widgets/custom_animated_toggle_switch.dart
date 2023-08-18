@@ -433,8 +433,10 @@ class _CustomAnimatedToggleSwitchState<T>
     return SizedBox(
       height: widget.height,
       child: MouseRegion(
+        hitTestBehavior: HitTestBehavior.deferToChild,
         cursor: defaultCursor,
         child: GestureDetector(
+          behavior: HitTestBehavior.deferToChild,
           onTapUp: (_) => _onTap(),
           child: TweenAnimationBuilder<double>(
             duration:

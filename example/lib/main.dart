@@ -300,10 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         CupertinoActivityIndicator(
                             color: Color.lerp(
                                 Colors.red[800], green, global.position)),
-                    onChanged: (b) {
-                      setState(() => positive = b);
-                      return Future<dynamic>.delayed(Duration(seconds: 2));
-                    },
+                    onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
                         ? Icon(Icons.power_outlined, color: green, size: 32.0)
                         : Icon(Icons.power_settings_new_rounded,
