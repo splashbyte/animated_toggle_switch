@@ -16,6 +16,9 @@ class GlobalToggleProperties<T> {
   /// If [values] does not contain [current], this value is set to [-1].
   final int currentIndex;
 
+  /// This value indicates if [values] does contain [current].
+  bool get isCurrentListed => currentIndex >= 0;
+
   /// The previous value of the switch.
   final T? previous;
 
@@ -94,8 +97,11 @@ class LocalToggleProperties<T> {
 
   /// The index of [value].
   ///
-  /// This value is [-1] if [values] does not contain [value].
+  /// If [values] does not contain [value], this value is set to [-1].
   final int index;
+
+  /// This value indicates if [values] does contain [value].
+  bool get isValueListed => index >= 0;
 
   const LocalToggleProperties({
     required this.value,

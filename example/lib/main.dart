@@ -334,6 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
+                indicatorIconScale: sqrt2,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) {
                   setState(() => value = i);
@@ -350,10 +351,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int?>.rolling(
                 allowUnlistedValues: true,
+                styleAnimationType: AnimationType.onHover,
                 current: nullableValue,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
+                customStyleBuilder: (context, local, global) {
+                  final color = local.isValueListed
+                      ? null
+                      : Theme.of(context).colorScheme.error;
+                  return ToggleStyle(borderColor: color, indicatorColor: color);
+                },
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
