@@ -78,12 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (b) => setState(() => positive = b),
                 styleBuilder: (b) =>
                     ToggleStyle(indicatorColor: b ? Colors.red : Colors.green),
-                iconBuilder: (value) =>
-                value
+                iconBuilder: (value) => value
                     ? Icon(Icons.coronavirus_rounded)
                     : Icon(Icons.tag_faces_rounded),
-                textBuilder: (value) =>
-                value
+                textBuilder: (value) => value
                     ? Center(child: Text('Oh no...'))
                     : Center(child: Text('Nice :)')),
               ),
@@ -107,32 +105,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderWidth: 5.0,
                 height: 55,
                 onChanged: (b) => setState(() => positive = b),
-                styleBuilder: (b) =>
-                    ToggleStyle(
-                      backgroundColor: b ? Colors.white : Colors.black,
-                      indicatorColor: b ? Colors.blue : Colors.red,
-                      borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(4.0),
-                          right: Radius.circular(50.0)),
-                      indicatorBorderRadius: BorderRadius.circular(
-                          b ? 50.0 : 4.0),
-                    ),
-                iconBuilder: (value) =>
-                    Icon(
-                      value
-                          ? Icons.access_time_rounded
-                          : Icons.power_settings_new_rounded,
-                      size: 32.0,
-                      color: value ? Colors.black : Colors.white,
-                    ),
-                textBuilder: (value) =>
-                value
+                styleBuilder: (b) => ToggleStyle(
+                  backgroundColor: b ? Colors.white : Colors.black,
+                  indicatorColor: b ? Colors.blue : Colors.red,
+                  borderRadius: const BorderRadius.horizontal(
+                      left: Radius.circular(4.0), right: Radius.circular(50.0)),
+                  indicatorBorderRadius: BorderRadius.circular(b ? 50.0 : 4.0),
+                ),
+                iconBuilder: (value) => Icon(
+                  value
+                      ? Icons.access_time_rounded
+                      : Icons.power_settings_new_rounded,
+                  size: 32.0,
+                  color: value ? Colors.black : Colors.white,
+                ),
+                textBuilder: (value) => value
                     ? const Center(
-                    child:
-                    Text('On', style: TextStyle(color: Colors.black)))
+                        child:
+                            Text('On', style: TextStyle(color: Colors.black)))
                     : const Center(
-                    child:
-                    Text('Off', style: TextStyle(color: Colors.white))),
+                        child:
+                            Text('Off', style: TextStyle(color: Colors.white))),
               ),
               SizedBox(height: 16.0),
               DefaultTextStyle.merge(
@@ -158,14 +151,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         return ToggleStyle(backgroundColor: Colors.red[800]);
                       return ToggleStyle(
                           backgroundGradient: LinearGradient(
-                            colors: [green, Colors.red[800]!],
-                            stops: [
-                              global.position -
-                                  (1 - 2 * max(0, global.position - 0.5)) * 0.2,
-                              global.position +
-                                  max(0, 2 * (global.position - 0.5)) * 0.2,
-                            ],
-                          ));
+                        colors: [green, Colors.red[800]!],
+                        stops: [
+                          global.position -
+                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
+                          global.position +
+                              max(0, 2 * (global.position - 0.5)) * 0.2,
+                        ],
+                      ));
                     },
                     borderWidth: 6.0,
                     height: 60.0,
@@ -174,13 +167,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Color.lerp(
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) => setState(() => positive = b),
-                    iconBuilder: (value) =>
-                    value
+                    iconBuilder: (value) => value
                         ? Icon(Icons.power_outlined, color: green, size: 32.0)
                         : Icon(Icons.power_settings_new_rounded,
-                        color: Colors.red[800], size: 32.0),
-                    textBuilder: (value) =>
-                    value
+                            color: Colors.red[800], size: 32.0),
+                    textBuilder: (value) => value
                         ? Center(child: Text('Active'))
                         : Center(child: Text('Inactive')),
                   ),
@@ -218,23 +209,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     borderWidth: 10.0,
                     height: 50,
                     loadingIconBuilder: (context, global) =>
-                    const CupertinoActivityIndicator(color: Colors.white),
+                        const CupertinoActivityIndicator(color: Colors.white),
                     onChanged: (b) {
                       setState(() => positive = b);
                       return Future<dynamic>.delayed(Duration(seconds: 2));
                     },
-                    styleBuilder: (b) =>
-                        ToggleStyle(
-                            indicatorColor: b ? Colors.purple : Colors.green),
-                    iconBuilder: (value) =>
-                    value
+                    styleBuilder: (b) => ToggleStyle(
+                        indicatorColor: b ? Colors.purple : Colors.green),
+                    iconBuilder: (value) => value
                         ? Icon(Icons.coronavirus_rounded)
                         : Icon(Icons.tag_faces_rounded),
-                    textBuilder: (value) =>
-                    value
+                    textBuilder: (value) => value
                         ? Center(
-                        child: Text('Oh no...',
-                            style: const TextStyle(color: Colors.white)))
+                            child: Text('Oh no...',
+                                style: const TextStyle(color: Colors.white)))
                         : Center(child: Text('Nice :)')),
                   ),
                 ),
@@ -252,10 +240,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   indicatorColor: Colors.white,
                   backgroundColor: Colors.amber,
                 ),
-                styleBuilder: (value) =>
-                    ToggleStyle(
-                        backgroundColor: value ? Colors.orange : Colors
-                            .red[800]),
+                styleBuilder: (value) => ToggleStyle(
+                    backgroundColor: value ? Colors.orange : Colors.red[800]),
                 borderWidth: 6.0,
                 height: 60.0,
                 loadingIconBuilder: (context, global) =>
@@ -266,21 +252,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() => positive = b);
                   return Future<dynamic>.delayed(Duration(seconds: 2));
                 },
-                iconBuilder: (value) =>
-                value
+                iconBuilder: (value) => value
                     ? Icon(Icons.power_outlined,
-                    color: Colors.orange, size: 32.0)
+                        color: Colors.orange, size: 32.0)
                     : Icon(Icons.power_settings_new_rounded,
-                    color: Colors.red[800], size: 32.0),
-                textBuilder: (value) =>
-                    Center(
-                        child: Text(
-                          value ? 'Active' : 'Inactive',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w600),
-                        )),
+                        color: Colors.red[800], size: 32.0),
+                textBuilder: (value) => Center(
+                    child: Text(
+                  value ? 'Active' : 'Inactive',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600),
+                )),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -308,9 +292,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       indicatorColor: Colors.white,
                       backgroundColor: Colors.black,
                     ),
-                    styleBuilder: (value) =>
-                        ToggleStyle(
-                            backgroundColor: value ? green : Colors.red[800]),
+                    styleBuilder: (value) => ToggleStyle(
+                        backgroundColor: value ? green : Colors.red[800]),
                     borderWidth: 6.0,
                     height: 60.0,
                     loadingIconBuilder: (context, global) =>
@@ -321,13 +304,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() => positive = b);
                       return Future<dynamic>.delayed(Duration(seconds: 2));
                     },
-                    iconBuilder: (value) =>
-                    value
+                    iconBuilder: (value) => value
                         ? Icon(Icons.power_outlined, color: green, size: 32.0)
                         : Icon(Icons.power_settings_new_rounded,
-                        color: Colors.red[800], size: 32.0),
-                    textBuilder: (value) =>
-                    value
+                            color: Colors.red[800], size: 32.0),
+                    textBuilder: (value) => value
                         ? Center(child: Text('Active'))
                         : Center(child: Text('Inactive')),
                   ),
@@ -376,10 +357,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 customStyleBuilder: (context, local, global) {
-                  final color = local.isValueListed ? null : Theme
-                      .of(context)
-                      .colorScheme
-                      .error;
+                  final color = local.isValueListed
+                      ? null
+                      : Theme.of(context).colorScheme.error;
                   return ToggleStyle(borderColor: color, indicatorColor: color);
                 },
               ),
@@ -446,13 +426,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   iconBuilder: coloredRollingIconBuilder,
                   borderWidth: 3.0,
                   styleAnimationType: AnimationType.onHover,
-                  styleBuilder: (value) =>
-                      ToggleStyle(
-                        backgroundColor: colorBuilder(value),
-                        borderRadius: BorderRadius.circular(value * 10.0),
-                        indicatorBorderRadius: BorderRadius.circular(
-                            value * 10.0),
-                      ),
+                  styleBuilder: (value) => ToggleStyle(
+                    backgroundColor: colorBuilder(value),
+                    borderRadius: BorderRadius.circular(value * 10.0),
+                    indicatorBorderRadius: BorderRadius.circular(value * 10.0),
+                  ),
                 ),
               ),
               SizedBox(height: 16.0),
@@ -486,7 +464,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: ToggleStyle(
                   indicatorColor: Colors.white,
                   backgroundGradient:
-                  const LinearGradient(colors: [Colors.red, Colors.blue]),
+                      const LinearGradient(colors: [Colors.red, Colors.blue]),
                   borderColor: Colors.transparent,
                 ),
                 height: 55,
@@ -529,7 +507,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   theme.colorScheme.background,
                                   global.position),
                               borderRadius:
-                              const BorderRadius.all(Radius.circular(50.0)),
+                                  const BorderRadius.all(Radius.circular(50.0)),
                             ),
                           )),
                       child,
@@ -570,10 +548,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 indicatorSize: const Size.fromWidth(100),
                 iconAnimationType: AnimationType.onHover,
                 styleAnimationType: AnimationType.onHover,
-                iconBuilder: (value) =>
-                    Icon(
-                        value.isEven ? Icons.cancel : Icons
-                            .access_time_rounded),
+                iconBuilder: (value) => Icon(
+                    value.isEven ? Icons.cancel : Icons.access_time_rounded),
                 style: ToggleStyle(
                   borderColor: Colors.transparent,
                 ),
@@ -622,13 +598,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: const [false, true],
                 iconOpacity: 0.2,
                 indicatorSize: const Size.fromWidth(100),
-                customIconBuilder: (context, local, global) =>
-                    Text(
-                        local.value ? 'RAM' : 'CPU',
-                        style: TextStyle(
-                            color: Color.lerp(
-                                Colors.black, Colors.white,
-                                local.animationValue))),
+                customIconBuilder: (context, local, global) => Text(
+                    local.value ? 'RAM' : 'CPU',
+                    style: TextStyle(
+                        color: Color.lerp(
+                            Colors.black, Colors.white, local.animationValue))),
                 borderWidth: 4.0,
                 iconAnimationType: AnimationType.onHover,
                 style: ToggleStyle(
@@ -672,8 +646,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 2.0,
                 customSeparatorBuilder: (context, local, global) {
                   final opacity =
-                  ((global.position - local.position).abs() - 0.5)
-                      .clamp(0.0, 1.0);
+                      ((global.position - local.position).abs() - 0.5)
+                          .clamp(0.0, 1.0);
                   return VerticalDivider(
                       indent: 10.0,
                       endIndent: 10.0,
@@ -713,9 +687,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
                 style: ToggleStyle(borderColor: Colors.transparent),
-                styleBuilder: (i) =>
-                    ToggleStyle(
-                        indicatorColor:
+                styleBuilder: (i) => ToggleStyle(
+                    indicatorColor:
                         i.isEven == true ? Colors.amber : Colors.red),
                 onChanged: (i) => setState(() => value = i),
               ),
@@ -751,9 +724,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   indicatorBorderRadius: BorderRadius.zero,
                 ),
-                styleBuilder: (i) =>
-                    ToggleStyle(
-                        indicatorColor:
+                styleBuilder: (i) => ToggleStyle(
+                    indicatorColor:
                         i.isEven == true ? Colors.green : Colors.tealAccent),
                 onChanged: (i) => setState(() => value = i),
               ),
@@ -782,10 +754,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 indicatorSize: const Size.square(1.5),
                 style: ToggleStyle(borderRadius: BorderRadius.circular(75.0)),
               ),
-              SizedBox(height: MediaQuery
-                  .of(context)
-                  .padding
-                  .bottom + 16.0),
+              SizedBox(height: MediaQuery.of(context).padding.bottom + 16.0),
             ],
           ),
         ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -793,8 +762,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Color colorBuilder(int value) =>
-      switch (value) {
+  Color colorBuilder(int value) => switch (value) {
         0 => Colors.blueAccent,
         1 => Colors.green,
         2 => Colors.orangeAccent,
@@ -817,8 +785,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Icon(iconDataByValue(value));
   }
 
-  IconData iconDataByValue(int? value) =>
-      switch (value) {
+  IconData iconDataByValue(int? value) => switch (value) {
         0 => Icons.access_time_rounded,
         1 => Icons.check_circle_outline_rounded,
         2 => Icons.power_settings_new_rounded,

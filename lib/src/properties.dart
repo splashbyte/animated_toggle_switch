@@ -100,7 +100,6 @@ class LocalToggleProperties<T> {
   /// If [values] does not contain [value], this value is set to [-1].
   final int index;
 
-
   /// This value indicates if [values] does contain [value].
   bool get isValueListed => index >= 0;
 
