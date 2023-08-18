@@ -353,6 +353,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
+                indicatorIconScale: sqrt2,
                 values: const [0, 1, 2, 3],
                 onChanged: (i) {
                   setState(() => value = i);
