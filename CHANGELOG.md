@@ -1,4 +1,4 @@
-## 0.8.0-beta.4
+## 0.8.0-beta.4 (2023-08-18)
 
 - BREAKING: removes `IconTheme` for controlling default size of `Icon`s
 - BREAKING: changes default background color from `ThemeData.scaffoldBackgroundColor` to `ThemeData.colorScheme.surface`
