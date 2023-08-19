@@ -3,7 +3,7 @@ part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 /// This class is a proxy for another animation.
 ///
 /// It is used for passing animations in builders without exposing the real
-/// animation to users.
+/// animation to the user.
 class _PrivateAnimation<T> extends Animation<T> {
   final Animation<T> _parent;
 

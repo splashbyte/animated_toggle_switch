@@ -53,7 +53,6 @@ class _AnimationTypeHoverBuilderState<T, V>
     final values = widget.properties.values;
     final index1 = pos.floor();
     final index2 = pos.ceil();
-    final isListed = widget.properties.isCurrentListed;
     V listedValueFunction() => widget.lerp(
           widget.valueProvider(
               StyledToggleProperties(value: values[index1], index: index1)),
