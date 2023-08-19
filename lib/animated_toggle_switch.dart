@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 part 'src/animation_type_builder.dart';
+part 'src/animations.dart';
 part 'src/properties.dart';
 part 'src/style.dart';
 part 'src/tweens.dart';

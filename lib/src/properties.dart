@@ -44,6 +44,17 @@ class GlobalToggleProperties<T> {
 
   final bool active;
 
+  /// This animation indicates whether the indicator is currently visible.
+  ///
+  /// 0.0 means it is not visible.
+  ///
+  /// 1.0 means it is fully visible.
+  ///
+  /// Depending on the curve of the animation, the value can also be below 0.0 or above 1.0.
+  ///
+  /// This will be publicly accessible in future releases.
+  final Animation<double> _indicatorAppearingAnimation;
+
   const GlobalToggleProperties({
     required this.position,
     required this.current,
@@ -55,7 +66,8 @@ class GlobalToggleProperties<T> {
     required this.mode,
     required this.loadingAnimationValue,
     required this.active,
-  });
+    required Animation<double> indicatorAppearingAnimation,
+  }) : _indicatorAppearingAnimation = indicatorAppearingAnimation;
 }
 
 class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
@@ -88,6 +100,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required super.mode,
     required super.loadingAnimationValue,
     required super.active,
+    required super.indicatorAppearingAnimation,
   });
 }
 

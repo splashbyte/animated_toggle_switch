@@ -420,6 +420,8 @@ class _CustomAnimatedToggleSwitchState<T>
     double spacing = widget.spacing;
     final textDirection = _textDirectionOf(context);
     final loadingValue = _animationInfo.loading ? 1.0 : 0.0;
+    final privateIndicatorAppearingAnimation =
+        _PrivateAnimation(_appearingAnimation);
 
     final defaultCursor = !_isActive
         ? (_animationInfo.loading
@@ -463,6 +465,8 @@ class _CustomAnimatedToggleSwitchState<T>
                     mode: _animationInfo.toggleMode,
                     loadingAnimationValue: loadingValue,
                     active: widget.active,
+                    indicatorAppearingAnimation:
+                        privateIndicatorAppearingAnimation,
                   );
                   Widget child = Padding(
                     padding: widget.padding,
@@ -574,6 +578,8 @@ class _CustomAnimatedToggleSwitchState<T>
                           mode: _animationInfo.toggleMode,
                           loadingAnimationValue: loadingValue,
                           active: widget.active,
+                          indicatorAppearingAnimation:
+                              privateIndicatorAppearingAnimation,
                         );
 
                         List<Widget> stack = <Widget>[
