@@ -1,5 +1,8 @@
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
+// this Animation is not covered because it contains not logic but
+// forwards all methods to its parent Animation.
+// coverage:ignore-start
 /// This class is a proxy for another animation.
 ///
 /// It is used for passing animations in builders without exposing the real
@@ -30,3 +33,4 @@ class _PrivateAnimation<T> extends Animation<T> {
   @override
   T get value => _parent.value;
 }
+// coverage:ignore-end
