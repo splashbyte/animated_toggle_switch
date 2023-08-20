@@ -37,10 +37,8 @@ void main() {
         that: isA<TapInfo<int>>()
             .having((i) => i.tappedValue, 'tappedValue', next)))).called(1);
 
-    // tap on the border
-    await tester.tapAt(
-        (tester.getTopLeft(switchFinder) + tester.getBottomLeft(switchFinder)) /
-            2);
+    // tap on the border of the switch
+    await tester.tapAt(tester.getRect(switchFinder).centerLeft);
     verify(() => tapFunction(any(
         that: isA<TapInfo<int>>()
             .having((i) => i.tappedValue, 'tappedValue', null)
