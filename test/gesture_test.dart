@@ -24,18 +24,29 @@ void main() {
     verifyNever(() => tapFunction.call(any()));
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
+    final switchFinder = find.byType(AnimatedToggleSwitch<int>);
 
     await tester.tap(currentFinder, warnIfMissed: false);
     verify(() => tapFunction(any(
         that: isA<TapInfo<int>>()
-            .having((i) => i.tappedValue, 'value', current)))).called(1);
+            .having((i) => i.tappedValue, 'tappedValue', current)))).called(1);
 
     await tester.tap(nextFinder, warnIfMissed: false);
     verify(() => changedFunction(next)).called(1);
     verify(() => tapFunction(any(
         that: isA<TapInfo<int>>()
-            .having((i) => i.tappedValue, 'value', next)))).called(1);
+            .having((i) => i.tappedValue, 'tappedValue', next)))).called(1);
 
+    // tap on the border
+    await tester.tapAt(
+        (tester.getTopLeft(switchFinder) + tester.getBottomLeft(switchFinder)) /
+            2);
+    verify(() => tapFunction(any(
+        that: isA<TapInfo<int>>()
+            .having((i) => i.tappedValue, 'tappedValue', null)
+            .having((i) => i.tappedIndex, 'tappedIndex', -1)))).called(1);
+
+    verifyNoMoreInteractions(tapFunction);
     verifyNoMoreInteractions(changedFunction);
   }, testDual: false);
 

@@ -1,3 +1,7 @@
+## 0.8.0-beta.6
+
+- adds parameter to `onTap` ([#41](https://github.com/splashbyte/animated_toggle_switch/issues/41))
+
 ## 0.8.0-beta.5 (2023-08-18)
 
 - fixes `AnimationType.onHover`
