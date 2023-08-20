@@ -1,6 +1,17 @@
 // coverage:ignore-file
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
+class ValueHolder<T> {
+  final T value;
+
+  /// The index of [value] in [values].
+  ///
+  /// If [values] does not contain [value], this value is set to [-1].
+  final int index;
+
+  ValueHolder({required this.value, required this.index});
+}
+
 class GlobalToggleProperties<T> {
   /// The position of the indicator relative to the indices of the values.
   final double position;
@@ -13,7 +24,7 @@ class GlobalToggleProperties<T> {
 
   /// The index of [current] in [values].
   ///
-  /// If [values] does not contain [current], this value is set to [-1].
+  /// If [values] does not contain [current], [currentIndex] is set to [-1].
   final int currentIndex;
 
   /// This value indicates if [values] does contain [current].
@@ -110,7 +121,7 @@ class LocalToggleProperties<T> {
 
   /// The index of [value].
   ///
-  /// If [values] does not contain [value], this value is set to [-1].
+  /// If [values] does not contain [value], this [index] is set to [-1].
   final int index;
 
   /// This value indicates if [values] does contain [value].
@@ -192,5 +203,40 @@ class SeparatorProperties<T> {
 
   const SeparatorProperties({
     required this.index,
+  });
+}
+
+class TapInfo<T> {
+  /// The value that the user has tapped.
+  final T? tappedValue;
+
+  /// The index of [tappedValue] in [values].
+  ///
+  /// If [tappedValue] is [null], this [tappedIndex] is set to [-1].
+  final int tappedIndex;
+
+  /// The current value which is given to the switch.
+  ///
+  /// Helpful if the value is generated e.g.
+  /// when the switch constructor is called.
+  final T current;
+
+  /// The index of [current] in [values].
+  ///
+  /// If [values] does not contain [current], this value is set to [-1].
+  final int currentIndex;
+
+  /// The values which are given to the switch.
+  ///
+  /// Helpful if the list is generated e.g.
+  /// when the switch constructor is called.
+  final List<T> values;
+
+  const TapInfo({
+    required this.tappedIndex,
+    required this.tappedValue,
+    required this.current,
+    required this.currentIndex,
+    required this.values,
   });
 }

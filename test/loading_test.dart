@@ -17,7 +17,7 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        onTap: () => Future<dynamic>.delayed(loadingDuration),
+        onTap: (info) => Future<dynamic>.delayed(loadingDuration),
         onChanged: (_) => Future<dynamic>.delayed(loadingDuration),
       ),
     ));
@@ -107,7 +107,7 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        onTap: () => Future<dynamic>.delayed(loadingDuration),
+        onTap: (info) => Future<dynamic>.delayed(loadingDuration),
         onChanged: (_) => Future<dynamic>.delayed(loadingDuration),
         loading: false,
       ),

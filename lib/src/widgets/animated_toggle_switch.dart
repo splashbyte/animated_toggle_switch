@@ -168,7 +168,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
   final AnimationType indicatorAnimationType;
 
   /// Callback for tapping anywhere on the widget.
-  final TapCallback? onTap;
+  final TapCallback<T>? onTap;
 
   final IconArrangement _iconArrangement;
 
@@ -864,7 +864,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.styleAnimationType = AnimationType.onHover,
     this.indicatorAnimationType = AnimationType.onHover,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    Function()? onTap,
+    TapCallback<T>? onTap,
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.cursors = const ToggleCursors(defaultCursor: SystemMouseCursors.click),
@@ -923,9 +923,9 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
           iconList: null,
         );
 
-  static Function() _dualOnTap<T>(
+  static TapCallback<T> _dualOnTap<T>(
       ChangeCallback<T>? onChanged, List<T> values, T? current) {
-    return () =>
+    return (info) =>
         onChanged?.call(values.firstWhere((element) => element != current));
   }
 

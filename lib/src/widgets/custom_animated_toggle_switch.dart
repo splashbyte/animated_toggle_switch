@@ -26,7 +26,7 @@ typedef IndicatorAppearingBuilder = Widget Function(
 
 typedef ChangeCallback<T> = FutureOr<void> Function(T value);
 
-typedef TapCallback = FutureOr<void> Function();
+typedef TapCallback<T> = FutureOr<void> Function(TapInfo<T> info);
 
 enum ToggleMode { animating, dragged, none }
 
@@ -127,7 +127,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final CustomSeparatorBuilder<T>? separatorBuilder;
 
   /// Callback for tapping anywhere on the widget.
-  final TapCallback? onTap;
+  final TapCallback<T>? onTap;
 
   /// Indicates if [onChanged] is called when an icon is tapped.
   ///
@@ -357,9 +357,9 @@ class _CustomAnimatedToggleSwitchState<T>
 
   /// This method is called in two [GestureDetector]s because only one
   /// [GestureDetector.onTapUp] will be triggered.
-  void _onTap() {
+  void _onTap(TapInfo<T> info) {
     if (!_isActive) return;
-    final result = widget.onTap?.call();
+    final result = widget.onTap?.call(info);
     if (result is Future) {
       _addLoadingFuture(result);
     }
@@ -409,12 +409,6 @@ class _CustomAnimatedToggleSwitchState<T>
     return _doubleFromPosition(x, properties).round();
   }
 
-  /// Returns the value by the local position of the cursor.
-  /// It is mainly intended as a helper function for the build method.
-  T _valueFromPosition(double x, DetailedGlobalToggleProperties<T> properties) {
-    return widget.values[_indexFromPosition(x, properties)];
-  }
-
   @override
   Widget build(BuildContext context) {
     double spacing = widget.spacing;
@@ -439,7 +433,13 @@ class _CustomAnimatedToggleSwitchState<T>
         cursor: defaultCursor,
         child: GestureDetector(
           behavior: HitTestBehavior.deferToChild,
-          onTapUp: (_) => _onTap(),
+          onTapUp: (_) => _onTap(TapInfo(
+            tappedIndex: -1,
+            tappedValue: null,
+            current: widget.current,
+            currentIndex: _currentIndex,
+            values: widget.values,
+          )),
           child: TweenAnimationBuilder<double>(
             duration:
                 widget.loadingAnimationDuration ?? widget.animationDuration,
@@ -648,12 +648,20 @@ class _CustomAnimatedToggleSwitchState<T>
                                     behavior: HitTestBehavior.translucent,
                                     dragStartBehavior: DragStartBehavior.down,
                                     onTapUp: (details) {
-                                      _onTap();
-                                      if (!widget.iconsTappable) return;
-                                      T newValue = _valueFromPosition(
+                                      int tappedIndex = _indexFromPosition(
                                           details.localPosition.dx, properties);
-                                      if (newValue == widget.current) return;
-                                      _onChanged(newValue);
+                                      T tappedValue =
+                                          widget.values[tappedIndex];
+                                      _onTap(TapInfo(
+                                        tappedIndex: tappedIndex,
+                                        tappedValue: tappedValue,
+                                        current: widget.current,
+                                        currentIndex: _currentIndex,
+                                        values: widget.values,
+                                      ));
+                                      if (!widget.iconsTappable) return;
+                                      if (tappedValue == widget.current) return;
+                                      _onChanged(tappedValue);
                                     },
                                     onHorizontalDragStart: (details) {
                                       if (!isHoveringIndicator(

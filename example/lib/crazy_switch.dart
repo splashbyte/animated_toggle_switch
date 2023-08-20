@@ -28,7 +28,7 @@ class _CrazySwitchState extends State<CrazySwitch> {
       animationDuration: const Duration(milliseconds: 350),
       animationCurve: Curves.bounceOut,
       iconBuilder: (context, local, global) => const SizedBox(),
-      onTap: () => setState(() => current = !current),
+      onTap: (_) => setState(() => current = !current),
       iconsTappable: false,
       onChanged: (b) => setState(() => current = b),
       height: height,

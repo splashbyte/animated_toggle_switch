@@ -456,7 +456,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: nullableValue,
                 allowUnlistedValues: true,
                 values: const [0, 1, 2, 3],
-                onTap: () => setState(() => nullableValue = null),
+                onTap: (info) {
+                  if (nullableValue == info.tappedValue) {
+                    setState(() => nullableValue = null);
+                  }
+                },
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
@@ -489,7 +493,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return const SizedBox();
                 },
                 cursors: ToggleCursors(defaultCursor: SystemMouseCursors.click),
-                onTap: () => setState(() => positive = !positive),
+                onTap: (_) => setState(() => positive = !positive),
                 iconsTappable: false,
                 wrapperBuilder: (context, global, child) {
                   return Stack(

@@ -1,6 +1,6 @@
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
-// this Animation is not covered because it contains not logic but
+// this Animation is not covered because it contains no logic but
 // forwards all methods to its parent Animation.
 // coverage:ignore-start
 /// This class is a proxy for another animation.

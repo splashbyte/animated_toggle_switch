@@ -21,16 +21,20 @@ void main() {
         onChanged: changedFunction,
       ),
     ));
-    verifyNever(() => tapFunction.call());
+    verifyNever(() => tapFunction.call(any()));
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
 
     await tester.tap(currentFinder, warnIfMissed: false);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any(
+        that: isA<TapInfo<int>>()
+            .having((i) => i.tappedValue, 'value', current)))).called(1);
 
     await tester.tap(nextFinder, warnIfMissed: false);
     verify(() => changedFunction(next)).called(1);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any(
+        that: isA<TapInfo<int>>()
+            .having((i) => i.tappedValue, 'value', next)))).called(1);
 
     verifyNoMoreInteractions(changedFunction);
   }, testDual: false);
@@ -109,15 +113,15 @@ void main() {
         iconsTappable: false,
       ),
     ));
-    verifyNever(() => tapFunction.call());
+    verifyNever(() => tapFunction.call(any()));
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
 
     await tester.tap(currentFinder, warnIfMissed: false);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any())).called(1);
 
     await tester.tap(nextFinder, warnIfMissed: false);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any())).called(1);
 
     verifyNoMoreInteractions(changedFunction);
   }, testDual: false);
