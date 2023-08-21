@@ -123,11 +123,8 @@ void defaultTestAllSwitches(
   bool testCustom = true,
   bool testSize = true,
 }) {
-  registerFallbackValue(const TapInfo<int>(
-    tappedIndex: -1,
-    tappedValue: -1,
-    current: -1,
-    currentIndex: -1,
+  registerFallbackValue(const TapProperties<int>(
+    tapped: null,
     values: [],
   ));
 

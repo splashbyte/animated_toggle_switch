@@ -457,7 +457,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 allowUnlistedValues: true,
                 values: const [0, 1, 2, 3],
                 onTap: (info) {
-                  if (nullableValue == info.tappedValue) {
+                  if (nullableValue == info.tapped?.value) {
                     setState(() => nullableValue = null);
                   }
                 },

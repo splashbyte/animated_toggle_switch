@@ -28,21 +28,20 @@ void main() {
 
     await tester.tap(currentFinder, warnIfMissed: false);
     verify(() => tapFunction(any(
-        that: isA<TapInfo<int>>()
-            .having((i) => i.tappedValue, 'tappedValue', current)))).called(1);
+        that: isA<TapProperties<int>>().having(
+            (i) => i.tapped?.value, 'tapped.value', current)))).called(1);
 
     await tester.tap(nextFinder, warnIfMissed: false);
     verify(() => changedFunction(next)).called(1);
     verify(() => tapFunction(any(
-        that: isA<TapInfo<int>>()
-            .having((i) => i.tappedValue, 'tappedValue', next)))).called(1);
+        that: isA<TapProperties<int>>()
+            .having((i) => i.tapped?.value, 'tapped.value', next)))).called(1);
 
     // tap on the border of the switch
     await tester.tapAt(tester.getRect(switchFinder).centerLeft);
     verify(() => tapFunction(any(
-        that: isA<TapInfo<int>>()
-            .having((i) => i.tappedValue, 'tappedValue', null)
-            .having((i) => i.tappedIndex, 'tappedIndex', -1)))).called(1);
+        that: isA<TapProperties<int>>()
+            .having((i) => i.tapped, 'tapped', null)))).called(1);
 
     verifyNoMoreInteractions(tapFunction);
     verifyNoMoreInteractions(changedFunction);

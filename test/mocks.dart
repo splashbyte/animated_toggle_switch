@@ -2,7 +2,7 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:mocktail/mocktail.dart';
 
 abstract class TestOnTapFunction<T> {
-  void call(TapInfo<T> info);
+  void call(TapProperties<T> props);
 }
 
 abstract class TestOnChangedFunction<T> {

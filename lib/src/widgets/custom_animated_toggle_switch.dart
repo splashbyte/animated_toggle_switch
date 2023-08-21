@@ -26,7 +26,7 @@ typedef IndicatorAppearingBuilder = Widget Function(
 
 typedef ChangeCallback<T> = FutureOr<void> Function(T value);
 
-typedef TapCallback<T> = FutureOr<void> Function(TapInfo<T> info);
+typedef TapCallback<T> = FutureOr<void> Function(TapProperties<T> props);
 
 enum ToggleMode { animating, dragged, none }
 
@@ -357,7 +357,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   /// This method is called in two [GestureDetector]s because only one
   /// [GestureDetector.onTapUp] will be triggered.
-  void _onTap(TapInfo<T> info) {
+  void _onTap(TapProperties<T> info) {
     if (!_isActive) return;
     final result = widget.onTap?.call(info);
     if (result is Future) {
@@ -377,8 +377,8 @@ class _CustomAnimatedToggleSwitchState<T>
   /// IMPORTANT: This must be called in [didUpdateWidget] because it updates
   /// [_currentIndex] also.
   void _checkValuePosition() {
-    if (_animationInfo.toggleMode == ToggleMode.dragged) return;
     _currentIndex = widget.values.indexOf(widget.current);
+    if (_animationInfo.toggleMode == ToggleMode.dragged) return;
     if (_currentIndex >= 0) {
       _animateTo(_currentIndex);
     } else {
@@ -402,11 +402,17 @@ class _CustomAnimatedToggleSwitchState<T>
     return result;
   }
 
-  /// Returns the value index by the local position of the cursor.
+  /// Returns the [TapInfo] by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
-  int _indexFromPosition(
+  TapInfo<T> _tapInfoFromPosition(
       double x, DetailedGlobalToggleProperties<T> properties) {
-    return _doubleFromPosition(x, properties).round();
+    final position = _doubleFromPosition(x, properties);
+    final index = position.round();
+    return TapInfo(
+      value: widget.values[index],
+      index: index,
+      position: position,
+    );
   }
 
   @override
@@ -433,11 +439,8 @@ class _CustomAnimatedToggleSwitchState<T>
         cursor: defaultCursor,
         child: GestureDetector(
           behavior: HitTestBehavior.deferToChild,
-          onTapUp: (_) => _onTap(TapInfo(
-            tappedIndex: -1,
-            tappedValue: null,
-            current: widget.current,
-            currentIndex: _currentIndex,
+          onTapUp: (_) => _onTap(TapProperties(
+            tapped: null,
             values: widget.values,
           )),
           child: TweenAnimationBuilder<double>(
@@ -648,20 +651,17 @@ class _CustomAnimatedToggleSwitchState<T>
                                     behavior: HitTestBehavior.translucent,
                                     dragStartBehavior: DragStartBehavior.down,
                                     onTapUp: (details) {
-                                      int tappedIndex = _indexFromPosition(
+                                      final tapInfo = _tapInfoFromPosition(
                                           details.localPosition.dx, properties);
-                                      T tappedValue =
-                                          widget.values[tappedIndex];
-                                      _onTap(TapInfo(
-                                        tappedIndex: tappedIndex,
-                                        tappedValue: tappedValue,
-                                        current: widget.current,
-                                        currentIndex: _currentIndex,
+                                      _onTap(TapProperties(
+                                        tapped: tapInfo,
                                         values: widget.values,
                                       ));
                                       if (!widget.iconsTappable) return;
-                                      if (tappedValue == widget.current) return;
-                                      _onChanged(tappedValue);
+                                      if (tapInfo.value == widget.current) {
+                                        return;
+                                      }
+                                      _onChanged(tapInfo.value);
                                     },
                                     onHorizontalDragStart: (details) {
                                       if (!isHoveringIndicator(

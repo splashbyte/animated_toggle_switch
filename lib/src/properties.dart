@@ -206,25 +206,13 @@ class SeparatorProperties<T> {
   });
 }
 
-class TapInfo<T> {
-  /// The value that the user has tapped.
-  final T? tappedValue;
-
-  /// The index of [tappedValue] in [values].
+class TapProperties<T> {
+  /// Information about the point on which the user has tapped.
   ///
-  /// If [tappedValue] is [null], this [tappedIndex] is set to [-1].
-  final int tappedIndex;
-
-  /// The current value which is given to the switch.
-  ///
-  /// Helpful if the value is generated e.g.
-  /// when the switch constructor is called.
-  final T current;
-
-  /// The index of [current] in [values].
-  ///
-  /// If [values] does not contain [current], this value is set to [-1].
-  final int currentIndex;
+  /// This value can be [null] if the user taps on the border of an
+  /// [AnimatedToggleSwitch] or on the wrapper of a
+  /// [CustomAnimatedToggleSwitch].
+  final TapInfo<T>? tapped;
 
   /// The values which are given to the switch.
   ///
@@ -232,11 +220,25 @@ class TapInfo<T> {
   /// when the switch constructor is called.
   final List<T> values;
 
-  const TapInfo({
-    required this.tappedIndex,
-    required this.tappedValue,
-    required this.current,
-    required this.currentIndex,
+  const TapProperties({
+    required this.tapped,
     required this.values,
+  });
+}
+
+class TapInfo<T> {
+  /// The value that the user has tapped.
+  final T value;
+
+  /// The index of [value] in [values].
+  final int index;
+
+  /// The tapped position relative to the indices of the values.
+  final double position;
+
+  TapInfo({
+    required this.value,
+    required this.index,
+    required this.position,
   });
 }
