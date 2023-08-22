@@ -1,6 +1,17 @@
 // coverage:ignore-file
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
+class ValueHolder<T> {
+  final T value;
+
+  /// The index of [value] in [values].
+  ///
+  /// If [values] does not contain [value], this value is set to [-1].
+  final int index;
+
+  ValueHolder({required this.value, required this.index});
+}
+
 class GlobalToggleProperties<T> {
   /// The position of the indicator relative to the indices of the values.
   final double position;
@@ -13,7 +24,7 @@ class GlobalToggleProperties<T> {
 
   /// The index of [current] in [values].
   ///
-  /// If [values] does not contain [current], this value is set to [-1].
+  /// If [values] does not contain [current], [currentIndex] is set to [-1].
   final int currentIndex;
 
   /// This value indicates if [values] does contain [current].
@@ -44,6 +55,17 @@ class GlobalToggleProperties<T> {
 
   final bool active;
 
+  /// This animation indicates whether the indicator is currently visible.
+  ///
+  /// [0.0] means it is not visible.
+  ///
+  /// [1.0] means it is fully visible.
+  ///
+  /// Depending on the curve of the animation, the value can also be below 0.0 or above 1.0.
+  ///
+  /// This will be publicly accessible in future releases.
+  final Animation<double> _indicatorAppearingAnimation;
+
   const GlobalToggleProperties({
     required this.position,
     required this.current,
@@ -55,7 +77,8 @@ class GlobalToggleProperties<T> {
     required this.mode,
     required this.loadingAnimationValue,
     required this.active,
-  });
+    required Animation<double> indicatorAppearingAnimation,
+  }) : _indicatorAppearingAnimation = indicatorAppearingAnimation;
 }
 
 class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
@@ -88,6 +111,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required super.mode,
     required super.loadingAnimationValue,
     required super.active,
+    required super.indicatorAppearingAnimation,
   });
 }
 
@@ -97,7 +121,7 @@ class LocalToggleProperties<T> {
 
   /// The index of [value].
   ///
-  /// If [values] does not contain [value], this value is set to [-1].
+  /// If [values] does not contain [value], this [index] is set to [-1].
   final int index;
 
   /// This value indicates if [values] does contain [value].
@@ -179,5 +203,48 @@ class SeparatorProperties<T> {
 
   const SeparatorProperties({
     required this.index,
+  });
+}
+
+class TapProperties<T> {
+  /// Information about the point on which the user has tapped.
+  ///
+  /// This value can be [null] if the user taps on the border of an
+  /// [AnimatedToggleSwitch] or on the wrapper of a
+  /// [CustomAnimatedToggleSwitch].
+  final TapInfo<T>? tapped;
+
+  /// The values which are given to the switch.
+  ///
+  /// Helpful if the list is generated e.g.
+  /// when the switch constructor is called.
+  final List<T> values;
+
+  const TapProperties({
+    required this.tapped,
+    required this.values,
+  });
+}
+
+class TapInfo<T> {
+  /// The value that the user has tapped.
+  final T value;
+
+  /// The index of [value] in [values].
+  ///
+  /// [index == position.round()] should always be [true].
+  final int index;
+
+  /// The tapped position relative to the indices of the values.
+  ///
+  /// [position] can be in the interval from [-0.5] to [values.length - 0.5].
+  ///
+  /// [position.round() == index] should always be [true].
+  final double position;
+
+  TapInfo({
+    required this.value,
+    required this.index,
+    required this.position,
   });
 }

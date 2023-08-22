@@ -72,7 +72,8 @@ abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
 /// If you want to implement a completely custom switch,
 /// you should use [CustomAnimatedToggleSwitch], which is used by
 /// [AnimatedToggleSwitch] in the background.
-class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
+class AnimatedToggleSwitch<T extends Object?>
+    extends _AnimatedToggleSwitchParent<T> {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly if [allowUnlistedValues] is false.
@@ -168,7 +169,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
   final AnimationType indicatorAnimationType;
 
   /// Callback for tapping anywhere on the widget.
-  final TapCallback? onTap;
+  final TapCallback<T>? onTap;
 
   final IconArrangement _iconArrangement;
 
@@ -864,7 +865,7 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
     this.styleAnimationType = AnimationType.onHover,
     this.indicatorAnimationType = AnimationType.onHover,
     this.fittingMode = FittingMode.preventHorizontalOverlapping,
-    Function()? onTap,
+    TapCallback<T>? onTap,
     this.minTouchTargetSize = 48.0,
     this.textDirection,
     this.cursors = const ToggleCursors(defaultCursor: SystemMouseCursors.click),
@@ -923,9 +924,9 @@ class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
           iconList: null,
         );
 
-  static Function() _dualOnTap<T>(
+  static TapCallback<T> _dualOnTap<T>(
       ChangeCallback<T>? onChanged, List<T> values, T? current) {
-    return () =>
+    return (info) =>
         onChanged?.call(values.firstWhere((element) => element != current));
   }
 

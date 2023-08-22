@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'keys.dart';
 
@@ -75,7 +76,7 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   List<Widget>? iconList,
   TextDirection? textDirection,
   ChangeCallback<T>? onChanged,
-  TapCallback? onTap,
+  TapCallback<T>? onTap,
   bool? loading,
   bool allowUnlistedValues,
   ToggleStyle? style,
@@ -95,7 +96,7 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   List<Widget>? iconList,
   TextDirection? textDirection,
   ChangeCallback<T>? onChanged,
-  TapCallback? onTap,
+  TapCallback<T>? onTap,
   bool? loading,
   bool allowUnlistedValues,
   ToggleStyle? style,
@@ -122,6 +123,11 @@ void defaultTestAllSwitches(
   bool testCustom = true,
   bool testSize = true,
 }) {
+  registerFallbackValue(const TapProperties<int>(
+    tapped: null,
+    values: [],
+  ));
+
   testAllSwitches<int>(
     description,
     (tester, buildSwitch, type) => test(
@@ -132,7 +138,7 @@ void defaultTestAllSwitches(
         List<Widget>? iconList,
         TextDirection? textDirection,
         ChangeCallback<int>? onChanged,
-        TapCallback? onTap,
+        TapCallback<int>? onTap,
         bool? loading,
         bool allowUnlistedValues = false,
         ToggleStyle? style,
@@ -183,7 +189,7 @@ void defaultTestAllSwitches(
           List<Widget>? iconList,
           TextDirection? textDirection,
           ChangeCallback<int>? onChanged,
-          TapCallback? onTap,
+          TapCallback<int>? onTap,
           bool? loading,
           bool allowUnlistedValues = false,
           ToggleStyle? style,
@@ -246,7 +252,7 @@ void testAllSwitches<T>(
               List<Widget>? iconList,
               TextDirection? textDirection,
               ChangeCallback<T>? onChanged,
-              TapCallback? onTap,
+              TapCallback<T>? onTap,
               bool? loading,
               bool allowUnlistedValues = false,
               ToggleStyle? style,
@@ -295,7 +301,7 @@ void testAllSwitches<T>(
               List<Widget>? iconList,
               TextDirection? textDirection,
               ChangeCallback<T>? onChanged,
-              TapCallback? onTap,
+              TapCallback<T>? onTap,
               bool? loading,
               bool allowUnlistedValues = false,
               ToggleStyle? style,
@@ -348,7 +354,7 @@ void testAllSwitches<T>(
                 List<Widget>? iconList,
                 TextDirection? textDirection,
                 ChangeCallback<T>? onChanged,
-                TapCallback? onTap,
+                TapCallback<T>? onTap,
                 bool? loading,
                 bool allowUnlistedValues = false,
                 ToggleStyle? style,
@@ -399,7 +405,7 @@ void testAllSwitches<T>(
                 List<Widget>? iconList,
                 TextDirection? textDirection,
                 ChangeCallback<T>? onChanged,
-                TapCallback? onTap,
+                TapCallback<T>? onTap,
                 bool? loading,
                 bool allowUnlistedValues = false,
                 ToggleStyle? style,
@@ -457,7 +463,7 @@ void testAllSwitches<T>(
                 List<Widget>? iconList,
                 TextDirection? textDirection,
                 ChangeCallback<T>? onChanged,
-                TapCallback? onTap,
+                TapCallback<T>? onTap,
                 bool? loading,
                 bool allowUnlistedValues = false,
                 ToggleStyle? style,
@@ -507,7 +513,7 @@ void testAllSwitches<T>(
                 List<Widget>? iconList,
                 TextDirection? textDirection,
                 ChangeCallback<T>? onChanged,
-                TapCallback? onTap,
+                TapCallback<T>? onTap,
                 bool? loading,
                 bool allowUnlistedValues = false,
                 ToggleStyle? style,

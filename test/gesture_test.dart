@@ -21,17 +21,29 @@ void main() {
         onChanged: changedFunction,
       ),
     ));
-    verifyNever(() => tapFunction.call());
+    verifyNever(() => tapFunction.call(any()));
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
+    final switchFinder = find.byType(AnimatedToggleSwitch<int>);
 
     await tester.tap(currentFinder, warnIfMissed: false);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any(
+        that: isA<TapProperties<int>>().having(
+            (i) => i.tapped?.value, 'tapped.value', current)))).called(1);
 
     await tester.tap(nextFinder, warnIfMissed: false);
     verify(() => changedFunction(next)).called(1);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any(
+        that: isA<TapProperties<int>>()
+            .having((i) => i.tapped?.value, 'tapped.value', next)))).called(1);
 
+    // tap on the border of the switch
+    await tester.tapAt(tester.getRect(switchFinder).centerLeft);
+    verify(() => tapFunction(any(
+        that: isA<TapProperties<int>>()
+            .having((i) => i.tapped, 'tapped', null)))).called(1);
+
+    verifyNoMoreInteractions(tapFunction);
     verifyNoMoreInteractions(changedFunction);
   }, testDual: false);
 
@@ -109,15 +121,15 @@ void main() {
         iconsTappable: false,
       ),
     ));
-    verifyNever(() => tapFunction.call());
+    verifyNever(() => tapFunction.call(any()));
     final currentFinder = find.byKey(iconKey(current));
     final nextFinder = find.byKey(iconKey(next));
 
     await tester.tap(currentFinder, warnIfMissed: false);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any())).called(1);
 
     await tester.tap(nextFinder, warnIfMissed: false);
-    verify(() => tapFunction()).called(1);
+    verify(() => tapFunction(any())).called(1);
 
     verifyNoMoreInteractions(changedFunction);
   }, testDual: false);

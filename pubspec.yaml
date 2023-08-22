@@ -1,6 +1,6 @@
 name: animated_toggle_switch
 description: Fully customizable, draggable and animated switch with multiple choices and smooth loading animation. It has prebuilt constructors for rolling and size animations.
-version: 0.8.0-beta.5
+version: 0.8.0-beta.6
 repository: https://github.com/SplashByte/animated_toggle_switch
 issue_tracker: https://github.com/SplashByte/animated_toggle_switch/issues
 
@@ -16,7 +16,7 @@ dev_dependencies:
   flutter_lints: ^2.0.2
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.0
 
 flutter:
 
@@ -27,3 +27,10 @@ funding:
 screenshots:
   - description: 'This image shows three examples of AnimatedToggleSwitch.'
     path: screenshots/preview.webp
+
+topics:
+  - ui
+  - switch
+  - toggle
+  - widget
+  - widgets

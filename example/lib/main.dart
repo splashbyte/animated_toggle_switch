@@ -154,9 +154,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         colors: [green, Colors.red[800]!],
                         stops: [
                           global.position -
-                              (1 - 2 * max(0, global.position - 0.5)) * 0.2,
+                              (1 - 2 * max(0, global.position - 0.5)) * 0.7,
                           global.position +
-                              max(0, 2 * (global.position - 0.5)) * 0.2,
+                              max(0, 2 * (global.position - 0.5)) * 0.7,
                         ],
                       ));
                     },
@@ -269,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Switch inspired by package lite_rolling_switch',
+                  'Switch similar to package lite_rolling_switch',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -300,10 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         CupertinoActivityIndicator(
                             color: Color.lerp(
                                 Colors.red[800], green, global.position)),
-                    onChanged: (b) {
-                      setState(() => positive = b);
-                      return Future<dynamic>.delayed(Duration(seconds: 2));
-                    },
+                    onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
                         ? Icon(Icons.power_outlined, color: green, size: 32.0)
                         : Icon(Icons.power_settings_new_rounded,
@@ -375,6 +372,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 active: false,
                 current: value,
                 values: const [0, 1, 2, 3],
+                indicatorIconScale: sqrt2,
                 onChanged: (i) {
                   setState(() {
                     value = i;
@@ -423,6 +421,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     ],
                   ),
+                  indicatorIconScale: sqrt2,
                   iconBuilder: coloredRollingIconBuilder,
                   borderWidth: 3.0,
                   styleAnimationType: AnimationType.onHover,
@@ -457,7 +456,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: nullableValue,
                 allowUnlistedValues: true,
                 values: const [0, 1, 2, 3],
-                onTap: () => setState(() => nullableValue = null),
+                onTap: (info) {
+                  if (nullableValue == info.tapped?.value) {
+                    setState(() => nullableValue = null);
+                  }
+                },
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
@@ -490,7 +493,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return const SizedBox();
                 },
                 cursors: ToggleCursors(defaultCursor: SystemMouseCursors.click),
-                onTap: () => setState(() => positive = !positive),
+                onTap: (_) => setState(() => positive = !positive),
                 iconsTappable: false,
                 wrapperBuilder: (context, global, child) {
                   return Stack(
@@ -703,6 +706,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 current: value,
                 values: const [0, 1, 2, 3],
                 iconOpacity: 1.0,
+                selectedIconScale: 1.0,
                 indicatorSize: const Size.fromWidth(25),
                 foregroundIndicatorIconBuilder: (context, global) {
                   double pos = global.position;

@@ -1,14 +1,15 @@
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:mocktail/mocktail.dart';
 
-abstract class TestFunction {
-  void call();
+abstract class TestOnTapFunction<T> {
+  void call(TapProperties<T> props);
 }
 
 abstract class TestOnChangedFunction<T> {
   void call(T value);
 }
 
-class MockFunction extends Mock implements TestFunction {}
+class MockFunction<T> extends Mock implements TestOnTapFunction<T> {}
 
 class MockOnChangedFunction<T> extends Mock
     implements TestOnChangedFunction<T> {}

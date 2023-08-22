@@ -53,7 +53,6 @@ class _AnimationTypeHoverBuilderState<T, V>
     final values = widget.properties.values;
     final index1 = pos.floor();
     final index2 = pos.ceil();
-    final isListed = widget.properties.isCurrentListed;
     V listedValueFunction() => widget.lerp(
           widget.valueProvider(
               StyledToggleProperties(value: values[index1], index: index1)),
@@ -61,13 +60,13 @@ class _AnimationTypeHoverBuilderState<T, V>
               StyledToggleProperties(value: values[index2], index: index2)),
           pos - pos.floor(),
         );
-    final unlistedDoubleValue = isListed ? 0.0 : 1.0;
-    return TweenAnimationBuilder<double>(
-      duration: widget.indicatorAppearingDuration,
-      curve: widget.indicatorAppearingCurve,
-      tween: Tween(begin: unlistedDoubleValue, end: unlistedDoubleValue),
-      builder: (context, unlistedDoubleValue, _) {
-        if (unlistedDoubleValue == 0.0) {
+    final indicatorAppearingAnimation =
+        widget.properties._indicatorAppearingAnimation;
+    return AnimatedBuilder(
+      animation: indicatorAppearingAnimation,
+      builder: (context, _) {
+        final appearingValue = indicatorAppearingAnimation.value;
+        if (appearingValue >= 1.0) {
           return _EmptyWidget(
               key: _builderKey, child: widget.builder(listedValueFunction()));
         }
@@ -81,10 +80,10 @@ class _AnimationTypeHoverBuilderState<T, V>
             builder: (context, unlistedValue, _) {
               return _EmptyWidget(
                 key: _builderKey,
-                child: widget.builder(unlistedDoubleValue == 1.0
+                child: widget.builder(appearingValue <= 0.0
                     ? unlistedValue
-                    : widget.lerp(listedValueFunction(), unlistedValue,
-                        unlistedDoubleValue)),
+                    : widget.lerp(
+                        unlistedValue, listedValueFunction(), appearingValue)),
               );
             });
       },

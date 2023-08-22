@@ -26,7 +26,7 @@ typedef IndicatorAppearingBuilder = Widget Function(
 
 typedef ChangeCallback<T> = FutureOr<void> Function(T value);
 
-typedef TapCallback = FutureOr<void> Function();
+typedef TapCallback<T> = FutureOr<void> Function(TapProperties<T> props);
 
 enum ToggleMode { animating, dragged, none }
 
@@ -59,7 +59,7 @@ enum IconArrangement {
 ///
 /// For pre-made switches, please use the constructors of [AnimatedToggleSwitch]
 /// instead.
-class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
+class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly if [allowUnlistedValues] is false.
@@ -127,7 +127,7 @@ class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
   final CustomSeparatorBuilder<T>? separatorBuilder;
 
   /// Callback for tapping anywhere on the widget.
-  final TapCallback? onTap;
+  final TapCallback<T>? onTap;
 
   /// Indicates if [onChanged] is called when an icon is tapped.
   ///
@@ -317,19 +317,12 @@ class _CustomAnimatedToggleSwitchState<T>
   void didUpdateWidget(covariant CustomAnimatedToggleSwitch<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     _checkForUnlistedValue();
-    if (oldWidget.indicatorAppearingDuration !=
-        widget.indicatorAppearingDuration) {
-      _appearingController.duration = widget.indicatorAppearingDuration;
-    }
-    if (oldWidget.indicatorAppearingCurve != widget.indicatorAppearingCurve) {
-      _appearingAnimation.curve = widget.indicatorAppearingCurve;
-    }
-    if (oldWidget.animationDuration != widget.animationDuration) {
-      _controller.duration = widget.animationDuration;
-    }
-    if (oldWidget.animationCurve != widget.animationCurve) {
-      _animation.curve = widget.animationCurve;
-    }
+
+    _appearingController.duration = widget.indicatorAppearingDuration;
+    _appearingAnimation.curve = widget.indicatorAppearingCurve;
+    _controller.duration = widget.animationDuration;
+    _animation.curve = widget.animationCurve;
+
     if (oldWidget.active && !widget.active) {
       _cancelDrag();
     }
@@ -364,9 +357,9 @@ class _CustomAnimatedToggleSwitchState<T>
 
   /// This method is called in two [GestureDetector]s because only one
   /// [GestureDetector.onTapUp] will be triggered.
-  void _onTap() {
+  void _onTap(TapProperties<T> info) {
     if (!_isActive) return;
-    final result = widget.onTap?.call();
+    final result = widget.onTap?.call(info);
     if (result is Future) {
       _addLoadingFuture(result);
     }
@@ -384,8 +377,8 @@ class _CustomAnimatedToggleSwitchState<T>
   /// IMPORTANT: This must be called in [didUpdateWidget] because it updates
   /// [_currentIndex] also.
   void _checkValuePosition() {
-    if (_animationInfo.toggleMode == ToggleMode.dragged) return;
     _currentIndex = widget.values.indexOf(widget.current);
+    if (_animationInfo.toggleMode == ToggleMode.dragged) return;
     if (_currentIndex >= 0) {
       _animateTo(_currentIndex);
     } else {
@@ -409,17 +402,17 @@ class _CustomAnimatedToggleSwitchState<T>
     return result;
   }
 
-  /// Returns the value index by the local position of the cursor.
+  /// Returns the [TapInfo] by the local position of the cursor.
   /// It is mainly intended as a helper function for the build method.
-  int _indexFromPosition(
+  TapInfo<T> _tapInfoFromPosition(
       double x, DetailedGlobalToggleProperties<T> properties) {
-    return _doubleFromPosition(x, properties).round();
-  }
-
-  /// Returns the value by the local position of the cursor.
-  /// It is mainly intended as a helper function for the build method.
-  T _valueFromPosition(double x, DetailedGlobalToggleProperties<T> properties) {
-    return widget.values[_indexFromPosition(x, properties)];
+    final position = _doubleFromPosition(x, properties);
+    final index = position.round();
+    return TapInfo(
+      value: widget.values[index],
+      index: index,
+      position: position,
+    );
   }
 
   @override
@@ -427,6 +420,8 @@ class _CustomAnimatedToggleSwitchState<T>
     double spacing = widget.spacing;
     final textDirection = _textDirectionOf(context);
     final loadingValue = _animationInfo.loading ? 1.0 : 0.0;
+    final privateIndicatorAppearingAnimation =
+        _PrivateAnimation(_appearingAnimation);
 
     final defaultCursor = !_isActive
         ? (_animationInfo.loading
@@ -440,9 +435,14 @@ class _CustomAnimatedToggleSwitchState<T>
     return SizedBox(
       height: widget.height,
       child: MouseRegion(
+        hitTestBehavior: HitTestBehavior.deferToChild,
         cursor: defaultCursor,
         child: GestureDetector(
-          onTapUp: (_) => _onTap(),
+          behavior: HitTestBehavior.deferToChild,
+          onTapUp: (_) => _onTap(TapProperties(
+            tapped: null,
+            values: widget.values,
+          )),
           child: TweenAnimationBuilder<double>(
             duration:
                 widget.loadingAnimationDuration ?? widget.animationDuration,
@@ -468,6 +468,8 @@ class _CustomAnimatedToggleSwitchState<T>
                     mode: _animationInfo.toggleMode,
                     loadingAnimationValue: loadingValue,
                     active: widget.active,
+                    indicatorAppearingAnimation:
+                        privateIndicatorAppearingAnimation,
                   );
                   Widget child = Padding(
                     padding: widget.padding,
@@ -579,6 +581,8 @@ class _CustomAnimatedToggleSwitchState<T>
                           mode: _animationInfo.toggleMode,
                           loadingAnimationValue: loadingValue,
                           active: widget.active,
+                          indicatorAppearingAnimation:
+                              privateIndicatorAppearingAnimation,
                         );
 
                         List<Widget> stack = <Widget>[
@@ -647,12 +651,17 @@ class _CustomAnimatedToggleSwitchState<T>
                                     behavior: HitTestBehavior.translucent,
                                     dragStartBehavior: DragStartBehavior.down,
                                     onTapUp: (details) {
-                                      _onTap();
-                                      if (!widget.iconsTappable) return;
-                                      T newValue = _valueFromPosition(
+                                      final tapInfo = _tapInfoFromPosition(
                                           details.localPosition.dx, properties);
-                                      if (newValue == widget.current) return;
-                                      _onChanged(newValue);
+                                      _onTap(TapProperties(
+                                        tapped: tapInfo,
+                                        values: widget.values,
+                                      ));
+                                      if (!widget.iconsTappable) return;
+                                      if (tapInfo.value == widget.current) {
+                                        return;
+                                      }
+                                      _onChanged(tapInfo.value);
                                     },
                                     onHorizontalDragStart: (details) {
                                       if (!isHoveringIndicator(
