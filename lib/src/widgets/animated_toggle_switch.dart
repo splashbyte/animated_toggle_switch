@@ -72,7 +72,8 @@ abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
 /// If you want to implement a completely custom switch,
 /// you should use [CustomAnimatedToggleSwitch], which is used by
 /// [AnimatedToggleSwitch] in the background.
-class AnimatedToggleSwitch<T> extends _AnimatedToggleSwitchParent<T> {
+class AnimatedToggleSwitch<T extends Object?>
+    extends _AnimatedToggleSwitchParent<T> {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly if [allowUnlistedValues] is false.

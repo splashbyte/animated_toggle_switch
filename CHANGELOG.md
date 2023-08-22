@@ -1,4 +1,4 @@
-## 0.8.0-beta.6
+## 0.8.0-beta.6 (2023-08-22)
 
 - adds parameter to `onTap` ([#41](https://github.com/splashbyte/animated_toggle_switch/issues/41))
 

@@ -59,7 +59,7 @@ enum IconArrangement {
 ///
 /// For pre-made switches, please use the constructors of [AnimatedToggleSwitch]
 /// instead.
-class CustomAnimatedToggleSwitch<T> extends StatefulWidget {
+class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
   /// The currently selected value. It has to be set at [onChanged] or whenever for animating to this value.
   ///
   /// [current] has to be in [values] for working correctly if [allowUnlistedValues] is false.
