@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:example/crazy_switch.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -45,7 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: DefaultTextStyle(
-        style: theme.textTheme.titleLarge ?? TextStyle(),
+        style: theme.textTheme.titleLarge!,
+        textAlign: TextAlign.center,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.dual:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<bool>.dual(
@@ -181,7 +183,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.dual with loading animation:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               DefaultTextStyle.merge(
@@ -233,44 +234,56 @@ class _MyHomePageState extends State<MyHomePage> {
                 first: false,
                 second: true,
                 spacing: 45.0,
-                animationCurve: Curves.easeInOut,
                 animationDuration: const Duration(milliseconds: 600),
                 style: ToggleStyle(
                   borderColor: Colors.transparent,
                   indicatorColor: Colors.white,
                   backgroundColor: Colors.amber,
                 ),
-                styleBuilder: (value) => ToggleStyle(
-                    backgroundColor: value ? Colors.orange : Colors.red[800]),
+                customStyleBuilder: (context, local, global) => ToggleStyle(
+                    backgroundGradient: LinearGradient(
+                  colors: [Colors.green, Colors.red],
+                  stops: [
+                    global.position -
+                        (1 - 2 * max(0, global.position - 0.5)) * 0.5,
+                    global.position + max(0, 2 * (global.position - 0.5)) * 0.5,
+                  ],
+                )),
                 borderWidth: 6.0,
                 height: 60.0,
                 loadingIconBuilder: (context, global) =>
                     CupertinoActivityIndicator(
                         color: Color.lerp(
-                            Colors.red[800], Colors.orange, global.position)),
+                            Colors.red, Colors.green, global.position)),
                 onChanged: (b) {
                   setState(() => positive = b);
                   return Future<dynamic>.delayed(Duration(seconds: 2));
                 },
                 iconBuilder: (value) => value
                     ? Icon(Icons.power_outlined,
-                        color: Colors.orange, size: 32.0)
+                        color: Colors.green, size: 32.0)
                     : Icon(Icons.power_settings_new_rounded,
-                        color: Colors.red[800], size: 32.0),
+                        color: Colors.red, size: 32.0),
                 textBuilder: (value) => Center(
                     child: Text(
-                  value ? 'Active' : 'Inactive',
+                  value ? 'On' : 'Off',
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 20.0,
+                      fontSize: 30.0,
                       fontWeight: FontWeight.w600),
                 )),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Switch similar to package lite_rolling_switch',
-                  textAlign: TextAlign.center,
+                child: Text.rich(
+                  TextSpan(children: [
+                    TextSpan(text: 'Switch inspired by package '),
+                    TextSpan(
+                        text: 'lite_rolling_switch',
+                        style: tappableTextStyle,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launchUrl(liteRollingSwitchUrl))
+                  ]),
                 ),
               ),
               DefaultTextStyle.merge(
@@ -302,20 +315,80 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
-                        ? Icon(Icons.power_outlined, color: green, size: 32.0)
+                        ? Icon(Icons.lightbulb_outline_rounded,
+                            color: green, size: 28.0)
                         : Icon(Icons.power_settings_new_rounded,
-                            color: Colors.red[800], size: 32.0),
+                            color: Colors.red[800], size: 30.0),
                     textBuilder: (value) => value
-                        ? Center(child: Text('Active'))
-                        : Center(child: Text('Inactive')),
+                        ? Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text('Active'))
+                        : Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: Text('Inactive')),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Switch inspired by CrazySwitch (https://github.com/pedromassango/crazy-switch)',
-                  textAlign: TextAlign.center,
+                child: Text.rich(
+                  TextSpan(children: [
+                    TextSpan(text: 'Switch inspired by package '),
+                    TextSpan(
+                        text: 'toggle_switch',
+                        style: tappableTextStyle,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launchUrl(toggleSwitchUrl))
+                  ]),
+                ),
+              ),
+              AnimatedToggleSwitch<int>.size(
+                current: min(value, 2),
+                style: ToggleStyle(
+                  backgroundColor: Color(0xFF919191),
+                  indicatorColor: Color(0xFFEC3345),
+                  borderColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(10.0),
+                  indicatorBorderRadius: BorderRadius.zero,
+                ),
+                values: const [0, 1, 2],
+                iconOpacity: 1.0,
+                selectedIconScale: 1.0,
+                indicatorSize: const Size.fromWidth(100),
+                iconAnimationType: AnimationType.onHover,
+                styleAnimationType: AnimationType.onHover,
+                spacing: 2.0,
+                customSeparatorBuilder: (context, local, global) {
+                  final opacity =
+                  ((global.position - local.position).abs() - 0.5)
+                      .clamp(0.0, 1.0);
+                  return VerticalDivider(
+                      indent: 10.0,
+                      endIndent: 10.0,
+                      color: Colors.white38.withOpacity(opacity));
+                },
+                customIconBuilder: (context, local, global) {
+                  final text = const ['not', 'only', 'icons'][local.index];
+                  return Center(
+                      child: Text(text,
+                          style: TextStyle(
+                              color: Color.lerp(Colors.black, Colors.white,
+                                  local.animationValue))));
+                },
+                borderWidth: 0.0,
+                onChanged: (i) => setState(() => value = i),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text.rich(
+                  TextSpan(children: [
+                    TextSpan(text: 'Switch inspired by '),
+                    TextSpan(
+                        text: 'Crazy Switch',
+                        style: tappableTextStyle,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launchUrl(crazySwitchUrl))
+                  ]),
                 ),
               ),
               Padding(
@@ -326,7 +399,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Standard AnimatedToggleSwitch.rolling:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int>.rolling(
@@ -343,7 +415,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Switch with unselected value:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int?>.rolling(
@@ -364,7 +435,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Customized AnimatedToggleSwitch.rolling:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               SizedBox(height: 16.0),
@@ -478,7 +548,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'You can make any other switch with CustomAnimatedToggleSwitch:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               CustomAnimatedToggleSwitch<bool>(
@@ -541,7 +610,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.size with some custom settings:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
@@ -627,51 +695,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Switch inspired by package toggle_switch',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              AnimatedToggleSwitch<int>.size(
-                current: min(value, 2),
-                style: ToggleStyle(
-                  backgroundColor: Color(0xFF919191),
-                  indicatorColor: Color(0xFFEC3345),
-                  borderColor: Colors.transparent,
-                  borderRadius: BorderRadius.circular(10.0),
-                  indicatorBorderRadius: BorderRadius.zero,
-                ),
-                values: const [0, 1, 2],
-                iconOpacity: 1.0,
-                selectedIconScale: 1.0,
-                indicatorSize: const Size.fromWidth(100),
-                iconAnimationType: AnimationType.onHover,
-                styleAnimationType: AnimationType.onHover,
-                spacing: 2.0,
-                customSeparatorBuilder: (context, local, global) {
-                  final opacity =
-                      ((global.position - local.position).abs() - 0.5)
-                          .clamp(0.0, 1.0);
-                  return VerticalDivider(
-                      indent: 10.0,
-                      endIndent: 10.0,
-                      color: Colors.white38.withOpacity(opacity));
-                },
-                customIconBuilder: (context, local, global) {
-                  final text = const ['not', 'only', 'icons'][local.index];
-                  return Center(
-                      child: Text(text,
-                          style: TextStyle(
-                              color: Color.lerp(Colors.black, Colors.white,
-                                  local.animationValue))));
-                },
-                borderWidth: 0.0,
-                onChanged: (i) => setState(() => value = i),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
                   'AnimatedToggleSwitch.size with a more custom icon and TextDirection.rtl:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
@@ -699,7 +723,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.size with custom rotating animation:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int>.size(
@@ -737,7 +760,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.rollingByHeight with custom indicatorSize and borderRadius:',
-                  textAlign: TextAlign.center,
                 ),
               ),
               AnimatedToggleSwitch<int>.rollingByHeight(
@@ -821,3 +843,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Icon(data);
   }
 }
+
+const tappableTextStyle = TextStyle(color: Colors.blue);
+
+final toggleSwitchUrl =
+    Uri.parse('https://pub.dev/packages/toggle_switch');
+final liteRollingSwitchUrl =
+    Uri.parse('https://pub.dev/packages/lite_rolling_switch');
+final crazySwitchUrl =
+    Uri.parse('https://github.com/pedromassango/crazy-switch');
