@@ -44,7 +44,7 @@
 ## 0.6.0 (2022-12-22)
 
 - fixes README
-- fixes #28
+- fixes ([#28](https://github.com/splashbyte/animated_toggle_switch/issues/28))
 - BREAKING: increases minimum SDK to 2.17
 - BREAKING: renames `value` to `current` and `previousValue` to `previous` in `DetailedGlobalToggleProperties`
 - BREAKING feature: Adds loading animation to all switches. You can disable it by setting `loading` to false.
