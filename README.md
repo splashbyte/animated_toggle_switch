@@ -10,7 +10,7 @@
 
 [![buy me a coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20pizza&emoji=🍕&slug=splashbyte&button_colour=FF8838&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff')](https://www.buymeacoffee.com/splashbyte)
 
-### If you like this package, please leave a like there on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
+### If you like this package, please like it on [pub.dev](https://pub.dev/packages/animated_toggle_switch) and star it on [GitHub](https://github.com/SplashByte/animated_toggle_switch).
 
 Fully customizable, draggable and animated switch with multiple choices and [smooth loading animation](#loading-animation). It has prebuilt constructors for rolling and size animations, but it also allows you to create your own switches with `CustomAnimatedToggleSwitch`.  
 `LTR` and `RTL` are both supported.  
