@@ -315,8 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
-                        ? Icon(Icons.lightbulb_outline_rounded,
-                            color: green, size: 28.0)
+                        ? Icon(Icons.power_outlined, color: green, size: 28.0)
                         : Icon(Icons.power_settings_new_rounded,
                             color: Colors.red[800], size: 30.0),
                     textBuilder: (value) => value
@@ -360,8 +359,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 2.0,
                 customSeparatorBuilder: (context, local, global) {
                   final opacity =
-                  ((global.position - local.position).abs() - 0.5)
-                      .clamp(0.0, 1.0);
+                      ((global.position - local.position).abs() - 0.5)
+                          .clamp(0.0, 1.0);
                   return VerticalDivider(
                       indent: 10.0,
                       endIndent: 10.0,
@@ -846,8 +845,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 const tappableTextStyle = TextStyle(color: Colors.blue);
 
-final toggleSwitchUrl =
-    Uri.parse('https://pub.dev/packages/toggle_switch');
+final toggleSwitchUrl = Uri.parse('https://pub.dev/packages/toggle_switch');
 final liteRollingSwitchUrl =
     Uri.parse('https://pub.dev/packages/lite_rolling_switch');
 final crazySwitchUrl =

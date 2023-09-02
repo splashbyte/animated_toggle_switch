@@ -758,15 +758,16 @@ class AnimatedToggleSwitch<T extends Object?>
       }
 
       final pos = global.position;
-      int first = pos.floor();
-      int second = pos.ceil();
-      double transitionValue = pos - first;
+      int firstIndex = pos.floor();
+      int secondIndex = pos.ceil();
+      double transitionValue = pos - firstIndex;
       return Transform.scale(
         scale: iconScale,
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Transform.rotate(
-              key: ValueKey(first),
+              key: ValueKey(firstIndex),
               angle: transitionValue * angleDistance,
               child: Opacity(
                   opacity: (1 - transitionValue).clamp(0.0, 1.0),
@@ -774,14 +775,14 @@ class AnimatedToggleSwitch<T extends Object?>
                       context,
                       RollingProperties(
                         foreground: true,
-                        value: values[first],
-                        index: first,
+                        value: values[firstIndex],
+                        index: firstIndex,
                       ),
                       global)),
             ),
-            if (first != second)
+            if (firstIndex != secondIndex)
               Transform.rotate(
-                key: ValueKey(second),
+                key: ValueKey(secondIndex),
                 angle: (transitionValue - 1) * angleDistance,
                 child: Opacity(
                     opacity: transitionValue.clamp(0.0, 1.0),
@@ -789,8 +790,8 @@ class AnimatedToggleSwitch<T extends Object?>
                         context,
                         RollingProperties(
                           foreground: true,
-                          value: values[second],
-                          index: second,
+                          value: values[secondIndex],
+                          index: secondIndex,
                         ),
                         global)),
               ),
