@@ -15,7 +15,7 @@
 Fully customizable, draggable and animated switch with multiple choices and [smooth loading animation](#loading-animation). It has prebuilt constructors for rolling and size animations, but it also allows you to create your own switches with `CustomAnimatedToggleSwitch`.  
 `LTR` and `RTL` are both supported.  
 [Switches without an (initial) selection](#nullable-selection) are also possible.  
-Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom version. This ensures that you can get started easily and still customize a lot if necessary. There are several options for [styling](#styling) it.
+Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom version. This ensures that you can [get started easily](#simple-rolling-animation) and still customize a lot if necessary. There are several options for [styling](#styling) it.
 
 For a slider with a similar look you can check out [action_slider](https://pub.dev/packages/action_slider).
 
@@ -71,6 +71,7 @@ AnimatedToggleSwitch<int>.rolling(
   values: [0, 1, 2, 3],
   onChanged: (i) => setState(() => value = i),
   iconBuilder: iconBuilder,
+  // iconList: [...], you can use iconBuilder, customIconBuilder or iconList
   style: ToggleStyle(...), // optional style settings
   ... // many more parameters available
 )
