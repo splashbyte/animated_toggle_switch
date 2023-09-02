@@ -3,6 +3,8 @@
 - adds `separatorBuilder`, `customSeparatorBuilder`, `style` and `styleAnimationType` to `AnimatedToggleSwitch`
 - adds `separatorBuilder` to `CustomAnimatedToggleSwitch`
 - adds `active` to all constructors ([#30](https://github.com/splashbyte/animated_toggle_switch/issues/30))
+- adds `styleBuilder` and `styleList` to `AnimatedToggleSwitch`
+- adds `iconList` to `AnimatedToggleSwitch.size`, `AnimatedToggleSwitch.sizeByHeight`, `AnimatedToggleSwitch.rolling` and `AnimatedToggleSwitch.rollingByHeight`
 - BREAKING: moves many parameters in `AnimatedToggleSwitch` to `style`:
   - `innerColor` (renamed to `backgroundColor`)
   - `innerGradient` (renamed to `backgroundGradient`)
