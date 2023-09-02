@@ -25,8 +25,8 @@
 - BREAKING: replaces `transitionType` with `indicatorTransition` in `AnimatedToggleSwitch.rolling()`,
   `AnimatedToggleSwitch.rollingByHeight()` and `AnimatedToggleSwitch.dual()`
 - BREAKING: removes `iconSize` and `selectedIconSize` in `AnimatedToggleSwitch` constructors
-  - `rolling()`, `rollingByHeight()`, `dual()`: new parameter `selectedIconScale` controls scaling now
-  - `size()`, `sizeByHeight()`: new parameter `indicatorIconScale` controls scaling now
+  - `rolling()`, `rollingByHeight()`, `dual()`: new parameter `indicatorIconScale` controls scaling now
+  - `size()`, `sizeByHeight()`: new parameter `selectedIconScale` controls scaling now
 
 ## 0.7.0 (2023-06-19)
 
