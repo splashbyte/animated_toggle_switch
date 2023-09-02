@@ -26,15 +26,13 @@ For a slider with a similar look you can check out [action_slider](https://pub.d
 `AnimatedToggleSwitch.dual()`  
 ![animated_toggle_switch_example_dual](https://user-images.githubusercontent.com/43761463/161432631-e6dd3d16-7b64-410b-a9fa-c956d3442598.gif)
 ![animated_toggle_switch_example_borderradius_builder](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/ee615f64-d897-43f1-b508-0318805195e4)
-![animated_toggle_switch_example_lite_rolling_gradient](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/6cd5d2d3-b4bd-4020-8568-354c71221e40)
+![animated_toggle_switch_example_gradient](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/b0d390fc-cd18-45ad-b2ce-61e453f098ad)
 
 Switch inspired by [lite_rolling_switch](https://pub.dev/packages/lite_rolling_switch) (made with `AnimatedToggleSwitch.dual()`)  
-![animated_toggle_switch_example_lite_rolling](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/f1bec7cd-4885-4e8d-ac13-176d6b46245a)
-
+![animated_toggle_switch_example_lite_rolling_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/34751d16-cbb1-42b5-a14d-6bd3340d676a)
 
 Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made with `AnimatedToggleSwitch.size()`)  
 ![animated_toggle_switch_example_toggle_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/884c8433-3b11-4fe1-b2a8-c02599c56aee)
-
 
 Switch inspired by [crazy-switch](https://github.com/pedromassango/crazy-switch) (made with `CustomAnimatedToggleSwitch()`)  
 ![animated_toggle_switch_example_crazy_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/106afaf5-88a0-4d4b-ad59-2b22182d18be)
