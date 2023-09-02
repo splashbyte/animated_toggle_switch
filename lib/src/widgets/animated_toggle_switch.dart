@@ -57,7 +57,7 @@ abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
           (styleBuilder ?? customStyleBuilder) == null ||
               (styleBuilder ?? styleList) == null ||
               (customStyleBuilder ?? styleList) == null,
-          'Only one parameter from styleBuilder, customStyleBuilder and styleList can be set.',
+          'Only one parameter of styleBuilder, customStyleBuilder and styleList can be set.',
         ),
         assert(styleList == null || styleList.length == values.length,
             'styleList must be null or have the same length as values'),

@@ -315,7 +315,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
-                        ? Icon(Icons.power_outlined, color: green, size: 28.0)
+                        ? Icon(Icons.lightbulb_outline_rounded,
+                            color: green, size: 28.0)
                         : Icon(Icons.power_settings_new_rounded,
                             color: Colors.red[800], size: 30.0),
                     textBuilder: (value) => value
