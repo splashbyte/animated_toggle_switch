@@ -57,7 +57,7 @@ abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
           (styleBuilder ?? customStyleBuilder) == null ||
               (styleBuilder ?? styleList) == null ||
               (customStyleBuilder ?? styleList) == null,
-          'Only one parameter from styleBuilder, customStyleBuilder and styleList can be set.',
+          'Only one parameter of styleBuilder, customStyleBuilder and styleList can be set.',
         ),
         assert(styleList == null || styleList.length == values.length,
             'styleList must be null or have the same length as values'),
@@ -758,39 +758,40 @@ class AnimatedToggleSwitch<T extends Object?>
       }
 
       final pos = global.position;
-      int first = pos.floor();
-      int second = pos.ceil();
-      double transitionValue = pos - first;
+      int firstIndex = pos.floor();
+      int secondIndex = pos.ceil();
+      double transitionValue = pos - firstIndex;
       return Transform.scale(
         scale: iconScale,
         child: Stack(
+          alignment: Alignment.center,
           children: [
             Transform.rotate(
-              key: ValueKey(first),
+              key: ValueKey(firstIndex),
               angle: transitionValue * angleDistance,
               child: Opacity(
-                  opacity: 1 - transitionValue,
+                  opacity: (1 - transitionValue).clamp(0.0, 1.0),
                   child: finalIconBuilder!(
                       context,
                       RollingProperties(
                         foreground: true,
-                        value: values[first],
-                        index: first,
+                        value: values[firstIndex],
+                        index: firstIndex,
                       ),
                       global)),
             ),
-            if (first != second)
+            if (firstIndex != secondIndex)
               Transform.rotate(
-                key: ValueKey(second),
+                key: ValueKey(secondIndex),
                 angle: (transitionValue - 1) * angleDistance,
                 child: Opacity(
-                    opacity: transitionValue,
+                    opacity: transitionValue.clamp(0.0, 1.0),
                     child: finalIconBuilder(
                         context,
                         RollingProperties(
                           foreground: true,
-                          value: values[second],
-                          index: second,
+                          value: values[secondIndex],
+                          index: secondIndex,
                         ),
                         global)),
               ),
@@ -956,8 +957,8 @@ class AnimatedToggleSwitch<T extends Object?>
           child: Align(
             alignment: alignment,
             widthFactor: min(
-                1,
-                1 -
+                1.0,
+                1.0 -
                     local.animationValue +
                     global.indicatorSize.width /
                         (2 * (global.indicatorSize.width + global.spacing))),
@@ -965,17 +966,21 @@ class AnimatedToggleSwitch<T extends Object?>
               padding: textMargin,
               child: Transform.translate(
                 offset: offset * local.animationValue * (left ? 1 : -1),
-                child: Opacity(
-                    opacity: opacityAnimation ? 1 - local.animationValue : 1,
-                    child: textBuilder?.call(value) ??
-                        customTextBuilder?.call(
-                          context,
-                          local.copyWith(
-                            value: value,
-                            index: index,
-                          ),
-                          global,
-                        )),
+                child: Center(
+                  child: Opacity(
+                      opacity: opacityAnimation
+                          ? 1.0 - local.animationValue.clamp(0.0, 1.0)
+                          : 1.0,
+                      child: textBuilder?.call(value) ??
+                          customTextBuilder?.call(
+                            context,
+                            local.copyWith(
+                              value: value,
+                              index: index,
+                            ),
+                            global,
+                          )),
+                ),
               ),
             ),
           ),
@@ -1160,7 +1165,7 @@ class AnimatedToggleSwitch<T extends Object?>
   Widget _animatedIcon(BuildContext context, AnimatedToggleProperties<T> local,
       DetailedGlobalToggleProperties<T> global) {
     return Opacity(
-        opacity: 1.0 - global.loadingAnimationValue,
+        opacity: 1.0 - global.loadingAnimationValue.clamp(0.0, 1.0),
         child: Center(child: animatedIconBuilder!(context, local, global)));
   }
 
@@ -1191,7 +1196,7 @@ class AnimatedToggleSwitch<T extends Object?>
         double localPosition =
             global.position - global.position.floorToDouble();
         if (values[global.position.floor()] == local.value) {
-          animationValue = 1 - localPosition;
+          animationValue = 1.0 - localPosition;
         } else if (values[global.position.ceil()] == local.value) {
           animationValue = localPosition;
         }
@@ -1218,7 +1223,7 @@ class AnimatedToggleSwitch<T extends Object?>
 
   Widget _customIndicatorBuilder(BuildContext context, ToggleStyle style,
       Widget? child, DetailedGlobalToggleProperties<T> global) {
-    final loadingValue = global.loadingAnimationValue;
+    final loadingValue = global.loadingAnimationValue.clamp(0.0, 1.0);
     return DecoratedBox(
         decoration: BoxDecoration(
           color: style.indicatorColor,

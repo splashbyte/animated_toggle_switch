@@ -14,6 +14,7 @@ dependencies:
 
   animated_toggle_switch:
     path: ..
+  url_launcher: ^6.1.12
 
 dev_dependencies:
   flutter_test:
