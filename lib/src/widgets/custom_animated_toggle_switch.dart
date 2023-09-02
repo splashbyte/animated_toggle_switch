@@ -292,6 +292,7 @@ class _CustomAnimatedToggleSwitchState<T>
   @override
   void dispose() {
     _controller.dispose();
+    _appearingController.dispose();
     super.dispose();
   }
 
