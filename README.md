@@ -80,7 +80,7 @@ AnimatedToggleSwitch<int>.rolling(
 ### Styling
 `style`, `styleBuilder`, `customStyleBuilder` and `styleList` can be used to style an `AnimatedToggleSwitch`.  
 For the general look of the switch, you can use `style`.  
-For parameters that should change with the selection, you can use `styleBuilder`.  
+For parameters that should change with the selection, you can use `styleBuilder` or `styleList`.  
 If you need additional parameters, you can use `customStyleBuilder`.  
 ```dart
 AnimatedToggleSwitch<int>.rolling(
