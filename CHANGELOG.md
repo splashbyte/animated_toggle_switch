@@ -1,5 +1,6 @@
-## 0.8.0+1
-- fixes changelog of version 0.8.0
+## 0.8.1 (2023-10-05)
+
+- adds `indicatorGradient` to `ToggleStyle`
 
 ## 0.8.0 (2023-09-02)
 
