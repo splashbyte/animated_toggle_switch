@@ -6,6 +6,9 @@ class ToggleStyle {
   /// Defaults to [ThemeData.colorScheme.secondary].
   final Color? indicatorColor;
 
+  /// Gradient of the indicator. Overwrites [indicatorColor] if not [null].
+  final Gradient? indicatorGradient;
+
   /// Background color of the switch.
   ///
   /// Defaults to [ThemeData.colorScheme.surface].
@@ -41,6 +44,7 @@ class ToggleStyle {
   /// Default constructor for [ToggleStyle].
   const ToggleStyle({
     this.indicatorColor,
+    this.indicatorGradient,
     this.backgroundColor,
     this.backgroundGradient,
     this.borderColor,
@@ -52,8 +56,9 @@ class ToggleStyle {
   });
 
   /// Private constructor for setting all possible parameters.
-  ToggleStyle._({
+  const ToggleStyle._({
     required this.indicatorColor,
+    required this.indicatorGradient,
     required this.backgroundColor,
     required this.backgroundGradient,
     required this.borderColor,
@@ -72,9 +77,11 @@ class ToggleStyle {
           ? this
           : ToggleStyle._(
               indicatorColor: other.indicatorColor ?? indicatorColor,
+              indicatorGradient: other.indicatorGradient ??
+                  (other.indicatorColor != null ? null : indicatorGradient),
               backgroundColor: other.backgroundColor ?? backgroundColor,
               backgroundGradient: other.backgroundGradient ??
-                  (other.backgroundColor == null ? null : backgroundGradient),
+                  (other.backgroundColor != null ? null : backgroundGradient),
               borderColor: other.borderColor ?? borderColor,
               borderRadius: other.borderRadius ?? borderRadius,
               indicatorBorderRadius: other.indicatorBorderRadius ??
@@ -93,6 +100,11 @@ class ToggleStyle {
       ToggleStyle._(
         indicatorColor:
             Color.lerp(style1.indicatorColor, style2.indicatorColor, t),
+        indicatorGradient: Gradient.lerp(
+          style1.indicatorGradient ?? style1.indicatorColor?.toGradient(),
+          style2.indicatorGradient ?? style2.indicatorColor?.toGradient(),
+          t,
+        ),
         backgroundColor:
             Color.lerp(style1.backgroundColor, style2.backgroundColor, t),
         backgroundGradient: Gradient.lerp(
@@ -136,6 +148,7 @@ class ToggleStyle {
       other is ToggleStyle &&
           runtimeType == other.runtimeType &&
           indicatorColor == other.indicatorColor &&
+          indicatorGradient == other.indicatorGradient &&
           backgroundColor == other.backgroundColor &&
           backgroundGradient == other.backgroundGradient &&
           borderColor == other.borderColor &&
@@ -148,6 +161,7 @@ class ToggleStyle {
   @override
   int get hashCode =>
       indicatorColor.hashCode ^
+      indicatorGradient.hashCode ^
       backgroundColor.hashCode ^
       backgroundGradient.hashCode ^
       borderColor.hashCode ^
