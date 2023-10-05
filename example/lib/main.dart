@@ -518,8 +518,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 styleBuilder: (i) => ToggleStyle(
-                  indicatorGradient:
-                      LinearGradient(colors: [colorBuilder(i), colorBuilder((i + 1) % 4)]),
+                  indicatorGradient: LinearGradient(
+                      colors: [colorBuilder(i), colorBuilder((i + 1) % 4)]),
                 ),
                 height: 55,
                 spacing: 20.0,
