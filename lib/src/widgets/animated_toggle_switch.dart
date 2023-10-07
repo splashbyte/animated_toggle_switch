@@ -13,7 +13,7 @@ typedef SimpleRollingIconBuilder<T> = Widget Function(T value, bool foreground);
 typedef LoadingIconBuilder<T> = Widget Function(
     BuildContext context, DetailedGlobalToggleProperties<T> global);
 
-/// A version of IconBuilder for writing a own Animation on the change of the selected item.
+/// A version of [IconBuilder] for writing a custom animation for the change of the selected item.
 typedef AnimatedIconBuilder<T> = Widget Function(
     BuildContext context,
     AnimatedToggleProperties<T> local,
@@ -37,6 +37,9 @@ typedef SeparatorBuilder = Widget Function(int index);
 
 /// Specifies when an value should be animated.
 enum AnimationType {
+  /// Disables the animation.
+  none,
+
   /// Starts an animation if an item is selected.
   onSelected,
 
@@ -272,6 +275,11 @@ class AnimatedToggleSwitch<T extends Object?>
   /// For deactivating this animation please set [inactiveOpacity] to [1.0].
   final Duration inactiveOpacityDuration;
 
+  /// Indicates whether external changes to the [Theme] will be animated.
+  ///
+  /// This is useful if the theme is already animated externally.
+  final bool animateThemeChanges;
+
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   ///
   /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
@@ -322,6 +330,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.animateThemeChanges = true,
   })  : _iconArrangement = IconArrangement.row,
         super(
           values: values,
@@ -384,6 +393,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.animateThemeChanges = true,
   })  : spacing = spacing * (height - 2 * borderWidth),
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
@@ -448,6 +458,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.animateThemeChanges = true,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
@@ -515,6 +526,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.animateThemeChanges = true,
   })  : indicatorSize = indicatorSize * (height - 2 * borderWidth),
         spacing = spacing * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -610,6 +622,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     double indicatorIconScale = 1.0,
+    this.animateThemeChanges = true,
   })  : iconAnimationCurve = Curves.linear,
         iconAnimationDuration = Duration.zero,
         selectedIconOpacity = iconOpacity,
@@ -691,6 +704,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     double indicatorIconScale = 1.0,
+    this.animateThemeChanges = true,
   })  : iconAnimationCurve = Curves.linear,
         spacing = spacing * (height - 2 * borderWidth),
         iconAnimationDuration = Duration.zero,
@@ -887,6 +901,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.animateThemeChanges = true,
   })  : assert(clipAnimation || opacityAnimation),
         iconOpacity = 1.0,
         selectedIconOpacity = 1.0,
@@ -1021,13 +1036,25 @@ class AnimatedToggleSwitch<T extends Object?>
     ThemeData theme = Theme.of(context);
     BorderRadiusGeometry defaultBorderRadius =
         BorderRadius.circular(height / 2);
-    final style = ToggleStyle._(
-      indicatorColor: theme.colorScheme.secondary,
+    final style = _CustomToggleStyle(
+      indicatorColor: _ToggleStyleProperty(
+        value: theme.colorScheme.secondary,
+        animationEnabled: animateThemeChanges,
+      ),
       indicatorGradient: null,
-      backgroundColor: theme.colorScheme.surface,
+      backgroundColor: _ToggleStyleProperty(
+        value: theme.colorScheme.surface,
+        animationEnabled: animateThemeChanges,
+      ),
       backgroundGradient: null,
-      borderColor: theme.colorScheme.secondary,
-      borderRadius: defaultBorderRadius,
+      borderColor: _ToggleStyleProperty(
+        value: theme.colorScheme.secondary,
+        animationEnabled: animateThemeChanges,
+      ),
+      borderRadius: _ToggleStyleProperty(
+        value: defaultBorderRadius,
+        animationEnabled: animateThemeChanges,
+      ),
       indicatorBorderRadius: null,
       indicatorBorder: null,
       indicatorBoxShadow: null,
@@ -1078,34 +1105,35 @@ class AnimatedToggleSwitch<T extends Object?>
             opacity: global.active ? 1.0 : inactiveOpacity,
             duration: inactiveOpacityDuration,
             curve: inactiveOpacityCurve,
-            child: _animationTypeBuilder<ToggleStyle>(
+            child: _animationTypeBuilder<_BaseToggleStyle>(
               context,
               styleAnimationType,
               (local) => style._merge(
                 _styleBuilder(context, local, global),
                 _indicatorBorderRadiusDifference,
               ),
-              ToggleStyle._lerp,
+              _BaseToggleStyle._lerp,
               (style) => DecoratedBox(
                 decoration: BoxDecoration(
-                  color: style.backgroundColor,
-                  gradient: style.backgroundGradient,
-                  borderRadius: style.borderRadius,
-                  boxShadow: style.boxShadow,
+                  color: style._backgroundColor?.value,
+                  gradient: style._backgroundGradient?.value,
+                  borderRadius: style._borderRadius?.value,
+                  boxShadow: style._boxShadow?.value,
                 ),
                 child: DecoratedBox(
                   position: DecorationPosition.foreground,
                   decoration: BoxDecoration(
-                    border: borderWidth <= 0.0
+                    border: borderWidth <= 0.0 || style._borderColor == null
                         ? null
                         : Border.all(
-                            color: style.borderColor!,
+                            color: style._borderColor!.value,
                             width: borderWidth,
                           ),
-                    borderRadius: style.borderRadius,
+                    borderRadius: style._borderRadius?.value,
                   ),
                   child: ClipRRect(
-                    borderRadius: style.borderRadius!,
+                    borderRadius:
+                        style._borderRadius?.value ?? BorderRadius.zero,
                     child: child,
                   ),
                 ),
@@ -1124,12 +1152,15 @@ class AnimatedToggleSwitch<T extends Object?>
     Widget Function(V value) builder,
     GlobalToggleProperties<T> properties,
   ) {
-    switch (animationType) {
-      case AnimationType.onSelected:
-        V currentValue = valueProvider(
+    currentValueProvider() => valueProvider(
           StyledToggleProperties(
               value: current, index: values.indexOf(current)),
         );
+    switch (animationType) {
+      case AnimationType.none:
+        return builder(currentValueProvider());
+      case AnimationType.onSelected:
+        V currentValue = currentValueProvider();
         return TweenAnimationBuilder<V>(
           curve: animationCurve,
           duration: animationDuration,
@@ -1151,16 +1182,16 @@ class AnimatedToggleSwitch<T extends Object?>
   }
 
   Widget _indicatorBuilder(BuildContext context,
-      DetailedGlobalToggleProperties<T> properties, ToggleStyle style) {
+      DetailedGlobalToggleProperties<T> properties, _BaseToggleStyle style) {
     final child = foregroundIndicatorIconBuilder?.call(context, properties);
-    return _animationTypeBuilder<ToggleStyle>(
+    return _animationTypeBuilder<_BaseToggleStyle>(
       context,
       indicatorAnimationType,
       (local) => style._merge(
         _styleBuilder(context, local, properties),
         _indicatorBorderRadiusDifference,
       ),
-      ToggleStyle._lerp,
+      _BaseToggleStyle._lerp,
       (style) => _customIndicatorBuilder(context, style, child, properties),
       properties,
     );
@@ -1177,6 +1208,15 @@ class AnimatedToggleSwitch<T extends Object?>
       DetailedGlobalToggleProperties<T> global) {
     if (animatedIconBuilder == null) return const SizedBox();
     switch (iconAnimationType) {
+      case AnimationType.none:
+        return _animatedIcon(
+          context,
+          AnimatedToggleProperties._fromLocal(
+            animationValue: local.value == global.current ? 1.0 : 0.0,
+            properties: local,
+          ),
+          global,
+        );
       case AnimationType.onSelected:
         double currentTweenValue = local.value == global.current ? 1.0 : 0.0;
         return TweenAnimationBuilder<double>(
@@ -1225,16 +1265,16 @@ class AnimatedToggleSwitch<T extends Object?>
           );
   }
 
-  Widget _customIndicatorBuilder(BuildContext context, ToggleStyle style,
+  Widget _customIndicatorBuilder(BuildContext context, _BaseToggleStyle style,
       Widget? child, DetailedGlobalToggleProperties<T> global) {
     final loadingValue = global.loadingAnimationValue.clamp(0.0, 1.0);
     return DecoratedBox(
         decoration: BoxDecoration(
-          color: style.indicatorColor,
-          gradient: style.indicatorGradient,
-          borderRadius: style.indicatorBorderRadius,
-          border: style.indicatorBorder,
-          boxShadow: style.indicatorBoxShadow,
+          color: style._indicatorColor?.value,
+          gradient: style._indicatorGradient?.value,
+          borderRadius: style._indicatorBorderRadius?.value,
+          border: style._indicatorBorder?.value,
+          boxShadow: style._indicatorBoxShadow?.value,
         ),
         child: Center(
           child: Stack(
