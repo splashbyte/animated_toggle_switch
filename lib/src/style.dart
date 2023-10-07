@@ -1,35 +1,41 @@
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
-abstract class _BaseToggleStyle {
-  const _BaseToggleStyle();
+/// The base class for all toggle styles.
+///
+/// In most cases [ToggleStyle] is sufficient.
+///
+/// If you want to disable the animation of single properties,
+/// you can use [CustomToggleStyle] for this purpose.
+abstract class BaseToggleStyle {
+  const BaseToggleStyle._();
 
-  _ToggleStyleProperty<Color>? get _indicatorColor;
+  ToggleStyleProperty<Color>? get _indicatorColor;
 
-  _ToggleStyleProperty<Gradient>? get _indicatorGradient;
+  ToggleStyleProperty<Gradient>? get _indicatorGradient;
 
-  _ToggleStyleProperty<Color>? get _backgroundColor;
+  ToggleStyleProperty<Color>? get _backgroundColor;
 
-  _ToggleStyleProperty<Gradient>? get _backgroundGradient;
+  ToggleStyleProperty<Gradient>? get _backgroundGradient;
 
-  _ToggleStyleProperty<Color>? get _borderColor;
+  ToggleStyleProperty<Color>? get _borderColor;
 
-  _ToggleStyleProperty<BorderRadiusGeometry>? get _borderRadius;
+  ToggleStyleProperty<BorderRadiusGeometry>? get _borderRadius;
 
-  _ToggleStyleProperty<BorderRadiusGeometry>? get _indicatorBorderRadius;
+  ToggleStyleProperty<BorderRadiusGeometry>? get _indicatorBorderRadius;
 
-  _ToggleStyleProperty<BoxBorder>? get _indicatorBorder;
+  ToggleStyleProperty<BoxBorder>? get _indicatorBorder;
 
-  _ToggleStyleProperty<List<BoxShadow>>? get _indicatorBoxShadow;
+  ToggleStyleProperty<List<BoxShadow>>? get _indicatorBoxShadow;
 
-  _ToggleStyleProperty<List<BoxShadow>>? get _boxShadow;
+  ToggleStyleProperty<List<BoxShadow>>? get _boxShadow;
 
-  _BaseToggleStyle _merge(
-    _BaseToggleStyle? other,
+  BaseToggleStyle _merge(
+    BaseToggleStyle? other,
     BorderRadiusGeometry indicatorBorderRadiusDifference,
   ) =>
       other == null
           ? this
-          : _CustomToggleStyle(
+          : CustomToggleStyle._(
               indicatorColor: other._indicatorColor ?? _indicatorColor,
               indicatorGradient: other._indicatorGradient ??
                   (other._indicatorColor != null ? null : _indicatorGradient),
@@ -39,10 +45,10 @@ abstract class _BaseToggleStyle {
               borderColor: other._borderColor ?? _borderColor,
               borderRadius: other._borderRadius ?? _borderRadius,
               indicatorBorderRadius: other._indicatorBorderRadius ??
-                  other._borderRadius?.update((value) =>
+                  other._borderRadius?._map((value) =>
                       value.subtract(indicatorBorderRadiusDifference)) ??
                   _indicatorBorderRadius ??
-                  _borderRadius?.update((value) =>
+                  _borderRadius?._map((value) =>
                       value.subtract(indicatorBorderRadiusDifference)),
               indicatorBorder: other._indicatorBorder ?? _indicatorBorder,
               indicatorBoxShadow:
@@ -50,86 +56,89 @@ abstract class _BaseToggleStyle {
               boxShadow: other._boxShadow ?? _boxShadow,
             );
 
-  static _BaseToggleStyle _lerp(
-          _BaseToggleStyle style1, _BaseToggleStyle style2, double t) =>
-      _CustomToggleStyle(
-        indicatorColor: _ToggleStyleProperty.lerpConditional(
+  static BaseToggleStyle _lerp(
+          BaseToggleStyle style1, BaseToggleStyle style2, double t) =>
+      CustomToggleStyle._(
+        indicatorColor: ToggleStyleProperty._lerpConditional(
             style1._indicatorColor, style2._indicatorColor, t, Color.lerp),
-        indicatorGradient: _ToggleStyleProperty.lerpConditional(
+        indicatorGradient: ToggleStyleProperty._lerpConditional(
             style1._indicatorGradient ??
-                style1._indicatorColor?.map((value) => value.toGradient()),
+                style1._indicatorColor?._map((value) => value.toGradient()),
             style2._indicatorGradient ??
-                style2._indicatorColor?.map((value) => value.toGradient()),
+                style2._indicatorColor?._map((value) => value.toGradient()),
             t,
             Gradient.lerp),
-        backgroundColor: _ToggleStyleProperty.lerpConditional(
+        backgroundColor: ToggleStyleProperty._lerpConditional(
             style1._backgroundColor, style2._backgroundColor, t, Color.lerp),
-        backgroundGradient: _ToggleStyleProperty.lerpConditional(
+        backgroundGradient: ToggleStyleProperty._lerpConditional(
             style1._backgroundGradient ??
-                style1._backgroundColor?.map((value) => value.toGradient()),
+                style1._backgroundColor?._map((value) => value.toGradient()),
             style2._backgroundGradient ??
-                style2._backgroundColor?.map((value) => value.toGradient()),
+                style2._backgroundColor?._map((value) => value.toGradient()),
             t,
             Gradient.lerp),
-        borderColor: _ToggleStyleProperty.lerpConditional(
+        borderColor: ToggleStyleProperty._lerpConditional(
             style1._borderColor, style2._borderColor, t, Color.lerp),
-        borderRadius: _ToggleStyleProperty.lerpConditional(style1._borderRadius,
+        borderRadius: ToggleStyleProperty._lerpConditional(style1._borderRadius,
             style2._borderRadius, t, BorderRadiusGeometry.lerp),
-        indicatorBorderRadius: _ToggleStyleProperty.lerpConditional(
+        indicatorBorderRadius: ToggleStyleProperty._lerpConditional(
             style1._indicatorBorderRadius ?? style1._borderRadius,
             style2._indicatorBorderRadius ?? style2._borderRadius,
             t,
             BorderRadiusGeometry.lerp),
-        indicatorBorder: _ToggleStyleProperty.lerpConditional(
+        indicatorBorder: ToggleStyleProperty._lerpConditional(
             style1._indicatorBorder,
             style2._indicatorBorder,
             t,
             BoxBorder.lerp),
-        indicatorBoxShadow: _ToggleStyleProperty.lerpConditional(
+        indicatorBoxShadow: ToggleStyleProperty._lerpConditional(
             style1._indicatorBoxShadow,
             style2._indicatorBoxShadow,
             t,
             BoxShadow.lerpList),
-        boxShadow: _ToggleStyleProperty.lerpConditional(
+        boxShadow: ToggleStyleProperty._lerpConditional(
             style1._boxShadow, style2._boxShadow, t, BoxShadow.lerpList),
       );
 }
 
-class _CustomToggleStyle extends _BaseToggleStyle {
+class CustomToggleStyle extends BaseToggleStyle {
   @override
-  final _ToggleStyleProperty<Color>? _indicatorColor;
+  final ToggleStyleProperty<Color>? _indicatorColor;
   @override
-  final _ToggleStyleProperty<Gradient>? _indicatorGradient;
+  final ToggleStyleProperty<Gradient>? _indicatorGradient;
   @override
-  final _ToggleStyleProperty<Color>? _backgroundColor;
+  final ToggleStyleProperty<Color>? _backgroundColor;
   @override
-  final _ToggleStyleProperty<Gradient>? _backgroundGradient;
+  final ToggleStyleProperty<Gradient>? _backgroundGradient;
   @override
-  final _ToggleStyleProperty<Color>? _borderColor;
+  final ToggleStyleProperty<Color>? _borderColor;
   @override
-  final _ToggleStyleProperty<BorderRadiusGeometry>? _borderRadius;
+  final ToggleStyleProperty<BorderRadiusGeometry>? _borderRadius;
   @override
-  final _ToggleStyleProperty<BorderRadiusGeometry>? _indicatorBorderRadius;
+  final ToggleStyleProperty<BorderRadiusGeometry>? _indicatorBorderRadius;
   @override
-  final _ToggleStyleProperty<BoxBorder>? _indicatorBorder;
+  final ToggleStyleProperty<BoxBorder>? _indicatorBorder;
   @override
-  final _ToggleStyleProperty<List<BoxShadow>>? _indicatorBoxShadow;
+  final ToggleStyleProperty<List<BoxShadow>>? _indicatorBoxShadow;
   @override
-  final _ToggleStyleProperty<List<BoxShadow>>? _boxShadow;
+  final ToggleStyleProperty<List<BoxShadow>>? _boxShadow;
 
-  const _CustomToggleStyle(
-      {required _ToggleStyleProperty<Color>? indicatorColor,
-      required _ToggleStyleProperty<Gradient>? indicatorGradient,
-      required _ToggleStyleProperty<Color>? backgroundColor,
-      required _ToggleStyleProperty<Gradient>? backgroundGradient,
-      required _ToggleStyleProperty<Color>? borderColor,
-      required _ToggleStyleProperty<BorderRadiusGeometry>? borderRadius,
-      required _ToggleStyleProperty<BorderRadiusGeometry>?
-          indicatorBorderRadius,
-      required _ToggleStyleProperty<BoxBorder>? indicatorBorder,
-      required _ToggleStyleProperty<List<BoxShadow>>? indicatorBoxShadow,
-      required _ToggleStyleProperty<List<BoxShadow>>? boxShadow})
-      : _indicatorColor = indicatorColor,
+  /// Default constructor for [CustomToggleStyle].
+  ///
+  /// If you don't want to disable the animation of single properties,
+  /// you should use [ToggleStyle] instead.
+  const CustomToggleStyle({
+    ToggleStyleProperty<Color>? indicatorColor,
+    ToggleStyleProperty<Gradient>? indicatorGradient,
+    ToggleStyleProperty<Color>? backgroundColor,
+    ToggleStyleProperty<Gradient>? backgroundGradient,
+    ToggleStyleProperty<Color>? borderColor,
+    ToggleStyleProperty<BorderRadiusGeometry>? borderRadius,
+    ToggleStyleProperty<BorderRadiusGeometry>? indicatorBorderRadius,
+    ToggleStyleProperty<BoxBorder>? indicatorBorder,
+    ToggleStyleProperty<List<BoxShadow>>? indicatorBoxShadow,
+    ToggleStyleProperty<List<BoxShadow>>? boxShadow,
+  })  : _indicatorColor = indicatorColor,
         _indicatorGradient = indicatorGradient,
         _backgroundColor = backgroundColor,
         _backgroundGradient = backgroundGradient,
@@ -138,10 +147,34 @@ class _CustomToggleStyle extends _BaseToggleStyle {
         _indicatorBorderRadius = indicatorBorderRadius,
         _indicatorBorder = indicatorBorder,
         _indicatorBoxShadow = indicatorBoxShadow,
-        _boxShadow = boxShadow;
+        _boxShadow = boxShadow,
+        super._();
+
+  const CustomToggleStyle._({
+    required ToggleStyleProperty<Color>? indicatorColor,
+    required ToggleStyleProperty<Gradient>? indicatorGradient,
+    required ToggleStyleProperty<Color>? backgroundColor,
+    required ToggleStyleProperty<Gradient>? backgroundGradient,
+    required ToggleStyleProperty<Color>? borderColor,
+    required ToggleStyleProperty<BorderRadiusGeometry>? borderRadius,
+    required ToggleStyleProperty<BorderRadiusGeometry>? indicatorBorderRadius,
+    required ToggleStyleProperty<BoxBorder>? indicatorBorder,
+    required ToggleStyleProperty<List<BoxShadow>>? indicatorBoxShadow,
+    required ToggleStyleProperty<List<BoxShadow>>? boxShadow,
+  })  : _indicatorColor = indicatorColor,
+        _indicatorGradient = indicatorGradient,
+        _backgroundColor = backgroundColor,
+        _backgroundGradient = backgroundGradient,
+        _borderColor = borderColor,
+        _borderRadius = borderRadius,
+        _indicatorBorderRadius = indicatorBorderRadius,
+        _indicatorBorder = indicatorBorder,
+        _indicatorBoxShadow = indicatorBoxShadow,
+        _boxShadow = boxShadow,
+        super._();
 }
 
-class ToggleStyle extends _BaseToggleStyle {
+class ToggleStyle extends BaseToggleStyle {
   /// Background color of the indicator.
   ///
   /// Defaults to [ThemeData.colorScheme.secondary].
@@ -183,6 +216,9 @@ class ToggleStyle extends _BaseToggleStyle {
   final List<BoxShadow>? boxShadow;
 
   /// Default constructor for [ToggleStyle].
+  ///
+  /// If you want to disable the animation of single properties,
+  /// you can use [CustomToggleStyle] for this purpose.
   const ToggleStyle({
     this.indicatorColor,
     this.indicatorGradient,
@@ -194,47 +230,47 @@ class ToggleStyle extends _BaseToggleStyle {
     this.indicatorBorder,
     this.indicatorBoxShadow,
     this.boxShadow,
-  });
+  }) : super._();
 
   @override
-  _ToggleStyleProperty<Color>? get _backgroundColor =>
-      _ToggleStyleProperty.nullable(value: backgroundColor);
+  ToggleStyleProperty<Color>? get _backgroundColor =>
+      ToggleStyleProperty.nullable(value: backgroundColor);
 
   @override
-  _ToggleStyleProperty<Gradient>? get _backgroundGradient =>
-      _ToggleStyleProperty.nullable(value: backgroundGradient);
+  ToggleStyleProperty<Gradient>? get _backgroundGradient =>
+      ToggleStyleProperty.nullable(value: backgroundGradient);
 
   @override
-  _ToggleStyleProperty<Color>? get _borderColor =>
-      _ToggleStyleProperty.nullable(value: borderColor);
+  ToggleStyleProperty<Color>? get _borderColor =>
+      ToggleStyleProperty.nullable(value: borderColor);
 
   @override
-  _ToggleStyleProperty<BorderRadiusGeometry>? get _borderRadius =>
-      _ToggleStyleProperty.nullable(value: borderRadius);
+  ToggleStyleProperty<BorderRadiusGeometry>? get _borderRadius =>
+      ToggleStyleProperty.nullable(value: borderRadius);
 
   @override
-  _ToggleStyleProperty<List<BoxShadow>>? get _boxShadow =>
-      _ToggleStyleProperty.nullable(value: boxShadow);
+  ToggleStyleProperty<List<BoxShadow>>? get _boxShadow =>
+      ToggleStyleProperty.nullable(value: boxShadow);
 
   @override
-  _ToggleStyleProperty<BoxBorder>? get _indicatorBorder =>
-      _ToggleStyleProperty.nullable(value: indicatorBorder);
+  ToggleStyleProperty<BoxBorder>? get _indicatorBorder =>
+      ToggleStyleProperty.nullable(value: indicatorBorder);
 
   @override
-  _ToggleStyleProperty<BorderRadiusGeometry>? get _indicatorBorderRadius =>
-      _ToggleStyleProperty.nullable(value: indicatorBorderRadius);
+  ToggleStyleProperty<BorderRadiusGeometry>? get _indicatorBorderRadius =>
+      ToggleStyleProperty.nullable(value: indicatorBorderRadius);
 
   @override
-  _ToggleStyleProperty<List<BoxShadow>>? get _indicatorBoxShadow =>
-      _ToggleStyleProperty.nullable(value: indicatorBoxShadow);
+  ToggleStyleProperty<List<BoxShadow>>? get _indicatorBoxShadow =>
+      ToggleStyleProperty.nullable(value: indicatorBoxShadow);
 
   @override
-  _ToggleStyleProperty<Color>? get _indicatorColor =>
-      _ToggleStyleProperty.nullable(value: indicatorColor);
+  ToggleStyleProperty<Color>? get _indicatorColor =>
+      ToggleStyleProperty.nullable(value: indicatorColor);
 
   @override
-  _ToggleStyleProperty<Gradient>? get _indicatorGradient =>
-      _ToggleStyleProperty.nullable(value: indicatorGradient);
+  ToggleStyleProperty<Gradient>? get _indicatorGradient =>
+      ToggleStyleProperty.nullable(value: indicatorGradient);
 
   // coverage:ignore-start
 
@@ -270,43 +306,41 @@ class ToggleStyle extends _BaseToggleStyle {
 // coverage:ignore-end
 }
 
-class _ToggleStyleProperty<T> {
+class ToggleStyleProperty<T> {
+  /// The value of this property.
   final T value;
 
-  /// Indicates if this property will be animated when changed
+  /// Indicates if this property will be animated when changed.
   final bool animationEnabled;
 
-  const _ToggleStyleProperty({
-    required this.value,
+  const ToggleStyleProperty(
+    this.value, {
     this.animationEnabled = true,
   });
 
-  _ToggleStyleProperty<T> update(T Function(T value) update) => map(update);
-
-  _ToggleStyleProperty<S> map<S>(S Function(T value) map) =>
-      _ToggleStyleProperty(
-        value: map(value),
-        animationEnabled: animationEnabled,
-      );
-
-  static _ToggleStyleProperty<T>? nullable<T>({
+  static ToggleStyleProperty<T>? nullable<T>({
     required T? value,
     bool animationEnabled = true,
   }) =>
       value == null
           ? null
-          : _ToggleStyleProperty(
-              value: value, animationEnabled: animationEnabled);
+          : ToggleStyleProperty(value, animationEnabled: animationEnabled);
 
-  static _ToggleStyleProperty<T>? lerpConditional<T>(
-      _ToggleStyleProperty<T>? prop1,
-      _ToggleStyleProperty<T>? prop2,
+  ToggleStyleProperty<S> _map<S>(S Function(T value) map) =>
+      ToggleStyleProperty(
+        map(value),
+        animationEnabled: animationEnabled,
+      );
+
+  static ToggleStyleProperty<T>? _lerpConditional<T>(
+      ToggleStyleProperty<T>? prop1,
+      ToggleStyleProperty<T>? prop2,
       double t,
       T? Function(T?, T?, double) lerp) {
     if (prop1?.animationEnabled != true && prop2?.animationEnabled != true) {
       return prop2;
     }
-    return _ToggleStyleProperty.nullable(
+    return ToggleStyleProperty.nullable(
       value: lerp(prop1?.value, prop2?.value, t),
       animationEnabled: true,
     );

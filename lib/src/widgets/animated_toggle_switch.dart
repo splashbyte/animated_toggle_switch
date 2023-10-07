@@ -25,9 +25,9 @@ typedef IconBuilder<T> = Widget Function(
   DetailedGlobalToggleProperties<T> global,
 );
 
-typedef StyleBuilder<T> = ToggleStyle Function(T value);
+typedef StyleBuilder<T> = BaseToggleStyle Function(T value);
 
-typedef CustomStyleBuilder<T> = ToggleStyle Function(
+typedef CustomStyleBuilder<T> = BaseToggleStyle Function(
   BuildContext context,
   StyledToggleProperties<T> local,
   GlobalToggleProperties<T> global,
@@ -54,7 +54,7 @@ abstract class _AnimatedToggleSwitchParent<T> extends StatelessWidget {
     required List<T> values,
     required StyleBuilder<T>? styleBuilder,
     required CustomStyleBuilder<T>? customStyleBuilder,
-    required List<ToggleStyle>? styleList,
+    required List<BaseToggleStyle>? styleList,
     required List<Widget>? iconList,
   })  : assert(
           (styleBuilder ?? customStyleBuilder) == null ||
@@ -91,7 +91,7 @@ class AnimatedToggleSwitch<T extends Object?>
   /// The default style of this switch.
   ///
   /// This value can be overwritten by [styleBuilder].
-  final ToggleStyle style;
+  final BaseToggleStyle style;
 
   /// Builder for the style of the indicator depending on the current value.
   ///
@@ -110,7 +110,7 @@ class AnimatedToggleSwitch<T extends Object?>
   /// List of the styles for all values.
   ///
   /// [styleList] must have the same length as [values].
-  final List<ToggleStyle>? styleList;
+  final List<BaseToggleStyle>? styleList;
 
   /// Duration of the motion animation.
   final Duration animationDuration;
@@ -1011,7 +1011,7 @@ class AnimatedToggleSwitch<T extends Object?>
           DetailedGlobalToggleProperties<dynamic> properties) =>
       const _MyLoading();
 
-  ToggleStyle? _styleBuilder(BuildContext context,
+  BaseToggleStyle? _styleBuilder(BuildContext context,
       StyledToggleProperties<T> local, GlobalToggleProperties<T> global) {
     if (customStyleBuilder != null) {
       return customStyleBuilder!(context, local, global);
@@ -1036,23 +1036,23 @@ class AnimatedToggleSwitch<T extends Object?>
     ThemeData theme = Theme.of(context);
     BorderRadiusGeometry defaultBorderRadius =
         BorderRadius.circular(height / 2);
-    final style = _CustomToggleStyle(
-      indicatorColor: _ToggleStyleProperty(
-        value: theme.colorScheme.secondary,
+    final style = CustomToggleStyle._(
+      indicatorColor: ToggleStyleProperty(
+        theme.colorScheme.secondary,
         animationEnabled: animateThemeChanges,
       ),
       indicatorGradient: null,
-      backgroundColor: _ToggleStyleProperty(
-        value: theme.colorScheme.surface,
+      backgroundColor: ToggleStyleProperty(
+        theme.colorScheme.surface,
         animationEnabled: animateThemeChanges,
       ),
       backgroundGradient: null,
-      borderColor: _ToggleStyleProperty(
-        value: theme.colorScheme.secondary,
+      borderColor: ToggleStyleProperty(
+        theme.colorScheme.secondary,
         animationEnabled: animateThemeChanges,
       ),
-      borderRadius: _ToggleStyleProperty(
-        value: defaultBorderRadius,
+      borderRadius: ToggleStyleProperty(
+        defaultBorderRadius,
         animationEnabled: animateThemeChanges,
       ),
       indicatorBorderRadius: null,
@@ -1105,14 +1105,14 @@ class AnimatedToggleSwitch<T extends Object?>
             opacity: global.active ? 1.0 : inactiveOpacity,
             duration: inactiveOpacityDuration,
             curve: inactiveOpacityCurve,
-            child: _animationTypeBuilder<_BaseToggleStyle>(
+            child: _animationTypeBuilder<BaseToggleStyle>(
               context,
               styleAnimationType,
               (local) => style._merge(
                 _styleBuilder(context, local, global),
                 _indicatorBorderRadiusDifference,
               ),
-              _BaseToggleStyle._lerp,
+              BaseToggleStyle._lerp,
               (style) => DecoratedBox(
                 decoration: BoxDecoration(
                   color: style._backgroundColor?.value,
@@ -1182,16 +1182,16 @@ class AnimatedToggleSwitch<T extends Object?>
   }
 
   Widget _indicatorBuilder(BuildContext context,
-      DetailedGlobalToggleProperties<T> properties, _BaseToggleStyle style) {
+      DetailedGlobalToggleProperties<T> properties, BaseToggleStyle style) {
     final child = foregroundIndicatorIconBuilder?.call(context, properties);
-    return _animationTypeBuilder<_BaseToggleStyle>(
+    return _animationTypeBuilder<BaseToggleStyle>(
       context,
       indicatorAnimationType,
       (local) => style._merge(
         _styleBuilder(context, local, properties),
         _indicatorBorderRadiusDifference,
       ),
-      _BaseToggleStyle._lerp,
+      BaseToggleStyle._lerp,
       (style) => _customIndicatorBuilder(context, style, child, properties),
       properties,
     );
@@ -1265,7 +1265,7 @@ class AnimatedToggleSwitch<T extends Object?>
           );
   }
 
-  Widget _customIndicatorBuilder(BuildContext context, _BaseToggleStyle style,
+  Widget _customIndicatorBuilder(BuildContext context, BaseToggleStyle style,
       Widget? child, DetailedGlobalToggleProperties<T> global) {
     final loadingValue = global.loadingAnimationValue.clamp(0.0, 1.0);
     return DecoratedBox(
