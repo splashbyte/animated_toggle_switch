@@ -116,6 +116,8 @@ class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
   final ChangeCallback<T>? onChanged;
 
   /// Space between adjacent icons.
+  ///
+  /// This value can only be negative if [iconArrangement] is set to [IconArrangement.overlap].
   final double spacing;
 
   /// Builder for divider or other separators between the icons.

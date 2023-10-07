@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:example/crazy_switch.dart';
+import 'package:example/load_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -394,6 +395,23 @@ class _MyHomePageState extends State<MyHomePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                 child: const CrazySwitch(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text.rich(
+                  TextSpan(children: [
+                    TextSpan(text: 'Switch inspired by '),
+                    TextSpan(
+                        text: 'load_switch',
+                        style: tappableTextStyle,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launchUrl(loadSwitchUrl))
+                  ]),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                child: const LoadSwitch(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -855,3 +873,4 @@ final liteRollingSwitchUrl =
     Uri.parse('https://pub.dev/packages/lite_rolling_switch');
 final crazySwitchUrl =
     Uri.parse('https://github.com/pedromassango/crazy-switch');
+final loadSwitchUrl = Uri.parse('https://pub.dev/packages/load_switch');
