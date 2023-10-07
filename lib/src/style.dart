@@ -234,43 +234,43 @@ class ToggleStyle extends BaseToggleStyle {
 
   @override
   ToggleStyleProperty<Color>? get _backgroundColor =>
-      ToggleStyleProperty.nullable(value: backgroundColor);
+      ToggleStyleProperty.nullable(backgroundColor);
 
   @override
   ToggleStyleProperty<Gradient>? get _backgroundGradient =>
-      ToggleStyleProperty.nullable(value: backgroundGradient);
+      ToggleStyleProperty.nullable(backgroundGradient);
 
   @override
   ToggleStyleProperty<Color>? get _borderColor =>
-      ToggleStyleProperty.nullable(value: borderColor);
+      ToggleStyleProperty.nullable(borderColor);
 
   @override
   ToggleStyleProperty<BorderRadiusGeometry>? get _borderRadius =>
-      ToggleStyleProperty.nullable(value: borderRadius);
+      ToggleStyleProperty.nullable(borderRadius);
 
   @override
   ToggleStyleProperty<List<BoxShadow>>? get _boxShadow =>
-      ToggleStyleProperty.nullable(value: boxShadow);
+      ToggleStyleProperty.nullable(boxShadow);
 
   @override
   ToggleStyleProperty<BoxBorder>? get _indicatorBorder =>
-      ToggleStyleProperty.nullable(value: indicatorBorder);
+      ToggleStyleProperty.nullable(indicatorBorder);
 
   @override
   ToggleStyleProperty<BorderRadiusGeometry>? get _indicatorBorderRadius =>
-      ToggleStyleProperty.nullable(value: indicatorBorderRadius);
+      ToggleStyleProperty.nullable(indicatorBorderRadius);
 
   @override
   ToggleStyleProperty<List<BoxShadow>>? get _indicatorBoxShadow =>
-      ToggleStyleProperty.nullable(value: indicatorBoxShadow);
+      ToggleStyleProperty.nullable(indicatorBoxShadow);
 
   @override
   ToggleStyleProperty<Color>? get _indicatorColor =>
-      ToggleStyleProperty.nullable(value: indicatorColor);
+      ToggleStyleProperty.nullable(indicatorColor);
 
   @override
   ToggleStyleProperty<Gradient>? get _indicatorGradient =>
-      ToggleStyleProperty.nullable(value: indicatorGradient);
+      ToggleStyleProperty.nullable(indicatorGradient);
 
   // coverage:ignore-start
 
@@ -341,7 +341,7 @@ class ToggleStyleProperty<T> {
       return prop2;
     }
     return ToggleStyleProperty.nullable(
-      value: lerp(prop1?.value, prop2?.value, t),
+      lerp(prop1?.value, prop2?.value, t),
       animationEnabled: true,
     );
   }
