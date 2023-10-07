@@ -1112,7 +1112,7 @@ class AnimatedToggleSwitch<T extends Object?>
                 _styleBuilder(context, local, global),
                 _indicatorBorderRadiusDifference,
               ),
-              BaseToggleStyle._lerp,
+              BaseToggleStyle._lerpFunction(indicatorAnimationType),
               (style) => DecoratedBox(
                 decoration: BoxDecoration(
                   color: style._backgroundColor?.value,
@@ -1191,7 +1191,7 @@ class AnimatedToggleSwitch<T extends Object?>
         _styleBuilder(context, local, properties),
         _indicatorBorderRadiusDifference,
       ),
-      BaseToggleStyle._lerp,
+      BaseToggleStyle._lerpFunction(indicatorAnimationType),
       (style) => _customIndicatorBuilder(context, style, child, properties),
       properties,
     );

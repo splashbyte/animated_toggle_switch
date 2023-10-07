@@ -56,48 +56,66 @@ abstract class BaseToggleStyle {
               boxShadow: other._boxShadow ?? _boxShadow,
             );
 
-  static BaseToggleStyle _lerp(
-          BaseToggleStyle style1, BaseToggleStyle style2, double t) =>
+  static BaseToggleStyle Function(
+      BaseToggleStyle style1, BaseToggleStyle style2, double t) _lerpFunction(
+          AnimationType animationType) =>
+      (style1, style2, t) => _lerp(style1, style2, t, animationType);
+
+  static BaseToggleStyle _lerp(BaseToggleStyle style1, BaseToggleStyle style2,
+          double t, AnimationType animationType) =>
       CustomToggleStyle._(
         indicatorColor: ToggleStyleProperty._lerpConditional(
-            style1._indicatorColor, style2._indicatorColor, t, Color.lerp),
+            style1._indicatorColor,
+            style2._indicatorColor,
+            t,
+            Color.lerp,
+            animationType),
         indicatorGradient: ToggleStyleProperty._lerpConditional(
             style1._indicatorGradient ??
                 style1._indicatorColor?._map((value) => value.toGradient()),
             style2._indicatorGradient ??
                 style2._indicatorColor?._map((value) => value.toGradient()),
             t,
-            Gradient.lerp),
+            Gradient.lerp,
+            animationType),
         backgroundColor: ToggleStyleProperty._lerpConditional(
-            style1._backgroundColor, style2._backgroundColor, t, Color.lerp),
+            style1._backgroundColor,
+            style2._backgroundColor,
+            t,
+            Color.lerp,
+            animationType),
         backgroundGradient: ToggleStyleProperty._lerpConditional(
             style1._backgroundGradient ??
                 style1._backgroundColor?._map((value) => value.toGradient()),
             style2._backgroundGradient ??
                 style2._backgroundColor?._map((value) => value.toGradient()),
             t,
-            Gradient.lerp),
-        borderColor: ToggleStyleProperty._lerpConditional(
-            style1._borderColor, style2._borderColor, t, Color.lerp),
+            Gradient.lerp,
+            animationType),
+        borderColor: ToggleStyleProperty._lerpConditional(style1._borderColor,
+            style2._borderColor, t, Color.lerp, animationType),
         borderRadius: ToggleStyleProperty._lerpConditional(style1._borderRadius,
-            style2._borderRadius, t, BorderRadiusGeometry.lerp),
+            style2._borderRadius, t, BorderRadiusGeometry.lerp, animationType),
         indicatorBorderRadius: ToggleStyleProperty._lerpConditional(
             style1._indicatorBorderRadius ?? style1._borderRadius,
             style2._indicatorBorderRadius ?? style2._borderRadius,
             t,
-            BorderRadiusGeometry.lerp),
+            BorderRadiusGeometry.lerp,
+            animationType),
         indicatorBorder: ToggleStyleProperty._lerpConditional(
             style1._indicatorBorder,
             style2._indicatorBorder,
             t,
-            BoxBorder.lerp),
+            BoxBorder.lerp,
+            animationType),
         indicatorBoxShadow: ToggleStyleProperty._lerpConditional(
             style1._indicatorBoxShadow,
             style2._indicatorBoxShadow,
             t,
-            BoxShadow.lerpList),
-        boxShadow: ToggleStyleProperty._lerpConditional(
-            style1._boxShadow, style2._boxShadow, t, BoxShadow.lerpList),
+            BoxShadow.lerpList,
+            animationType),
+        boxShadow: ToggleStyleProperty._lerpConditional(style1._boxShadow,
+            style2._boxShadow, t, BoxShadow.lerpList, animationType),
       );
 }
 
@@ -336,8 +354,10 @@ class ToggleStyleProperty<T> {
       ToggleStyleProperty<T>? prop1,
       ToggleStyleProperty<T>? prop2,
       double t,
-      T? Function(T?, T?, double) lerp) {
+      T? Function(T?, T?, double) lerp,
+      AnimationType animationType) {
     if (prop1?.animationEnabled != true && prop2?.animationEnabled != true) {
+      if (animationType == AnimationType.onHover && t < 0.5) return prop1;
       return prop2;
     }
     return ToggleStyleProperty.nullable(
