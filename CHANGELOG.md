@@ -1,5 +1,7 @@
-## 0.8.0+1
-- fixes changelog of version 0.8.0
+## 0.8.1
+
+- adds `indicatorGradient` to `ToggleStyle` ([#44](https://github.com/splashbyte/animated_toggle_switch/issues/44))
+- fixes problems with `backgroundGradient` and `backgroundColor` ([#46](https://github.com/splashbyte/animated_toggle_switch/issues/46))
 
 ## 0.8.0 (2023-09-02)
 

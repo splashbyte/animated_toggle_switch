@@ -158,12 +158,15 @@ class AnimatedToggleSwitch<T extends Object?>
 
   /// The [AnimationType] for [styleBuilder].
   ///
-  /// The [AnimationType] for [ToggleStyle.indicatorColor], [ToggleStyle.indicatorBorderRadius],
+  /// The [AnimationType] for [ToggleStyle.indicatorColor],
+  /// [ToggleStyle.indicatorGradient], [ToggleStyle.indicatorBorderRadius],
   /// [ToggleStyle.indicatorBorder] and [ToggleStyle.indicatorBoxShadow].
   /// is managed separately with [indicatorAnimationType].
   final AnimationType styleAnimationType;
 
-  /// The [AnimationType] for the [ToggleStyle.indicatorColor].
+  /// The [AnimationType] for [ToggleStyle.indicatorColor],
+  /// [ToggleStyle.indicatorGradient], [ToggleStyle.indicatorBorderRadius],
+  /// [ToggleStyle.indicatorBorder] and [ToggleStyle.indicatorBoxShadow]
   ///
   /// For the other style parameters, please use [styleAnimationType].
   final AnimationType indicatorAnimationType;
@@ -1020,6 +1023,7 @@ class AnimatedToggleSwitch<T extends Object?>
         BorderRadius.circular(height / 2);
     final style = ToggleStyle._(
       indicatorColor: theme.colorScheme.secondary,
+      indicatorGradient: null,
       backgroundColor: theme.colorScheme.surface,
       backgroundGradient: null,
       borderColor: theme.colorScheme.secondary,
@@ -1227,6 +1231,7 @@ class AnimatedToggleSwitch<T extends Object?>
     return DecoratedBox(
         decoration: BoxDecoration(
           color: style.indicatorColor,
+          gradient: style.indicatorGradient,
           borderRadius: style.indicatorBorderRadius,
           border: style.indicatorBorder,
           boxShadow: style.indicatorBoxShadow,
