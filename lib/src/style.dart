@@ -318,8 +318,8 @@ class ToggleStyleProperty<T> {
     this.animationEnabled = true,
   });
 
-  static ToggleStyleProperty<T>? nullable<T>({
-    required T? value,
+  static ToggleStyleProperty<T>? nullable<T>(
+    T? value, {
     bool animationEnabled = true,
   }) =>
       value == null
