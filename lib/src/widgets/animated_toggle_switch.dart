@@ -275,11 +275,6 @@ class AnimatedToggleSwitch<T extends Object?>
   /// For deactivating this animation please set [inactiveOpacity] to [1.0].
   final Duration inactiveOpacityDuration;
 
-  /// Indicates whether external changes to the [Theme] will be animated.
-  ///
-  /// This is useful if the theme is already animated externally.
-  final bool animateThemeChanges;
-
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   ///
   /// Consider using [CustomAnimatedToggleSwitch] for maximum customizability.
@@ -330,7 +325,6 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-    this.animateThemeChanges = true,
   })  : _iconArrangement = IconArrangement.row,
         super(
           values: values,
@@ -393,7 +387,6 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-    this.animateThemeChanges = true,
   })  : spacing = spacing * (height - 2 * borderWidth),
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
@@ -458,7 +451,6 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-    this.animateThemeChanges = true,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
@@ -526,7 +518,6 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-    this.animateThemeChanges = true,
   })  : indicatorSize = indicatorSize * (height - 2 * borderWidth),
         spacing = spacing * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -622,7 +613,6 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     double indicatorIconScale = 1.0,
-    this.animateThemeChanges = true,
   })  : iconAnimationCurve = Curves.linear,
         iconAnimationDuration = Duration.zero,
         selectedIconOpacity = iconOpacity,
@@ -704,7 +694,6 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     double indicatorIconScale = 1.0,
-    this.animateThemeChanges = true,
   })  : iconAnimationCurve = Curves.linear,
         spacing = spacing * (height - 2 * borderWidth),
         iconAnimationDuration = Duration.zero,
@@ -901,7 +890,6 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
-    this.animateThemeChanges = true,
   })  : assert(clipAnimation || opacityAnimation),
         iconOpacity = 1.0,
         selectedIconOpacity = 1.0,
@@ -1036,25 +1024,13 @@ class AnimatedToggleSwitch<T extends Object?>
     ThemeData theme = Theme.of(context);
     BorderRadiusGeometry defaultBorderRadius =
         BorderRadius.circular(height / 2);
-    final style = CustomToggleStyle._(
-      indicatorColor: ToggleStyleProperty(
-        theme.colorScheme.secondary,
-        animationEnabled: animateThemeChanges,
-      ),
+    final style = ToggleStyle._(
+      indicatorColor: theme.colorScheme.secondary,
       indicatorGradient: null,
-      backgroundColor: ToggleStyleProperty(
-        theme.colorScheme.surface,
-        animationEnabled: animateThemeChanges,
-      ),
+      backgroundColor: theme.colorScheme.surface,
       backgroundGradient: null,
-      borderColor: ToggleStyleProperty(
-        theme.colorScheme.secondary,
-        animationEnabled: animateThemeChanges,
-      ),
-      borderRadius: ToggleStyleProperty(
-        defaultBorderRadius,
-        animationEnabled: animateThemeChanges,
-      ),
+      borderColor: theme.colorScheme.secondary,
+      borderRadius: defaultBorderRadius,
       indicatorBorderRadius: null,
       indicatorBorder: null,
       indicatorBoxShadow: null,

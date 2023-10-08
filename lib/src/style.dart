@@ -250,6 +250,19 @@ class ToggleStyle extends BaseToggleStyle {
     this.boxShadow,
   }) : super._();
 
+  const ToggleStyle._({
+    required this.indicatorColor,
+    required this.indicatorGradient,
+    required this.backgroundColor,
+    required this.backgroundGradient,
+    required this.borderColor,
+    required this.borderRadius,
+    required this.indicatorBorderRadius,
+    required this.indicatorBorder,
+    required this.indicatorBoxShadow,
+    required this.boxShadow,
+  }) : super._();
+
   @override
   ToggleStyleProperty<Color>? get _backgroundColor =>
       ToggleStyleProperty.nullable(backgroundColor);
