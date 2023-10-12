@@ -85,7 +85,7 @@ class AnimatedToggleSwitch<T extends Object?>
   /// All possible values.
   final List<T> values;
 
-  /// The IconBuilder for all icons with the specified size.
+  /// The [IconBuilder] for all icons with the specified size.
   final AnimatedIconBuilder<T>? animatedIconBuilder;
 
   /// The default style of this switch.
@@ -1176,8 +1176,9 @@ class AnimatedToggleSwitch<T extends Object?>
   Widget _animatedIcon(BuildContext context, AnimatedToggleProperties<T> local,
       DetailedGlobalToggleProperties<T> global) {
     return Opacity(
-        opacity: 1.0 - global.loadingAnimationValue.clamp(0.0, 1.0),
-        child: Center(child: animatedIconBuilder!(context, local, global)));
+      opacity: 1.0 - global.loadingAnimationValue.clamp(0.0, 1.0),
+      child: Center(child: animatedIconBuilder!(context, local, global)),
+    );
   }
 
   Widget _animatedSizeIcon(BuildContext context, LocalToggleProperties<T> local,
@@ -1245,6 +1246,7 @@ class AnimatedToggleSwitch<T extends Object?>
       Widget? child, DetailedGlobalToggleProperties<T> global) {
     final loadingValue = global.loadingAnimationValue.clamp(0.0, 1.0);
     return DecoratedBox(
+        key: AnimatedToggleSwitchTestKeys.indicatorDecoratedBoxKey,
         decoration: BoxDecoration(
           color: style._indicatorColor?.value,
           gradient: style._indicatorGradient?.value,
@@ -1292,23 +1294,12 @@ class _CustomClipRectState extends State<_CustomClipRect> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = _WidgetWrapper(key: _childKey, child: widget.child);
+    Widget child = _EmptyWidget(key: _childKey, child: widget.child);
     if (widget.clipBehavior == Clip.none) return child;
     return ClipRect(
       clipBehavior: widget.clipBehavior,
       child: child,
     );
-  }
-}
-
-class _WidgetWrapper extends StatelessWidget {
-  final Widget child;
-
-  const _WidgetWrapper({Key? key, required this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return child;
   }
 }
 
