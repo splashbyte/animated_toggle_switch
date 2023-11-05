@@ -13,7 +13,7 @@ typedef SimpleRollingIconBuilder<T> = Widget Function(T value, bool foreground);
 typedef LoadingIconBuilder<T> = Widget Function(
     BuildContext context, DetailedGlobalToggleProperties<T> global);
 
-/// A version of IconBuilder for writing a own Animation on the change of the selected item.
+/// A version of [IconBuilder] for writing a custom animation for the change of the selected item.
 typedef AnimatedIconBuilder<T> = Widget Function(
     BuildContext context,
     AnimatedToggleProperties<T> local,
@@ -37,6 +37,9 @@ typedef SeparatorBuilder = Widget Function(int index);
 
 /// Specifies when an value should be animated.
 enum AnimationType {
+  /// Disables the animation.
+  none,
+
   /// Starts an animation if an item is selected.
   onSelected,
 
@@ -82,7 +85,7 @@ class AnimatedToggleSwitch<T extends Object?>
   /// All possible values.
   final List<T> values;
 
-  /// The IconBuilder for all icons with the specified size.
+  /// The [IconBuilder] for all icons with the specified size.
   final AnimatedIconBuilder<T>? animatedIconBuilder;
 
   /// The default style of this switch.
@@ -271,6 +274,8 @@ class AnimatedToggleSwitch<T extends Object?>
   ///
   /// For deactivating this animation please set [inactiveOpacity] to [1.0].
   final Duration inactiveOpacityDuration;
+
+  final bool animateStyleChanges = true;
 
   /// Constructor of AnimatedToggleSwitch with all possible settings.
   ///
@@ -996,7 +1001,7 @@ class AnimatedToggleSwitch<T extends Object?>
           DetailedGlobalToggleProperties<dynamic> properties) =>
       const _MyLoading();
 
-  ToggleStyle? _styleBuilder(BuildContext context,
+  _BaseToggleStyle? _styleBuilder(BuildContext context,
       StyledToggleProperties<T> local, GlobalToggleProperties<T> global) {
     if (customStyleBuilder != null) {
       return customStyleBuilder!(context, local, global);
@@ -1078,34 +1083,35 @@ class AnimatedToggleSwitch<T extends Object?>
             opacity: global.active ? 1.0 : inactiveOpacity,
             duration: inactiveOpacityDuration,
             curve: inactiveOpacityCurve,
-            child: _animationTypeBuilder<ToggleStyle>(
+            child: _animationTypeBuilder<_BaseToggleStyle>(
               context,
               styleAnimationType,
               (local) => style._merge(
                 _styleBuilder(context, local, global),
                 _indicatorBorderRadiusDifference,
               ),
-              ToggleStyle._lerp,
+              _BaseToggleStyle._lerpFunction(styleAnimationType),
               (style) => DecoratedBox(
                 decoration: BoxDecoration(
-                  color: style.backgroundColor,
-                  gradient: style.backgroundGradient,
-                  borderRadius: style.borderRadius,
-                  boxShadow: style.boxShadow,
+                  color: style._backgroundColor?.value,
+                  gradient: style._backgroundGradient?.value,
+                  borderRadius: style._borderRadius?.value,
+                  boxShadow: style._boxShadow?.value,
                 ),
                 child: DecoratedBox(
                   position: DecorationPosition.foreground,
                   decoration: BoxDecoration(
-                    border: borderWidth <= 0.0
+                    border: borderWidth <= 0.0 || style._borderColor == null
                         ? null
                         : Border.all(
-                            color: style.borderColor!,
+                            color: style._borderColor!.value,
                             width: borderWidth,
                           ),
-                    borderRadius: style.borderRadius,
+                    borderRadius: style._borderRadius?.value,
                   ),
                   child: ClipRRect(
-                    borderRadius: style.borderRadius!,
+                    borderRadius:
+                        style._borderRadius?.value ?? BorderRadius.zero,
                     child: child,
                   ),
                 ),
@@ -1124,12 +1130,15 @@ class AnimatedToggleSwitch<T extends Object?>
     Widget Function(V value) builder,
     GlobalToggleProperties<T> properties,
   ) {
-    switch (animationType) {
-      case AnimationType.onSelected:
-        V currentValue = valueProvider(
+    currentValueProvider() => valueProvider(
           StyledToggleProperties(
               value: current, index: values.indexOf(current)),
         );
+    switch (animationType) {
+      case AnimationType.none:
+        return builder(currentValueProvider());
+      case AnimationType.onSelected:
+        V currentValue = currentValueProvider();
         return TweenAnimationBuilder<V>(
           curve: animationCurve,
           duration: animationDuration,
@@ -1151,16 +1160,16 @@ class AnimatedToggleSwitch<T extends Object?>
   }
 
   Widget _indicatorBuilder(BuildContext context,
-      DetailedGlobalToggleProperties<T> properties, ToggleStyle style) {
+      DetailedGlobalToggleProperties<T> properties, _BaseToggleStyle style) {
     final child = foregroundIndicatorIconBuilder?.call(context, properties);
-    return _animationTypeBuilder<ToggleStyle>(
+    return _animationTypeBuilder<_BaseToggleStyle>(
       context,
       indicatorAnimationType,
       (local) => style._merge(
         _styleBuilder(context, local, properties),
         _indicatorBorderRadiusDifference,
       ),
-      ToggleStyle._lerp,
+      _BaseToggleStyle._lerpFunction(indicatorAnimationType),
       (style) => _customIndicatorBuilder(context, style, child, properties),
       properties,
     );
@@ -1169,14 +1178,24 @@ class AnimatedToggleSwitch<T extends Object?>
   Widget _animatedIcon(BuildContext context, AnimatedToggleProperties<T> local,
       DetailedGlobalToggleProperties<T> global) {
     return Opacity(
-        opacity: 1.0 - global.loadingAnimationValue.clamp(0.0, 1.0),
-        child: Center(child: animatedIconBuilder!(context, local, global)));
+      opacity: 1.0 - global.loadingAnimationValue.clamp(0.0, 1.0),
+      child: Center(child: animatedIconBuilder!(context, local, global)),
+    );
   }
 
   Widget _animatedSizeIcon(BuildContext context, LocalToggleProperties<T> local,
       DetailedGlobalToggleProperties<T> global) {
     if (animatedIconBuilder == null) return const SizedBox();
     switch (iconAnimationType) {
+      case AnimationType.none:
+        return _animatedIcon(
+          context,
+          AnimatedToggleProperties._fromLocal(
+            animationValue: local.value == global.current ? 1.0 : 0.0,
+            properties: local,
+          ),
+          global,
+        );
       case AnimationType.onSelected:
         double currentTweenValue = local.value == global.current ? 1.0 : 0.0;
         return TweenAnimationBuilder<double>(
@@ -1225,16 +1244,17 @@ class AnimatedToggleSwitch<T extends Object?>
           );
   }
 
-  Widget _customIndicatorBuilder(BuildContext context, ToggleStyle style,
+  Widget _customIndicatorBuilder(BuildContext context, _BaseToggleStyle style,
       Widget? child, DetailedGlobalToggleProperties<T> global) {
     final loadingValue = global.loadingAnimationValue.clamp(0.0, 1.0);
     return DecoratedBox(
+        key: AnimatedToggleSwitchTestKeys.indicatorDecoratedBoxKey,
         decoration: BoxDecoration(
-          color: style.indicatorColor,
-          gradient: style.indicatorGradient,
-          borderRadius: style.indicatorBorderRadius,
-          border: style.indicatorBorder,
-          boxShadow: style.indicatorBoxShadow,
+          color: style._indicatorColor?.value,
+          gradient: style._indicatorGradient?.value,
+          borderRadius: style._indicatorBorderRadius?.value,
+          border: style._indicatorBorder?.value,
+          boxShadow: style._indicatorBoxShadow?.value,
         ),
         child: Center(
           child: Stack(
@@ -1276,23 +1296,12 @@ class _CustomClipRectState extends State<_CustomClipRect> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = _WidgetWrapper(key: _childKey, child: widget.child);
+    Widget child = _EmptyWidget(key: _childKey, child: widget.child);
     if (widget.clipBehavior == Clip.none) return child;
     return ClipRect(
       clipBehavior: widget.clipBehavior,
       child: child,
     );
-  }
-}
-
-class _WidgetWrapper extends StatelessWidget {
-  final Widget child;
-
-  const _WidgetWrapper({Key? key, required this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return child;
   }
 }
 

@@ -3,6 +3,7 @@ library animated_toggle_switch;
 import 'dart:async';
 import 'dart:math';
 
+import 'package:animated_toggle_switch/src/test_keys.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';

@@ -9,6 +9,7 @@ class _AnimationTypeHoverBuilder<T, V> extends StatefulWidget {
   final Curve animationCurve;
   final Duration indicatorAppearingDuration;
   final Curve indicatorAppearingCurve;
+  final bool animateExternalChanges;
 
   const _AnimationTypeHoverBuilder({
     required this.valueProvider,
@@ -19,6 +20,7 @@ class _AnimationTypeHoverBuilder<T, V> extends StatefulWidget {
     required this.animationCurve,
     required this.indicatorAppearingDuration,
     required this.indicatorAppearingCurve,
+    this.animateExternalChanges = true,
   });
 
   @override

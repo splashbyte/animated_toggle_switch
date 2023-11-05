@@ -27,6 +27,27 @@ class _ConditionalWrapperState extends State<_ConditionalWrapper> {
     return child;
   }
 }
+
+//ignore: unused_element
+class _ConditionalOpacity extends StatelessWidget {
+  final double opacity;
+  final Widget Function(BuildContext context) builder;
+
+  const _ConditionalOpacity({required this.opacity, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    return _ConditionalWrapper(
+      wrapper: (context, child) => Opacity(
+        opacity: opacity,
+        child: builder(context),
+      ),
+      condition: opacity > 0.0,
+      child: const SizedBox(),
+    );
+  }
+}
+
 // coverage:ignore-end
 
 class _EmptyWidget extends StatelessWidget {
