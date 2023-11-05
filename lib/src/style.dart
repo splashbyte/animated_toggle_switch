@@ -56,8 +56,8 @@ abstract class _BaseToggleStyle {
           AnimationType animationType) =>
       (style1, style2, t) => _lerp(style1, style2, t, animationType);
 
-  static _BaseToggleStyle _lerp(_BaseToggleStyle style1, _BaseToggleStyle style2,
-          double t, AnimationType animationType) =>
+  static _BaseToggleStyle _lerp(_BaseToggleStyle style1,
+          _BaseToggleStyle style2, double t, AnimationType animationType) =>
       _CustomToggleStyle._(
         indicatorColor: ToggleStyleProperty._lerpConditional(
             style1._indicatorColor,
