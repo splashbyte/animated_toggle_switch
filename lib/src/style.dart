@@ -1,13 +1,8 @@
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 /// The base class for all toggle styles.
-///
-/// In most cases [ToggleStyle] is sufficient.
-///
-/// If you want to disable the animation of single properties,
-/// you can use [CustomToggleStyle] for this purpose.
-abstract class BaseToggleStyle {
-  const BaseToggleStyle._();
+abstract class _BaseToggleStyle {
+  const _BaseToggleStyle._();
 
   ToggleStyleProperty<Color>? get _indicatorColor;
 
@@ -29,13 +24,13 @@ abstract class BaseToggleStyle {
 
   ToggleStyleProperty<List<BoxShadow>>? get _boxShadow;
 
-  BaseToggleStyle _merge(
-    BaseToggleStyle? other,
+  _BaseToggleStyle _merge(
+    _BaseToggleStyle? other,
     BorderRadiusGeometry indicatorBorderRadiusDifference,
   ) =>
       other == null
           ? this
-          : CustomToggleStyle._(
+          : _CustomToggleStyle._(
               indicatorColor: other._indicatorColor ?? _indicatorColor,
               indicatorGradient: other._indicatorGradient ??
                   (other._indicatorColor != null ? null : _indicatorGradient),
@@ -56,14 +51,14 @@ abstract class BaseToggleStyle {
               boxShadow: other._boxShadow ?? _boxShadow,
             );
 
-  static BaseToggleStyle Function(
-      BaseToggleStyle style1, BaseToggleStyle style2, double t) _lerpFunction(
+  static _BaseToggleStyle Function(
+      _BaseToggleStyle style1, _BaseToggleStyle style2, double t) _lerpFunction(
           AnimationType animationType) =>
       (style1, style2, t) => _lerp(style1, style2, t, animationType);
 
-  static BaseToggleStyle _lerp(BaseToggleStyle style1, BaseToggleStyle style2,
+  static _BaseToggleStyle _lerp(_BaseToggleStyle style1, _BaseToggleStyle style2,
           double t, AnimationType animationType) =>
-      CustomToggleStyle._(
+      _CustomToggleStyle._(
         indicatorColor: ToggleStyleProperty._lerpConditional(
             style1._indicatorColor,
             style2._indicatorColor,
@@ -119,7 +114,8 @@ abstract class BaseToggleStyle {
       );
 }
 
-class CustomToggleStyle extends BaseToggleStyle {
+/// Currently not supported.
+class _CustomToggleStyle extends _BaseToggleStyle {
   @override
   final ToggleStyleProperty<Color>? _indicatorColor;
   @override
@@ -141,11 +137,11 @@ class CustomToggleStyle extends BaseToggleStyle {
   @override
   final ToggleStyleProperty<List<BoxShadow>>? _boxShadow;
 
-  /// Default constructor for [CustomToggleStyle].
+  /// Default constructor for [_CustomToggleStyle].
   ///
   /// If you don't want to disable the animation of single properties,
   /// you should use [ToggleStyle] instead.
-  const CustomToggleStyle({
+  const _CustomToggleStyle({
     ToggleStyleProperty<Color>? indicatorColor,
     ToggleStyleProperty<Gradient>? indicatorGradient,
     ToggleStyleProperty<Color>? backgroundColor,
@@ -168,7 +164,7 @@ class CustomToggleStyle extends BaseToggleStyle {
         _boxShadow = boxShadow,
         super._();
 
-  const CustomToggleStyle._({
+  const _CustomToggleStyle._({
     required ToggleStyleProperty<Color>? indicatorColor,
     required ToggleStyleProperty<Gradient>? indicatorGradient,
     required ToggleStyleProperty<Color>? backgroundColor,
@@ -192,7 +188,7 @@ class CustomToggleStyle extends BaseToggleStyle {
         super._();
 }
 
-class ToggleStyle extends BaseToggleStyle {
+class ToggleStyle extends _BaseToggleStyle {
   /// Background color of the indicator.
   ///
   /// Defaults to [ThemeData.colorScheme.secondary].
@@ -236,7 +232,7 @@ class ToggleStyle extends BaseToggleStyle {
   /// Default constructor for [ToggleStyle].
   ///
   /// If you want to disable the animation of single properties,
-  /// you can use [CustomToggleStyle] for this purpose.
+  /// you can use [_CustomToggleStyle] for this purpose.
   const ToggleStyle({
     this.indicatorColor,
     this.indicatorGradient,
