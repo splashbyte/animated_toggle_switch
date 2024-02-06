@@ -226,8 +226,8 @@ class TapProperties<T> {
   });
 }
 
-class TapInfo<T> {
-  /// The value that the user has tapped.
+class TogglePosition<T> {
+  /// The value next to [position].
   final T value;
 
   /// The index of [value] in [values].
@@ -235,16 +235,65 @@ class TapInfo<T> {
   /// [index == position.round()] should always be [true].
   final int index;
 
-  /// The tapped position relative to the indices of the values.
+  /// The position relative to the indices of the values.
   ///
   /// [position] can be in the interval from [-0.5] to [values.length - 0.5].
   ///
   /// [position.round() == index] should always be [true].
   final double position;
 
-  TapInfo({
+  TogglePosition({
     required this.value,
     required this.index,
     required this.position,
   });
+}
+
+class TapInfo<T> extends TogglePosition<T> {
+  TapInfo({
+    required super.value,
+    required super.index,
+    required super.position,
+  });
+
+  TapInfo._fromPosition(TogglePosition<T> position)
+      : this(
+          value: position.value,
+          index: position.index,
+          position: position.position,
+        );
+}
+
+class PositionListenerInfo<T> extends TogglePosition<T> {
+  final ToggleMode mode;
+
+  PositionListenerInfo({
+    required super.value,
+    required super.index,
+    required super.position,
+    required this.mode,
+  });
+
+  PositionListenerInfo._fromPosition(
+      TogglePosition<T> position, ToggleMode mode)
+      : this(
+          value: position.value,
+          index: position.index,
+          position: position.position,
+          mode: mode,
+        );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PositionListenerInfo &&
+          runtimeType == other.runtimeType &&
+          value == other.mode &&
+          index == other.index &&
+          position == other.position &&
+          mode == other.mode;
+
+  @override
+  int get hashCode =>
+      value.hashCode ^ index.hashCode ^ position.hashCode ^ mode.hashCode;
 }

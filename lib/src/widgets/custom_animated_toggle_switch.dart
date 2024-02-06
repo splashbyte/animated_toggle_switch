@@ -28,6 +28,9 @@ typedef ChangeCallback<T> = FutureOr<void> Function(T value);
 
 typedef TapCallback<T> = FutureOr<void> Function(TapProperties<T> props);
 
+/// Listener for the current position and [ToggleMode] of the indicator.
+typedef PositionListener<T> = void Function(PositionListenerInfo<T> position);
+
 enum ToggleMode { animating, dragged, none }
 
 enum FittingMode { none, preventHorizontalOverlapping }
@@ -187,6 +190,9 @@ class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
   /// Indicates if the switch is active.
   final bool active;
 
+  /// Listener for the current position and [ToggleMode] of the indicator.
+  final PositionListener<T>? positionListener;
+
   const CustomAnimatedToggleSwitch({
     Key? key,
     required this.current,
@@ -221,6 +227,7 @@ class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
     this.indicatorAppearingCurve = _defaultIndicatorAppearingAnimationCurve,
     this.allowUnlistedValues = false,
     this.active = true,
+    this.positionListener,
   })  : assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         assert(separatorBuilder == null ||
@@ -256,6 +263,12 @@ class _CustomAnimatedToggleSwitchState<T>
 
   bool get _isCurrentUnlisted => _currentIndex < 0;
 
+  double get _positionValue => _animationInfo
+      .valueAt(_animation.value)
+      .clamp(0, widget.values.length - 1);
+
+  PositionListenerInfo<T>? _lastPositionListenerValue;
+
   @override
   void initState() {
     super.initState();
@@ -272,12 +285,13 @@ class _CustomAnimatedToggleSwitchState<T>
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed &&
                 _animationInfo.toggleMode != ToggleMode.dragged) {
-              _animationInfo = _animationInfo.ended();
+              _setAnimationInfo(_animationInfo.ended());
             }
           });
 
     _animation =
-        CurvedAnimation(parent: _controller, curve: widget.animationCurve);
+        CurvedAnimation(parent: _controller, curve: widget.animationCurve)
+          ..addListener(_callPositionListener);
 
     _appearingController = AnimationController(
       vsync: this,
@@ -371,7 +385,7 @@ class _CustomAnimatedToggleSwitchState<T>
   void _loading(bool b) {
     if (b == _animationInfo.loading) return;
     _cancelDrag();
-    setState(() => _animationInfo = _animationInfo.setLoading(b));
+    _setAnimationInfo(_animationInfo.setLoading(b), setState: true);
   }
 
   /// Checks if the current value has a different position than the indicator
@@ -405,17 +419,39 @@ class _CustomAnimatedToggleSwitchState<T>
     return result;
   }
 
-  /// Returns the [TapInfo] by the local position of the cursor.
+  void _setAnimationInfo(_AnimationInfo info, {bool setState = false}) {
+    if (_animationInfo == info) return;
+    _animationInfo = info;
+    if (setState) this.setState(() {});
+    _callPositionListener();
+  }
+
+  void _callPositionListener() {
+    if (widget.positionListener == null) return;
+    final value = PositionListenerInfo._fromPosition(
+        _togglePositionFromPositionValue(_positionValue),
+        _animationInfo.toggleMode);
+    if (_lastPositionListenerValue == value) return;
+    _lastPositionListenerValue = value;
+    widget.positionListener?.call(value);
+  }
+
+  /// Returns the [TogglePosition] by the position value.
   /// It is mainly intended as a helper function for the build method.
-  TapInfo<T> _tapInfoFromPosition(
-      double x, DetailedGlobalToggleProperties<T> properties) {
-    final position = _doubleFromPosition(x, properties);
+  TogglePosition<T> _togglePositionFromPositionValue(double position) {
     final index = position.round();
-    return TapInfo(
+    return TogglePosition(
       value: widget.values[index],
       index: index,
       position: position,
     );
+  }
+
+  /// Returns the [TogglePosition] by the local position of the cursor.
+  /// It is mainly intended as a helper function for the build method.
+  TogglePosition<T> _togglePositionFromRealPosition(
+      double x, DetailedGlobalToggleProperties<T> properties) {
+    return _togglePositionFromPositionValue(_doubleFromPosition(x, properties));
   }
 
   @override
@@ -454,9 +490,7 @@ class _CustomAnimatedToggleSwitchState<T>
             builder: (context, loadingValue, child) => AnimatedBuilder(
                 animation: _animation,
                 builder: (context, child) {
-                  double positionValue = _animationInfo
-                      .valueAt(_animation.value)
-                      .clamp(0, widget.values.length - 1);
+                  double positionValue = _positionValue;
                   GlobalToggleProperties<T> properties = GlobalToggleProperties(
                     position: positionValue,
                     current: widget.current,
@@ -654,17 +688,21 @@ class _CustomAnimatedToggleSwitchState<T>
                                     behavior: HitTestBehavior.translucent,
                                     dragStartBehavior: DragStartBehavior.down,
                                     onTapUp: (details) {
-                                      final tapInfo = _tapInfoFromPosition(
-                                          details.localPosition.dx, properties);
+                                      final togglePosition =
+                                          _togglePositionFromRealPosition(
+                                              details.localPosition.dx,
+                                              properties);
                                       _onTap(TapProperties(
-                                        tapped: tapInfo,
+                                        tapped: TapInfo._fromPosition(
+                                            togglePosition),
                                         values: widget.values,
                                       ));
                                       if (!widget.iconsTappable) return;
-                                      if (tapInfo.value == widget.current) {
+                                      if (togglePosition.value ==
+                                          widget.current) {
                                         return;
                                       }
-                                      _onChanged(tapInfo.value);
+                                      _onChanged(togglePosition.value);
                                     },
                                     onHorizontalDragStart: (details) {
                                       if (!isHoveringIndicator(
@@ -782,14 +820,14 @@ class _CustomAnimatedToggleSwitchState<T>
     if (_animationInfo.toggleMode == ToggleMode.dragged) return;
     if (_appearingController.value > 0.0) {
       if (index.toDouble() != _animationInfo.end) {
-        _animationInfo = _animationInfo.toEnd(index.toDouble(),
-            current: current ?? _animationInfo.valueAt(_animation.value));
+        _setAnimationInfo(_animationInfo.toEnd(index.toDouble(),
+            current: current ?? _animationInfo.valueAt(_animation.value)));
         _controller.duration = widget.animationDuration;
         _animation.curve = widget.animationCurve;
         _controller.forward(from: 0.0);
       }
     } else {
-      _animationInfo = _animationInfo.toEnd(index.toDouble()).ended();
+      _setAnimationInfo(_animationInfo.toEnd(index.toDouble()).ended());
     }
     _appearingController.forward();
   }
@@ -798,7 +836,7 @@ class _CustomAnimatedToggleSwitchState<T>
   /// the current cursor position.
   void _onDragged(double indexPosition, double pos) {
     if (!_isActive) return;
-    _animationInfo = _animationInfo.dragged(indexPosition, pos: pos);
+    _setAnimationInfo(_animationInfo.dragged(indexPosition, pos: pos));
     _controller.duration = widget.dragStartDuration;
     _animation.curve = widget.dragStartCurve;
     _controller.forward(from: 0.0);
@@ -807,9 +845,7 @@ class _CustomAnimatedToggleSwitchState<T>
   /// Updates the current drag position.
   void _onDragUpdate(double indexPosition) {
     if (_animationInfo.toggleMode != ToggleMode.dragged) return;
-    setState(() {
-      _animationInfo = _animationInfo.dragged(indexPosition);
-    });
+    _setAnimationInfo(_animationInfo.dragged(indexPosition), setState: true);
   }
 
   /// Ends the dragging of the indicator and starts an animation
@@ -818,14 +854,14 @@ class _CustomAnimatedToggleSwitchState<T>
     if (_animationInfo.toggleMode != ToggleMode.dragged) return;
     int index = _animationInfo.end.round();
     T newValue = widget.values[index];
-    _animationInfo = _animationInfo.none(current: _animationInfo.end);
+    _setAnimationInfo(_animationInfo.none(current: _animationInfo.end));
     if (widget.current != newValue) _onChanged(newValue);
     _checkValuePosition();
   }
 
   /// Cancels drag because of loading or inactivity
   void _cancelDrag() {
-    _animationInfo = _animationInfo.none();
+    _setAnimationInfo(_animationInfo.none());
     _checkValuePosition();
   }
 
@@ -955,4 +991,18 @@ class _AnimationInfo {
           toggleMode: toggleMode, loading: loading);
 
   double valueAt(num position) => start + (end - start) * position;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _AnimationInfo &&
+          runtimeType == other.runtimeType &&
+          start == other.start &&
+          end == other.end &&
+          toggleMode == other.toggleMode &&
+          loading == other.loading;
+
+  @override
+  int get hashCode =>
+      start.hashCode ^ end.hashCode ^ toggleMode.hashCode ^ loading.hashCode;
 }
