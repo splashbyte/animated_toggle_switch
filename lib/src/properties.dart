@@ -251,11 +251,11 @@ class TogglePosition<T> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is PositionListenerInfo &&
-              runtimeType == other.runtimeType &&
-              value == other.mode &&
-              index == other.index &&
-              position == other.position;
+      other is PositionListenerInfo &&
+          runtimeType == other.runtimeType &&
+          value == other.mode &&
+          index == other.index &&
+          position == other.position;
 
   @override
   int get hashCode => value.hashCode ^ index.hashCode ^ position.hashCode;
