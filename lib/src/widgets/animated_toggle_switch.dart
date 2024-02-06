@@ -275,6 +275,9 @@ class AnimatedToggleSwitch<T extends Object?>
   /// For deactivating this animation please set [inactiveOpacity] to [1.0].
   final Duration inactiveOpacityDuration;
 
+  /// Listener for the current position and [ToggleMode] of the indicator.
+  final PositionListener<T>? positionListener;
+
   final bool animateStyleChanges = true;
 
   /// Constructor of AnimatedToggleSwitch with all possible settings.
@@ -327,6 +330,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.positionListener,
   })  : _iconArrangement = IconArrangement.row,
         super(
           values: values,
@@ -389,6 +393,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.positionListener,
   })  : spacing = spacing * (height - 2 * borderWidth),
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
@@ -453,6 +458,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.positionListener,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
@@ -520,6 +526,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.positionListener,
   })  : indicatorSize = indicatorSize * (height - 2 * borderWidth),
         spacing = spacing * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -614,6 +621,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.positionListener,
     double indicatorIconScale = 1.0,
   })  : iconAnimationCurve = Curves.linear,
         iconAnimationDuration = Duration.zero,
@@ -695,6 +703,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.positionListener,
     double indicatorIconScale = 1.0,
   })  : iconAnimationCurve = Curves.linear,
         spacing = spacing * (height - 2 * borderWidth),
@@ -892,6 +901,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacity = 0.6,
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
+    this.positionListener,
   })  : assert(clipAnimation || opacityAnimation),
         iconOpacity = 1.0,
         selectedIconOpacity = 1.0,
@@ -1062,6 +1072,7 @@ class AnimatedToggleSwitch<T extends Object?>
         indicatorAppearingBuilder: indicatorAppearingBuilder,
         indicatorAppearingDuration: indicatorAppearingDuration,
         indicatorAppearingCurve: indicatorAppearingCurve,
+        positionListener: positionListener,
         separatorBuilder: customSeparatorBuilder ??
             (separatorBuilder == null
                 ? null
