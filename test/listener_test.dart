@@ -5,8 +5,7 @@ import 'helper.dart';
 import 'mocks.dart';
 
 void main() {
-  defaultTestAllSwitches(
-      'AnimatedToggleSwitch triggers positionListener',
+  defaultTestAllSwitches('AnimatedToggleSwitch triggers positionListener',
       (tester, buildSwitch, type, values) async {
     final current = values.first;
     final nextIndex = values.length - 1;
