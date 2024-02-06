@@ -37,6 +37,9 @@ Switch inspired by [toggle_switch](https://pub.dev/packages/toggle_switch) (made
 Switch inspired by [crazy-switch](https://github.com/pedromassango/crazy-switch) (made with `CustomAnimatedToggleSwitch()`)  
 ![animated_toggle_switch_example_crazy_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/106afaf5-88a0-4d4b-ad59-2b22182d18be)
 
+Switch inspired by [load_switch](https://pub.dev/packages/load_switch) (made with `CustomAnimatedToggleSwitch()`)  
+![animated_toggle_switch_example_loading_switch](https://github.com/splashbyte/animated_toggle_switch/assets/43761463/e8cd9e3f-b8a1-4dcc-8319-21d7875cef0e)
+
 `AnimatedToggleSwitch.rolling()`  
 ![animated_toggle_switch_example_1](https://user-images.githubusercontent.com/43761463/161432579-9fe81c57-6463-45c3-a48f-75db666a3a22.gif)
 ![animated_toggle_switch_example_2](https://user-images.githubusercontent.com/43761463/161432589-d76f61f6-cb97-42e2-b1fd-8c5203a965fa.gif)
