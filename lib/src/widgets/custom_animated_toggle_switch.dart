@@ -345,7 +345,7 @@ class _CustomAnimatedToggleSwitchState<T>
     Future.wait(_loadingFutures).whenComplete(() {
       // Check if new future is added since calling method
       if (futureLength != _loadingFutures.length) return;
-      if (widget.loading == null) _loading(false);
+      if (widget.loading == null && mounted) _loading(false);
       _loadingFutures.clear();
     });
   }
