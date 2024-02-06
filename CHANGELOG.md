@@ -1,9 +1,10 @@
-## 0.8.1
+## 0.8.1 (2024-02-06)
 
 - adds `indicatorGradient` to `ToggleStyle` ([#44](https://github.com/splashbyte/animated_toggle_switch/issues/44))
 - fixes problems with `backgroundGradient` and `backgroundColor` ([#46](https://github.com/splashbyte/animated_toggle_switch/issues/46))
 - adds `AnimationType.none`
-- introduces `CustomToggleStyle` for disabling the animation of single style properties
+- introduces `positionListener` ([#50](https://github.com/splashbyte/animated_toggle_switch/issues/50))
+- fixes [#51](https://github.com/splashbyte/animated_toggle_switch/issues/51)
 
 ## 0.8.0 (2023-09-02)
 
