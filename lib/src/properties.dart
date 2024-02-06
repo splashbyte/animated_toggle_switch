@@ -247,6 +247,18 @@ class TogglePosition<T> {
     required this.index,
     required this.position,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is PositionListenerInfo &&
+              runtimeType == other.runtimeType &&
+              value == other.mode &&
+              index == other.index &&
+              position == other.position;
+
+  @override
+  int get hashCode => value.hashCode ^ index.hashCode ^ position.hashCode;
 }
 
 class TapInfo<T> extends TogglePosition<T> {
@@ -288,7 +300,7 @@ class PositionListenerInfo<T> extends TogglePosition<T> {
       identical(this, other) ||
       other is PositionListenerInfo &&
           runtimeType == other.runtimeType &&
-          value == other.mode &&
+          value == other.value &&
           index == other.index &&
           position == other.position &&
           mode == other.mode;

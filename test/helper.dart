@@ -90,6 +90,7 @@ typedef SwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   Size? indicatorSize,
   AnimationType? indicatorAnimationType,
   AnimationType? iconAnimationType,
+  PositionListener<T>? positionListener,
 });
 
 typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
@@ -112,6 +113,7 @@ typedef SimpleSwitchBuilder<T> = AnimatedToggleSwitch<T> Function({
   Size? indicatorSize,
   AnimationType? indicatorAnimationType,
   AnimationType? iconAnimationType,
+  PositionListener<T>? positionListener,
 });
 
 /// Tests all AnimatedToggleSwitch constructors
@@ -157,6 +159,7 @@ void defaultTestAllSwitches(
         Size? indicatorSize,
         AnimationType? indicatorAnimationType,
         AnimationType? iconAnimationType,
+        PositionListener<int>? positionListener,
       }) =>
           buildSwitch(
         current: current,
@@ -179,6 +182,7 @@ void defaultTestAllSwitches(
         indicatorSize: indicatorSize,
         indicatorAnimationType: indicatorAnimationType,
         iconAnimationType: iconAnimationType,
+        positionListener: positionListener,
       ),
       type,
       defaultValues,
@@ -213,6 +217,7 @@ void defaultTestAllSwitches(
           Size? indicatorSize,
           AnimationType? indicatorAnimationType,
           AnimationType? iconAnimationType,
+          PositionListener<int>? positionListener,
         }) =>
             AnimatedToggleSwitch<int>.dual(
           current: current,
@@ -238,6 +243,7 @@ void defaultTestAllSwitches(
           indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
           indicatorAnimationType:
               indicatorAnimationType ?? AnimationType.onHover,
+          positionListener: positionListener,
         ),
         ConstructorType.dual,
         values,
@@ -282,6 +288,7 @@ void testAllSwitches<T>(
                 Size? indicatorSize,
                 AnimationType? indicatorAnimationType,
                 AnimationType? iconAnimationType,
+                PositionListener<T>? positionListener,
               }) =>
                   AnimatedToggleSwitch<T>.rolling(
                 current: current,
@@ -306,6 +313,7 @@ void testAllSwitches<T>(
                 indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
                 indicatorAnimationType:
                     indicatorAnimationType ?? AnimationType.onHover,
+                positionListener: positionListener,
               ),
               ConstructorType.rolling,
             ));
@@ -335,6 +343,7 @@ void testAllSwitches<T>(
                 Size? indicatorSize,
                 AnimationType? indicatorAnimationType,
                 AnimationType? iconAnimationType,
+                PositionListener<T>? positionListener,
               }) =>
                   AnimatedToggleSwitch<T>.rollingByHeight(
                 current: current,
@@ -364,6 +373,7 @@ void testAllSwitches<T>(
                             indicatorSize.height, 50.0, 2.0)),
                 indicatorAnimationType:
                     indicatorAnimationType ?? AnimationType.onHover,
+                positionListener: positionListener,
               ),
               ConstructorType.rolling,
             ));
@@ -394,6 +404,7 @@ void testAllSwitches<T>(
                 Size? indicatorSize,
                 AnimationType? indicatorAnimationType,
                 AnimationType? iconAnimationType,
+                PositionListener<T>? positionListener,
               }) =>
                   AnimatedToggleSwitch<T>.size(
                 current: current,
@@ -421,6 +432,7 @@ void testAllSwitches<T>(
                 indicatorSize: indicatorSize ?? const Size.fromWidth(46.0),
                 indicatorAnimationType:
                     indicatorAnimationType ?? AnimationType.onHover,
+                positionListener: positionListener,
               ),
               ConstructorType.size,
             ));
@@ -449,6 +461,7 @@ void testAllSwitches<T>(
                 Size? indicatorSize,
                 AnimationType? indicatorAnimationType,
                 AnimationType? iconAnimationType,
+                PositionListener<T>? positionListener,
               }) =>
                   AnimatedToggleSwitch<T>.sizeByHeight(
                 current: current,
@@ -481,6 +494,7 @@ void testAllSwitches<T>(
                             indicatorSize.height, 50.0, 2.0)),
                 indicatorAnimationType:
                     indicatorAnimationType ?? AnimationType.onHover,
+                positionListener: positionListener,
               ),
               ConstructorType.size,
             ));
@@ -511,6 +525,7 @@ void testAllSwitches<T>(
                 Size? indicatorSize,
                 AnimationType? indicatorAnimationType,
                 AnimationType? iconAnimationType,
+                PositionListener<T>? positionListener,
               }) =>
                   AnimatedToggleSwitch<T>.custom(
                 current: current,
@@ -539,6 +554,7 @@ void testAllSwitches<T>(
                     indicatorAnimationType ?? AnimationType.onHover,
                 iconAnimationType:
                     iconAnimationType ?? AnimationType.onSelected,
+                positionListener: positionListener,
               ),
               ConstructorType.custom,
             ));
@@ -567,6 +583,7 @@ void testAllSwitches<T>(
                 Size? indicatorSize,
                 AnimationType? indicatorAnimationType,
                 AnimationType? iconAnimationType,
+                PositionListener<T>? positionListener,
               }) =>
                   AnimatedToggleSwitch<T>.customByHeight(
                 current: current,
@@ -600,6 +617,7 @@ void testAllSwitches<T>(
                     indicatorAnimationType ?? AnimationType.onHover,
                 iconAnimationType:
                     iconAnimationType ?? AnimationType.onSelected,
+                positionListener: positionListener,
               ),
               ConstructorType.custom,
             ));

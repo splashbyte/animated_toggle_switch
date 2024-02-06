@@ -9,7 +9,14 @@ abstract class TestOnChangedFunction<T> {
   void call(T value);
 }
 
+abstract class TestPositionListenerFunction<T> {
+  void call(PositionListenerInfo<T> positionListenerInfo);
+}
+
 class MockFunction<T> extends Mock implements TestOnTapFunction<T> {}
 
 class MockOnChangedFunction<T> extends Mock
     implements TestOnChangedFunction<T> {}
+
+class MockPositionListenerFunction<T> extends Mock
+    implements TestPositionListenerFunction<T> {}
