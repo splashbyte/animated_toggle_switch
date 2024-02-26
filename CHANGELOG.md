@@ -1,3 +1,7 @@
+## 0.8.2 (2024-02-26)
+
+- adds `clipBehavior` to `AnimatedToggleSwitch` ([#56](https://github.com/splashbyte/animated_toggle_switch/issues/56))
+
 ## 0.8.1 (2024-02-06)
 
 - adds `indicatorGradient` to `ToggleStyle` ([#44](https://github.com/splashbyte/animated_toggle_switch/issues/44))
