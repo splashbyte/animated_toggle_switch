@@ -278,6 +278,9 @@ class AnimatedToggleSwitch<T extends Object?>
   /// Listener for the current position and [ToggleMode] of the indicator.
   final PositionListener<T>? positionListener;
 
+  /// [Clip] of the switch wrapper.
+  final Clip clipBehavior;
+
   final bool animateStyleChanges = true;
 
   /// Constructor of AnimatedToggleSwitch with all possible settings.
@@ -331,6 +334,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
+    this.clipBehavior = Clip.antiAlias,
   })  : _iconArrangement = IconArrangement.row,
         super(
           values: values,
@@ -394,6 +398,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
+    this.clipBehavior = Clip.antiAlias,
   })  : spacing = spacing * (height - 2 * borderWidth),
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
@@ -459,6 +464,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
+    this.clipBehavior = Clip.antiAlias,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
@@ -527,6 +533,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
+    this.clipBehavior = Clip.antiAlias,
   })  : indicatorSize = indicatorSize * (height - 2 * borderWidth),
         spacing = spacing * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -622,6 +629,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
+    this.clipBehavior = Clip.antiAlias,
     double indicatorIconScale = 1.0,
   })  : iconAnimationCurve = Curves.linear,
         iconAnimationDuration = Duration.zero,
@@ -704,6 +712,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
+    this.clipBehavior = Clip.antiAlias,
     double indicatorIconScale = 1.0,
   })  : iconAnimationCurve = Curves.linear,
         spacing = spacing * (height - 2 * borderWidth),
@@ -902,6 +911,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityCurve = Curves.easeInOut,
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
+    this.clipBehavior = Clip.antiAlias,
   })  : assert(clipAnimation || opacityAnimation),
         iconOpacity = 1.0,
         selectedIconOpacity = 1.0,
@@ -970,7 +980,7 @@ class AnimatedToggleSwitch<T extends Object?>
 
       return Align(
         alignment: alignment,
-        child: _CustomClipRect(
+        child: ClipRect(
           clipBehavior: clipAnimation ? Clip.hardEdge : Clip.none,
           child: Align(
             alignment: alignment,
@@ -1121,6 +1131,7 @@ class AnimatedToggleSwitch<T extends Object?>
                     borderRadius: style._borderRadius?.value,
                   ),
                   child: ClipRRect(
+                    clipBehavior: clipBehavior,
                     borderRadius:
                         style._borderRadius?.value ?? BorderRadius.zero,
                     child: child,
@@ -1285,34 +1296,6 @@ class AnimatedToggleSwitch<T extends Object?>
             ],
           ),
         ));
-  }
-}
-
-class _CustomClipRect extends StatefulWidget {
-  final Clip clipBehavior;
-  final Widget child;
-
-  const _CustomClipRect({
-    Key? key,
-    this.clipBehavior = Clip.hardEdge,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  _CustomClipRectState createState() => _CustomClipRectState();
-}
-
-class _CustomClipRectState extends State<_CustomClipRect> {
-  final _childKey = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    Widget child = _EmptyWidget(key: _childKey, child: widget.child);
-    if (widget.clipBehavior == Clip.none) return child;
-    return ClipRect(
-      clipBehavior: widget.clipBehavior,
-      child: child,
-    );
   }
 }
 
