@@ -1,8 +1,8 @@
 name: animated_toggle_switch
 description: Fully customizable, draggable and animated switch with multiple choices and smooth loading animation. It has prebuilt constructors for rolling and size animations.
 version: 0.8.2
-repository: https://github.com/SplashByte/animated_toggle_switch
-issue_tracker: https://github.com/SplashByte/animated_toggle_switch/issues
+repository: https://github.com/splashbyte/animated_toggle_switch
+issue_tracker: https://github.com/splashbyte/animated_toggle_switch/issues
 
 environment:
   sdk: '>=2.17.0 <4.0.0'
