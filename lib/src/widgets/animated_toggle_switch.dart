@@ -1274,7 +1274,9 @@ class AnimatedToggleSwitch<T extends Object?>
     return DecoratedBox(
         key: AnimatedToggleSwitchTestKeys.indicatorDecoratedBoxKey,
         decoration: BoxDecoration(
-          color: style._indicatorColor?.value,
+          color: style._indicatorGradient != null
+              ? null
+              : style._indicatorColor?.value,
           gradient: style._indicatorGradient?.value,
           borderRadius: style._indicatorBorderRadius?.value,
           border: style._indicatorBorder?.value,
