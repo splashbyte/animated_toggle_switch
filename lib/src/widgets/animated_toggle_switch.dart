@@ -1114,7 +1114,9 @@ class AnimatedToggleSwitch<T extends Object?>
               _BaseToggleStyle._lerpFunction(styleAnimationType),
               (style) => DecoratedBox(
                 decoration: BoxDecoration(
-                  color: style._backgroundColor?.value,
+                  color: style._backgroundGradient != null
+                      ? null
+                      : style._backgroundColor?.value,
                   gradient: style._backgroundGradient?.value,
                   borderRadius: style._borderRadius?.value,
                   boxShadow: style._boxShadow?.value,
