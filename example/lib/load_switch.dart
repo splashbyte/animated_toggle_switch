@@ -19,9 +19,9 @@ class _LoadSwitchState extends State<LoadSwitch> {
     const borderWidth = 5.0;
     return CustomAnimatedToggleSwitch(
       height: height,
-      indicatorSize: Size.square(height),
+      indicatorSize: const Size.square(height),
       current: value,
-      values: [false, true],
+      values: const [false, true],
       onChanged: (newValue) {
         setState(() => value = newValue);
         return Future.delayed(const Duration(seconds: 2));
@@ -42,8 +42,8 @@ class _LoadSwitchState extends State<LoadSwitch> {
         return Stack(
           fit: StackFit.expand,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(borderWidth),
+            const Padding(
+              padding: EdgeInsets.all(borderWidth),
               child: DecoratedBox(
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: Colors.white)),

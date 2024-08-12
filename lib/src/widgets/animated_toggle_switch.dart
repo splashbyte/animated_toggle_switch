@@ -977,6 +977,8 @@ class AnimatedToggleSwitch<T extends Object?>
       AlignmentGeometry alignment = start
           ? AlignmentDirectional.centerStart
           : AlignmentDirectional.centerEnd;
+      final finalOffset =
+          global.vertical ? Offset(offset.dy, offset.dx) : offset;
 
       return Align(
         alignment: alignment,
@@ -993,7 +995,7 @@ class AnimatedToggleSwitch<T extends Object?>
             child: Padding(
               padding: textMargin,
               child: Transform.translate(
-                offset: offset * local.animationValue * (left ? 1 : -1),
+                offset: (finalOffset * local.animationValue * (left ? 1 : -1)),
                 child: Center(
                   child: Opacity(
                       opacity: opacityAnimation
@@ -1015,6 +1017,13 @@ class AnimatedToggleSwitch<T extends Object?>
         ),
       );
     };
+  }
+
+  /// {@macro animated_toggle_switch.method.vertical}
+  Widget vertical() {
+    return Builder(builder: (context) {
+      return _build(context).vertical();
+    });
   }
 
   static Widget _defaultLoadingIconBuilder(BuildContext context,
@@ -1043,6 +1052,10 @@ class AnimatedToggleSwitch<T extends Object?>
 
   @override
   Widget build(BuildContext context) {
+    return _build(context);
+  }
+
+  CustomAnimatedToggleSwitch _build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     BorderRadiusGeometry defaultBorderRadius =
         BorderRadius.circular(height / 2);

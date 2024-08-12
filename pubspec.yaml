@@ -17,6 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.0
+  dartdoc: ^8.0.13
 
 flutter:
 

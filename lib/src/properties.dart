@@ -55,6 +55,8 @@ class GlobalToggleProperties<T> {
 
   final bool active;
 
+  final bool vertical;
+
   /// This animation indicates whether the indicator is currently visible.
   ///
   /// [0.0] means it is not visible.
@@ -77,6 +79,7 @@ class GlobalToggleProperties<T> {
     required this.mode,
     required this.loadingAnimationValue,
     required this.active,
+    required this.vertical,
     required Animation<double> indicatorAppearingAnimation,
   }) : _indicatorAppearingAnimation = indicatorAppearingAnimation;
 }
@@ -112,6 +115,7 @@ class DetailedGlobalToggleProperties<T> extends GlobalToggleProperties<T> {
     required super.loadingAnimationValue,
     required super.active,
     required super.indicatorAppearingAnimation,
+    required super.vertical,
   });
 }
 
