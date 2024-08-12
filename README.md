@@ -130,7 +130,7 @@ AnimatedToggleSwitch<int?>.rolling(
 ```
 
 ### Vertical switches
-  
+![animated_toggle_switch_example_vertical](https://github.com/user-attachments/assets/b6b804d0-a8f0-47a2-bf73-e9e0b65773d7)  
 To use this feature, you simply have to call `vertical()` on the switch you want to make vertical.
 
 ```dart
