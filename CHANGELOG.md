@@ -1,3 +1,7 @@
+## 0.8.3
+
+- adds support for vertical switches ([#61](https://github.com/splashbyte/animated_toggle_switch/issues/61))
+
 ## 0.8.2 (2024-02-26)
 
 - adds `clipBehavior` to `AnimatedToggleSwitch` ([#56](https://github.com/splashbyte/animated_toggle_switch/issues/56))

@@ -12,7 +12,7 @@ void _verifyVertical<T>(WidgetTester tester, List<T> values) {
 }
 
 void main() {
-  defaultTestAllSwitches('Switch respects TextDirection',
+  defaultTestAllSwitches('Vertical switch',
       (tester, buildSwitch, type, values) async {
     final current = values[1];
     await tester.pumpWidget(TestWrapper(

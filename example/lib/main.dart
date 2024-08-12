@@ -459,6 +459,24 @@ class _MyHomePageState extends State<MyHomePage> {
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
+                  'You can make any switch vertical:',
+                ),
+              ),
+              AnimatedToggleSwitch<int>.rolling(
+                current: value,
+                values: const [0, 1, 2, 3],
+                indicatorIconScale: sqrt2,
+                style: const ToggleStyle(
+                  indicatorColor: Colors.blue,
+                  borderColor: Colors.blue,
+                  backgroundColor: Colors.white,
+                ),
+                onChanged: (i) => setState(() => value = i),
+                iconBuilder: rollingIconBuilder,
+              ).vertical(),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
                   'Customized AnimatedToggleSwitch.rolling:',
                 ),
               ),

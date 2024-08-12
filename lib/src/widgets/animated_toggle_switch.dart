@@ -1055,6 +1055,9 @@ class AnimatedToggleSwitch<T extends Object?>
     return _build(context);
   }
 
+  /// Separate build-method, so [build] does not return
+  /// [CustomAnimatedToggleSwitch], which would make changing the return type
+  /// back to [Widget] a breaking change.
   CustomAnimatedToggleSwitch _build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     BorderRadiusGeometry defaultBorderRadius =
