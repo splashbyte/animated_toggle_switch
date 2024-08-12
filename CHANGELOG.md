@@ -1,4 +1,4 @@
-## 0.8.3
+## 0.8.3 (2024-08-12)
 
 - adds support for vertical switches ([#61](https://github.com/splashbyte/animated_toggle_switch/issues/61))
 
