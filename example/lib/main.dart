@@ -473,6 +473,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 onChanged: (i) => setState(() => value = i),
                 iconBuilder: rollingIconBuilder,
+                loading: false,
               ).vertical(),
               const Padding(
                 padding: EdgeInsets.all(8.0),
