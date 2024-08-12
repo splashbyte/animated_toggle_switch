@@ -9,7 +9,6 @@ void _verifyVertical<T>(WidgetTester tester, List<T> values) {
       reason: 'Icons do not have the same x-coordinate');
   expect((firstPos - lastPos).dy < 0, true,
       reason: 'Icons should be ordered top down');
-
 }
 
 void main() {

@@ -176,7 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
-                        ? const Icon(Icons.power_outlined, color: green, size: 32.0)
+                        ? const Icon(Icons.power_outlined,
+                            color: green, size: 32.0)
                         : Icon(Icons.power_settings_new_rounded,
                             color: Colors.red[800], size: 32.0),
                     textBuilder: (value) => value
@@ -219,7 +220,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         const CupertinoActivityIndicator(color: Colors.white),
                     onChanged: (b) {
                       setState(() => positive = b);
-                      return Future<dynamic>.delayed(const Duration(seconds: 2));
+                      return Future<dynamic>.delayed(
+                          const Duration(seconds: 2));
                     },
                     styleBuilder: (b) => ToggleStyle(
                         indicatorColor: b ? Colors.purple : Colors.green),
