@@ -9,27 +9,29 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AnimatedToggleSwitch Demo',
       theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-      home: MyHomePage(title: 'Example'),
+      home: const MyHomePage(title: 'AnimatedToggleSwitch'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -54,41 +56,43 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.dual:',
                 ),
               ),
-              AnimatedToggleSwitch<bool>.dual(
-                current: positive,
-                first: false,
-                second: true,
-                spacing: 50.0,
-                style: const ToggleStyle(
-                  borderColor: Colors.transparent,
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      offset: Offset(0, 1.5),
-                    ),
-                  ],
+              SizedBox(
+                child: AnimatedToggleSwitch<bool>.dual(
+                  current: positive,
+                  first: false,
+                  second: true,
+                  spacing: 50.0,
+                  style: const ToggleStyle(
+                    borderColor: Colors.transparent,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 1.5),
+                      ),
+                    ],
+                  ),
+                  borderWidth: 5.0,
+                  height: 55,
+                  onChanged: (b) => setState(() => positive = b),
+                  styleBuilder: (b) => ToggleStyle(
+                      indicatorColor: b ? Colors.red : Colors.green),
+                  iconBuilder: (value) => value
+                      ? const Icon(Icons.coronavirus_rounded)
+                      : const Icon(Icons.tag_faces_rounded),
+                  textBuilder: (value) => value
+                      ? const Center(child: Text('Oh no...'))
+                      : const Center(child: Text('Nice :)')),
                 ),
-                borderWidth: 5.0,
-                height: 55,
-                onChanged: (b) => setState(() => positive = b),
-                styleBuilder: (b) =>
-                    ToggleStyle(indicatorColor: b ? Colors.red : Colors.green),
-                iconBuilder: (value) => value
-                    ? Icon(Icons.coronavirus_rounded)
-                    : Icon(Icons.tag_faces_rounded),
-                textBuilder: (value) => value
-                    ? Center(child: Text('Oh no...'))
-                    : Center(child: Text('Nice :)')),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               AnimatedToggleSwitch<bool>.dual(
                 current: positive,
                 first: false,
@@ -96,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 50.0,
                 style: const ToggleStyle(
                   borderColor: Colors.transparent,
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
                       spreadRadius: 1,
@@ -130,28 +134,29 @@ class _MyHomePageState extends State<MyHomePage> {
                         child:
                             Text('Off', style: TextStyle(color: Colors.white))),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               DefaultTextStyle.merge(
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold),
                 child: IconTheme.merge(
-                  data: IconThemeData(color: Colors.white),
+                  data: const IconThemeData(color: Colors.white),
                   child: AnimatedToggleSwitch<bool>.dual(
                     current: positive,
                     first: false,
                     second: true,
                     spacing: 45.0,
                     animationDuration: const Duration(milliseconds: 600),
-                    style: ToggleStyle(
+                    style: const ToggleStyle(
                       borderColor: Colors.transparent,
                       indicatorColor: Colors.white,
                       backgroundColor: Colors.black,
                     ),
                     customStyleBuilder: (context, local, global) {
-                      if (global.position <= 0.0)
+                      if (global.position <= 0.0) {
                         return ToggleStyle(backgroundColor: Colors.red[800]);
+                      }
                       return ToggleStyle(
                           backgroundGradient: LinearGradient(
                         colors: [green, Colors.red[800]!],
@@ -171,17 +176,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
-                        ? Icon(Icons.power_outlined, color: green, size: 32.0)
+                        ? const Icon(Icons.power_outlined,
+                            color: green, size: 32.0)
                         : Icon(Icons.power_settings_new_rounded,
                             color: Colors.red[800], size: 32.0),
                     textBuilder: (value) => value
-                        ? Center(child: Text('Active'))
-                        : Center(child: Text('Inactive')),
+                        ? const Center(child: Text('Active'))
+                        : const Center(child: Text('Inactive')),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.dual with loading animation:',
                 ),
@@ -189,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
               DefaultTextStyle.merge(
                 style: const TextStyle(color: Colors.white),
                 child: IconTheme.merge(
-                  data: IconThemeData(color: Colors.white),
+                  data: const IconThemeData(color: Colors.white),
                   child: AnimatedToggleSwitch<bool>.dual(
                     current: positive,
                     first: false,
@@ -199,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderColor: Colors.transparent,
                       backgroundColor: Colors.black,
                       borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
                           color: Colors.purple,
                           spreadRadius: 1,
@@ -214,36 +220,37 @@ class _MyHomePageState extends State<MyHomePage> {
                         const CupertinoActivityIndicator(color: Colors.white),
                     onChanged: (b) {
                       setState(() => positive = b);
-                      return Future<dynamic>.delayed(Duration(seconds: 2));
+                      return Future<dynamic>.delayed(
+                          const Duration(seconds: 2));
                     },
                     styleBuilder: (b) => ToggleStyle(
                         indicatorColor: b ? Colors.purple : Colors.green),
                     iconBuilder: (value) => value
-                        ? Icon(Icons.coronavirus_rounded)
-                        : Icon(Icons.tag_faces_rounded),
+                        ? const Icon(Icons.coronavirus_rounded)
+                        : const Icon(Icons.tag_faces_rounded),
                     textBuilder: (value) => value
-                        ? Center(
+                        ? const Center(
                             child: Text('Oh no...',
-                                style: const TextStyle(color: Colors.white)))
-                        : Center(child: Text('Nice :)')),
+                                style: TextStyle(color: Colors.white)))
+                        : const Center(child: Text('Nice :)')),
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               AnimatedToggleSwitch<bool>.dual(
                 current: positive,
                 first: false,
                 second: true,
                 spacing: 45.0,
                 animationDuration: const Duration(milliseconds: 600),
-                style: ToggleStyle(
+                style: const ToggleStyle(
                   borderColor: Colors.transparent,
                   indicatorColor: Colors.white,
                   backgroundColor: Colors.amber,
                 ),
                 customStyleBuilder: (context, local, global) => ToggleStyle(
                     backgroundGradient: LinearGradient(
-                  colors: [Colors.green, Colors.red],
+                  colors: const [Colors.green, Colors.red],
                   stops: [
                     global.position -
                         (1 - 2 * max(0, global.position - 0.5)) * 0.5,
@@ -258,12 +265,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             Colors.red, Colors.green, global.position)),
                 onChanged: (b) {
                   setState(() => positive = b);
-                  return Future<dynamic>.delayed(Duration(seconds: 2));
+                  return Future<dynamic>.delayed(const Duration(seconds: 2));
                 },
                 iconBuilder: (value) => value
-                    ? Icon(Icons.power_outlined,
+                    ? const Icon(Icons.power_outlined,
                         color: Colors.green, size: 32.0)
-                    : Icon(Icons.power_settings_new_rounded,
+                    : const Icon(Icons.power_settings_new_rounded,
                         color: Colors.red, size: 32.0),
                 textBuilder: (value) => Center(
                     child: Text(
@@ -278,7 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text.rich(
                   TextSpan(children: [
-                    TextSpan(text: 'Switch inspired by package '),
+                    const TextSpan(text: 'Switch inspired by package '),
                     TextSpan(
                         text: 'lite_rolling_switch',
                         style: tappableTextStyle,
@@ -293,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold),
                 child: IconTheme.merge(
-                  data: IconThemeData(color: Colors.white),
+                  data: const IconThemeData(color: Colors.white),
                   child: AnimatedToggleSwitch<bool>.dual(
                     current: positive,
                     first: false,
@@ -301,7 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     spacing: 45.0,
                     animationCurve: Curves.easeInOut,
                     animationDuration: const Duration(milliseconds: 600),
-                    style: ToggleStyle(
+                    style: const ToggleStyle(
                       borderColor: Colors.transparent,
                       indicatorColor: Colors.white,
                       backgroundColor: Colors.black,
@@ -316,15 +323,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Colors.red[800], green, global.position)),
                     onChanged: (b) => setState(() => positive = b),
                     iconBuilder: (value) => value
-                        ? Icon(Icons.lightbulb_outline_rounded,
+                        ? const Icon(Icons.lightbulb_outline_rounded,
                             color: green, size: 28.0)
                         : Icon(Icons.power_settings_new_rounded,
                             color: Colors.red[800], size: 30.0),
                     textBuilder: (value) => value
-                        ? Align(
+                        ? const Align(
                             alignment: AlignmentDirectional.centerStart,
                             child: Text('Active'))
-                        : Align(
+                        : const Align(
                             alignment: AlignmentDirectional.centerEnd,
                             child: Text('Inactive')),
                   ),
@@ -334,7 +341,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text.rich(
                   TextSpan(children: [
-                    TextSpan(text: 'Switch inspired by package '),
+                    const TextSpan(text: 'Switch inspired by package '),
                     TextSpan(
                         text: 'toggle_switch',
                         style: tappableTextStyle,
@@ -346,8 +353,8 @@ class _MyHomePageState extends State<MyHomePage> {
               AnimatedToggleSwitch<int>.size(
                 current: min(value, 2),
                 style: ToggleStyle(
-                  backgroundColor: Color(0xFF919191),
-                  indicatorColor: Color(0xFFEC3345),
+                  backgroundColor: const Color(0xFF919191),
+                  indicatorColor: const Color(0xFFEC3345),
                   borderColor: Colors.transparent,
                   borderRadius: BorderRadius.circular(10.0),
                   indicatorBorderRadius: BorderRadius.zero,
@@ -383,7 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text.rich(
                   TextSpan(children: [
-                    TextSpan(text: 'Switch inspired by '),
+                    const TextSpan(text: 'Switch inspired by '),
                     TextSpan(
                         text: 'Crazy Switch',
                         style: tappableTextStyle,
@@ -392,15 +399,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
-                child: const CrazySwitch(),
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 16.0),
+                child: CrazySwitch(),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text.rich(
                   TextSpan(children: [
-                    TextSpan(text: 'Switch inspired by '),
+                    const TextSpan(text: 'Switch inspired by '),
                     TextSpan(
                         text: 'load_switch',
                         style: tappableTextStyle,
@@ -409,12 +416,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
-                child: const LoadSwitch(),
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0, bottom: 16.0),
+                child: LoadSwitch(),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Standard AnimatedToggleSwitch.rolling:',
                 ),
@@ -425,12 +432,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: const [0, 1, 2, 3],
                 onChanged: (i) {
                   setState(() => value = i);
-                  return Future<dynamic>.delayed(Duration(seconds: 3));
+                  return Future<dynamic>.delayed(const Duration(seconds: 3));
                 },
                 iconBuilder: rollingIconBuilder,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Switch with unselected value:',
                 ),
@@ -449,13 +456,32 @@ class _MyHomePageState extends State<MyHomePage> {
                   return ToggleStyle(borderColor: color, indicatorColor: color);
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'You can make any switch vertical:',
+                ),
+              ),
+              AnimatedToggleSwitch<int>.rolling(
+                current: value,
+                values: const [0, 1, 2, 3],
+                indicatorIconScale: sqrt2,
+                style: const ToggleStyle(
+                  indicatorColor: Colors.blue,
+                  borderColor: Colors.blue,
+                  backgroundColor: Colors.white,
+                ),
+                onChanged: (i) => setState(() => value = i),
+                iconBuilder: rollingIconBuilder,
+                loading: false,
+              ).vertical(),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Customized AnimatedToggleSwitch.rolling:',
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
                 active: false,
                 current: value,
@@ -466,13 +492,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     value = i;
                     loading = true;
                   });
-                  return Future<Object?>.delayed(Duration(seconds: 3))
+                  return Future<Object?>.delayed(const Duration(seconds: 3))
                       .then((_) => setState(() => loading = false));
                 },
                 iconBuilder: rollingIconBuilder,
-                style: ToggleStyle(
+                style: const ToggleStyle(
                   borderColor: Colors.transparent,
-                  indicatorBoxShadow: const [
+                  indicatorBoxShadow: [
                     BoxShadow(
                       color: Colors.black26,
                       spreadRadius: 1,
@@ -480,7 +506,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       offset: Offset(0, 1.5),
                     )
                   ],
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
                       spreadRadius: 1,
@@ -490,17 +516,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               IconTheme.merge(
-                data: IconThemeData(color: Colors.white),
+                data: const IconThemeData(color: Colors.white),
                 child: AnimatedToggleSwitch<int>.rolling(
                   current: value,
                   values: const [0, 1, 2, 3],
                   onChanged: (i) => setState(() => value = i),
-                  style: ToggleStyle(
+                  style: const ToggleStyle(
                     indicatorColor: Colors.white,
                     borderColor: Colors.transparent,
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
                         color: Colors.black26,
                         spreadRadius: 1,
@@ -520,7 +546,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rolling(
                 current: value,
                 allowUnlistedValues: true,
@@ -543,7 +569,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 20.0,
                 loading: loading,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               AnimatedToggleSwitch<int?>.rolling(
                 current: nullableValue,
                 allowUnlistedValues: true,
@@ -556,34 +582,35 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (i) => setState(() => nullableValue = i),
                 iconBuilder: rollingIconBuilder,
                 borderWidth: 4.5,
-                style: ToggleStyle(
+                style: const ToggleStyle(
                   indicatorColor: Colors.white,
                   backgroundGradient:
-                      const LinearGradient(colors: [Colors.red, Colors.blue]),
+                      LinearGradient(colors: [Colors.red, Colors.blue]),
                   borderColor: Colors.transparent,
                 ),
                 height: 55,
                 spacing: 20.0,
                 loading: loading,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'You can make any other switch with CustomAnimatedToggleSwitch:',
                 ),
               ),
               CustomAnimatedToggleSwitch<bool>(
                 current: positive,
-                values: [false, true],
+                values: const [false, true],
                 spacing: 0.0,
-                indicatorSize: Size.square(30.0),
+                indicatorSize: const Size.square(30.0),
                 animationDuration: const Duration(milliseconds: 200),
                 animationCurve: Curves.linear,
                 onChanged: (b) => setState(() => positive = b),
                 iconBuilder: (context, local, global) {
                   return const SizedBox();
                 },
-                cursors: ToggleCursors(defaultCursor: SystemMouseCursors.click),
+                cursors: const ToggleCursors(
+                    defaultCursor: SystemMouseCursors.click),
                 onTap: (_) => setState(() => positive = !positive),
                 iconsTappable: false,
                 wrapperBuilder: (context, global, child) {
@@ -596,10 +623,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 20.0,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Color.lerp(
-                                  Colors.black26,
-                                  theme.colorScheme.background,
-                                  global.position),
+                              color: Color.lerp(Colors.black26,
+                                  theme.colorScheme.surface, global.position),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(50.0)),
                             ),
@@ -615,7 +640,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       decoration: BoxDecoration(
                         color: Color.lerp(
                             Colors.white, theme.primaryColor, global.position),
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50.0)),
                         boxShadow: const [
                           BoxShadow(
                               color: Colors.black38,
@@ -628,8 +654,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.size with some custom settings:',
                 ),
@@ -643,7 +669,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 styleAnimationType: AnimationType.onHover,
                 iconBuilder: (value) => Icon(
                     value.isEven ? Icons.cancel : Icons.access_time_rounded),
-                style: ToggleStyle(
+                style: const ToggleStyle(
                   borderColor: Colors.transparent,
                 ),
                 borderWidth: 0.0,
@@ -656,7 +682,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 onChanged: (i) {
                   setState(() => value = i);
-                  return Future<dynamic>.delayed(Duration(seconds: 3));
+                  return Future<dynamic>.delayed(const Duration(seconds: 3));
                 },
               ),
               const SizedBox(height: 16.0),
@@ -673,7 +699,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderColor: Colors.transparent,
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
-                    BoxShadow(
+                    const BoxShadow(
                       color: Colors.black26,
                       spreadRadius: 1,
                       blurRadius: 2,
@@ -703,7 +729,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderColor: Colors.transparent,
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
-                    BoxShadow(
+                    const BoxShadow(
                       color: Colors.black26,
                       spreadRadius: 1,
                       blurRadius: 2,
@@ -714,8 +740,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 selectedIconScale: 1.0,
                 onChanged: (b) => setState(() => positive = b),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.size with a more custom icon and TextDirection.rtl:',
                 ),
@@ -735,14 +761,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   );
                 },
-                style: ToggleStyle(borderColor: Colors.transparent),
+                style: const ToggleStyle(borderColor: Colors.transparent),
                 styleBuilder: (i) => ToggleStyle(
                     indicatorColor:
                         i.isEven == true ? Colors.amber : Colors.red),
                 onChanged: (i) => setState(() => value = i),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.size with custom rotating animation:',
                 ),
@@ -778,8 +804,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         i.isEven == true ? Colors.green : Colors.tealAccent),
                 onChanged: (i) => setState(() => value = i),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'AnimatedToggleSwitch.rollingByHeight with custom indicatorSize and borderRadius:',
                 ),
@@ -792,7 +818,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 iconBuilder: rollingIconBuilder,
                 indicatorSize: const Size.fromWidth(2),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               AnimatedToggleSwitch<int>.rollingByHeight(
                 height: 50.0,
                 current: value,

@@ -18,5 +18,5 @@ part 'src/widgets/animation_type_builder.dart';
 part 'src/foreground_indicator_transition.dart';
 part 'src/widgets/animated_toggle_switch.dart';
 part 'src/widgets/custom_animated_toggle_switch.dart';
-part 'src/widgets/drag_region.dart';
+part 'src/widgets/hover_region.dart';
 part 'src/widgets/conditional_wrapper.dart';

@@ -24,7 +24,7 @@ class _CrazySwitchState extends State<CrazySwitch> {
     return CustomAnimatedToggleSwitch(
       current: current,
       spacing: 36.0,
-      values: [false, true],
+      values: const [false, true],
       animationDuration: const Duration(milliseconds: 350),
       animationCurve: Curves.bounceOut,
       iconBuilder: (context, local, global) => const SizedBox(),
@@ -41,7 +41,7 @@ class _CrazySwitchState extends State<CrazySwitch> {
         return Container(
           alignment: Alignment.center,
           decoration:
-              BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+              const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
           child: Container(
               width: innerIndicatorSize * 0.4 +
                   global.position * innerIndicatorSize * 0.6,

@@ -193,6 +193,8 @@ class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
   /// Listener for the current position and [ToggleMode] of the indicator.
   final PositionListener<T>? positionListener;
 
+  final bool _vertical;
+
   const CustomAnimatedToggleSwitch({
     Key? key,
     required this.current,
@@ -228,15 +230,124 @@ class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
     this.allowUnlistedValues = false,
     this.active = true,
     this.positionListener,
-  })  : assert(foregroundIndicatorBuilder != null ||
+  })  : _vertical = false,
+        assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         assert(separatorBuilder == null ||
             (spacing > 0 && iconArrangement == IconArrangement.row)),
         super(key: key);
 
+  const CustomAnimatedToggleSwitch._({
+    required this.current,
+    required this.values,
+    required this.wrapperBuilder,
+    required this.iconBuilder,
+    required this.foregroundIndicatorBuilder,
+    required this.backgroundIndicatorBuilder,
+    required this.indicatorAppearingBuilder,
+    required this.animationDuration,
+    required this.animationCurve,
+    required this.loadingAnimationDuration,
+    required this.loadingAnimationCurve,
+    required this.indicatorAppearingDuration,
+    required this.indicatorAppearingCurve,
+    required this.indicatorSize,
+    required this.onChanged,
+    required this.spacing,
+    required this.separatorBuilder,
+    required this.onTap,
+    required this.iconsTappable,
+    required this.iconArrangement,
+    required this.fittingMode,
+    required this.height,
+    required this.padding,
+    required this.minTouchTargetSize,
+    required this.dragStartDuration,
+    required this.dragStartCurve,
+    required this.textDirection,
+    required this.cursors,
+    required this.loading,
+    required this.allowUnlistedValues,
+    required this.active,
+    required this.positionListener,
+    required bool vertical,
+  }) : _vertical = vertical;
+
   @override
   State<CustomAnimatedToggleSwitch<T>> createState() =>
       _CustomAnimatedToggleSwitchState<T>();
+
+  /// {@template animated_toggle_switch.method.vertical}
+  /// Rotates this switch and its builders and returns a vertical version of itself.
+  /// {@endtemplate}
+  Widget vertical() {
+    if (_vertical) return this;
+
+    return RotatedBox(
+        quarterTurns: 1,
+        child: CustomAnimatedToggleSwitch<T>._(
+          vertical: true,
+          current: current,
+          values: values,
+          iconBuilder: (context, global, local) => RotatedBox(
+            quarterTurns: -1,
+            child: iconBuilder(context, global, local),
+          ),
+          indicatorAppearingBuilder: (context, value, indicator) => RotatedBox(
+            quarterTurns: -1,
+            child: indicatorAppearingBuilder(
+              context,
+              value,
+              RotatedBox(quarterTurns: 1, child: indicator),
+            ),
+          ),
+          animationDuration: animationDuration,
+          animationCurve: animationCurve,
+          indicatorAppearingDuration: indicatorAppearingDuration,
+          indicatorAppearingCurve: indicatorAppearingCurve,
+          indicatorSize: indicatorSize,
+          spacing: spacing,
+          iconsTappable: iconsTappable,
+          iconArrangement: iconArrangement,
+          fittingMode: fittingMode,
+          height: height,
+          padding: padding,
+          minTouchTargetSize: minTouchTargetSize,
+          dragStartDuration: dragStartDuration,
+          dragStartCurve: dragStartCurve,
+          cursors: cursors,
+          allowUnlistedValues: allowUnlistedValues,
+          active: active,
+          wrapperBuilder: wrapperBuilder,
+          foregroundIndicatorBuilder: foregroundIndicatorBuilder == null
+              ? null
+              : (BuildContext context,
+                  DetailedGlobalToggleProperties<T> global) {
+                  return RotatedBox(
+                    quarterTurns: -1,
+                    child: foregroundIndicatorBuilder!(context, global),
+                  );
+                },
+          backgroundIndicatorBuilder: backgroundIndicatorBuilder == null
+              ? null
+              : (BuildContext context,
+                  DetailedGlobalToggleProperties<T> global) {
+                  return RotatedBox(
+                    quarterTurns: -1,
+                    child: backgroundIndicatorBuilder!(context, global),
+                  );
+                },
+          loadingAnimationDuration: loadingAnimationDuration,
+          loadingAnimationCurve: loadingAnimationCurve,
+          onChanged: onChanged,
+          separatorBuilder: separatorBuilder,
+          onTap: onTap,
+          // by default the icons are ordered top down
+          textDirection: textDirection ?? TextDirection.ltr,
+          loading: loading,
+          positionListener: positionListener,
+        ));
+  }
 }
 
 class _CustomAnimatedToggleSwitchState<T>
@@ -457,7 +568,7 @@ class _CustomAnimatedToggleSwitchState<T>
   @override
   Widget build(BuildContext context) {
     double spacing = widget.spacing;
-    final textDirection = _textDirectionOf(context);
+    final textDirection = widget.textDirection ?? _textDirectionOf(context);
     final loadingValue = _animationInfo.loading ? 1.0 : 0.0;
     final privateIndicatorAppearingAnimation =
         _PrivateAnimation(_appearingAnimation);
@@ -507,6 +618,7 @@ class _CustomAnimatedToggleSwitchState<T>
                     active: widget.active,
                     indicatorAppearingAnimation:
                         privateIndicatorAppearingAnimation,
+                    vertical: widget._vertical,
                   );
                   Widget child = Padding(
                     padding: widget.padding,
@@ -620,6 +732,7 @@ class _CustomAnimatedToggleSwitchState<T>
                           active: widget.active,
                           indicatorAppearingAnimation:
                               privateIndicatorAppearingAnimation,
+                          vertical: widget._vertical,
                         );
 
                         List<Widget> stack = <Widget>[
@@ -671,67 +784,69 @@ class _CustomAnimatedToggleSwitchState<T>
                               // to make sure that GestureDetector and MouseRegion match.
                               // TODO: one widget for _DragRegion and GestureDetector to avoid redundancy
                               child: _HoverRegion(
-                                hoverCursor: widget.cursors.tapCursor,
-                                hoverCheck: (pos) =>
-                                    widget.iconsTappable &&
-                                    _doubleFromPosition(pos.dx, properties)
-                                            .round() !=
-                                        _currentIndex,
-                                child: _DragRegion(
-                                  dragging: _animationInfo.toggleMode ==
-                                      ToggleMode.dragged,
-                                  draggingCursor: widget.cursors.draggingCursor,
-                                  dragCursor: widget.cursors.dragCursor,
-                                  hoverCheck: isHoveringIndicator,
-                                  defaultCursor: defaultCursor,
-                                  child: GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    dragStartBehavior: DragStartBehavior.down,
-                                    onTapUp: (details) {
-                                      final togglePosition =
-                                          _togglePositionFromRealPosition(
-                                              details.localPosition.dx,
-                                              properties);
-                                      _onTap(TapProperties(
-                                        tapped: TapInfo._fromPosition(
-                                            togglePosition),
-                                        values: widget.values,
-                                      ));
-                                      if (!widget.iconsTappable) return;
-                                      if (togglePosition.value ==
-                                          widget.current) {
-                                        return;
-                                      }
-                                      _onChanged(togglePosition.value);
-                                    },
-                                    onHorizontalDragStart: (details) {
-                                      if (!isHoveringIndicator(
-                                          details.localPosition)) {
-                                        return;
-                                      }
-                                      _onDragged(
-                                          _doubleFromPosition(
-                                              details.localPosition.dx,
-                                              properties),
-                                          positionValue);
-                                    },
-                                    onHorizontalDragUpdate: (details) {
-                                      _onDragUpdate(_doubleFromPosition(
-                                          details.localPosition.dx,
-                                          properties));
-                                    },
-                                    onHorizontalDragEnd: (details) {
-                                      _onDragEnd();
-                                    },
-                                    // DecoratedBox for gesture detection
-                                    child: DecoratedBox(
-                                        position: DecorationPosition.background,
-                                        decoration: const BoxDecoration(),
-                                        child: Stack(
-                                          clipBehavior: Clip.none,
-                                          children: stack,
-                                        )),
-                                  ),
+                                defaultCursor: defaultCursor,
+                                cursorByOffset: (pos) {
+                                  if (_animationInfo.toggleMode ==
+                                      ToggleMode.dragged) {
+                                    return widget.cursors.draggingCursor;
+                                  }
+                                  if (isHoveringIndicator(pos)) {
+                                    return widget.cursors.dragCursor;
+                                  }
+                                  if (widget.iconsTappable &&
+                                      _doubleFromPosition(pos.dx, properties)
+                                              .round() !=
+                                          _currentIndex) {
+                                    return widget.cursors.tapCursor;
+                                  }
+                                  return null;
+                                },
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  dragStartBehavior: DragStartBehavior.down,
+                                  onTapUp: (details) {
+                                    final togglePosition =
+                                        _togglePositionFromRealPosition(
+                                            details.localPosition.dx,
+                                            properties);
+                                    _onTap(TapProperties(
+                                      tapped:
+                                          TapInfo._fromPosition(togglePosition),
+                                      values: widget.values,
+                                    ));
+                                    if (!widget.iconsTappable) return;
+                                    if (togglePosition.value ==
+                                        widget.current) {
+                                      return;
+                                    }
+                                    _onChanged(togglePosition.value);
+                                  },
+                                  onHorizontalDragStart: (details) {
+                                    if (!isHoveringIndicator(
+                                        details.localPosition)) {
+                                      return;
+                                    }
+                                    _onDragged(
+                                        _doubleFromPosition(
+                                            details.localPosition.dx,
+                                            properties),
+                                        positionValue);
+                                  },
+                                  onHorizontalDragUpdate: (details) {
+                                    _onDragUpdate(_doubleFromPosition(
+                                        details.localPosition.dx, properties));
+                                  },
+                                  onHorizontalDragEnd: (details) {
+                                    _onDragEnd();
+                                  },
+                                  // DecoratedBox for gesture detection
+                                  child: DecoratedBox(
+                                      position: DecorationPosition.background,
+                                      decoration: const BoxDecoration(),
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: stack,
+                                      )),
                                 ),
                               ),
                             ),
@@ -758,7 +873,7 @@ class _CustomAnimatedToggleSwitchState<T>
         double position =
             i * (properties.indicatorSize.width + properties.spacing);
         return Positioned.directional(
-          textDirection: _textDirectionOf(context),
+          textDirection: properties.textDirection,
           start: i == 0 ? position : position - properties.spacing,
           width: (i == 0 || i == widget.values.length - 1 ? 1 : 2) *
                   properties.spacing +
@@ -789,7 +904,7 @@ class _CustomAnimatedToggleSwitchState<T>
     final length = properties.values.length;
     return [
       Row(
-        textDirection: _textDirectionOf(context),
+        textDirection: properties.textDirection,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           for (int i = 0; i < length; i++) ...[
@@ -864,13 +979,11 @@ class _CustomAnimatedToggleSwitchState<T>
     _setAnimationInfo(_animationInfo.none());
     _checkValuePosition();
   }
-
-  /// Returns the [TextDirection] of the widget.
-  TextDirection _textDirectionOf(BuildContext context) =>
-      widget.textDirection ??
-      Directionality.maybeOf(context) ??
-      TextDirection.ltr;
 }
+
+/// Returns the [TextDirection] from the [BuildContext].
+TextDirection _textDirectionOf(BuildContext context) =>
+    Directionality.maybeOf(context) ?? TextDirection.ltr;
 
 /// The [Positioned] for an indicator. It is used as wrapper for
 /// [CustomAnimatedToggleSwitch.foregroundIndicatorBuilder] and

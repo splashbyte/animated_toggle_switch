@@ -14,8 +14,8 @@
 
 Fully customizable, draggable and animated switch with multiple choices and [smooth loading animation](#loading-animation). It has prebuilt constructors for rolling and size animations, but it also allows you to create your own switches with `CustomAnimatedToggleSwitch`.  
 `LTR` and `RTL` are both supported.  
-[Switches without an (initial) selection](#nullable-selection) are also possible.  
-Most builder arguments of `AnimatedToggleSwitch` have a standard and a custom version. This ensures that you can [get started easily](#simple-rolling-animation) and still customize a lot if necessary. There are several options for [styling](#styling) it.
+[Switches without an (initial) selection](#nullable-selection) and [vertical switches](#vertical-switches) are also possible.  
+Most builder arguments of `AnimatedToggleSwitch` have standard and a custom version. This ensures that you can [get started easily](#simple-rolling-animation) and still customize a lot if necessary. There are several options for [styling](#styling) it.
 
 For a slider with a similar look you can check out [action_slider](https://pub.dev/packages/action_slider).
 
@@ -127,6 +127,14 @@ AnimatedToggleSwitch<int?>.rolling(
    iconBuilder: iconBuilder,
    indicatorAppearingBuilder: ..., // appearing animation is fully customizable (optional)
 )
+```
+
+### Vertical switches
+![animated_toggle_switch_example_vertical](https://github.com/user-attachments/assets/b6b804d0-a8f0-47a2-bf73-e9e0b65773d7)  
+You can get a vertical version of any switch by calling `vertical()` on it.
+
+```dart
+AnimatedToggleSwitch<int?>.rolling(...).vertical()
 ```
 
 ### Fully customizable toggle switch with `CustomAnimatedToggleSwitch`
