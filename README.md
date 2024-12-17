@@ -3,6 +3,7 @@
 [![pub.dev](https://img.shields.io/pub/v/animated_toggle_switch.svg?style=flat?logo=dart)](https://pub.dev/packages/animated_toggle_switch)
 [![github](https://img.shields.io/static/v1?label=platform&message=flutter&color=1ebbfd)](https://github.com/SplashByte/animated_toggle_switch)
 [![likes](https://img.shields.io/pub/likes/animated_toggle_switch)](https://pub.dev/packages/animated_toggle_switch/score)
+![downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpub.dev%2Fapi%2Fpackages%2Fanimated_toggle_switch%2Fscore&query=%24.downloadCount30Days&label=downloads%20(30%20days))
 [![popularity](https://img.shields.io/pub/popularity/animated_toggle_switch)](https://pub.dev/packages/animated_toggle_switch/score)
 [![pub points](https://img.shields.io/pub/points/animated_toggle_switch)](https://pub.dev/packages/animated_toggle_switch/score)
 [![license](https://img.shields.io/github/license/SplashByte/animated_toggle_switch.svg)](https://github.com/SplashByte/animated_toggle_switch/blob/main/LICENSE)
