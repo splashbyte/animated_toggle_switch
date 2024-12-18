@@ -118,6 +118,7 @@ abstract class _BaseToggleStyle extends ThemeExtension<_BaseToggleStyle> {
       );
 }
 
+// coverage:ignore-start
 /// Currently not supported.
 class _CustomToggleStyle extends _BaseToggleStyle {
   @override
@@ -243,6 +244,7 @@ class _CustomToggleStyle extends _BaseToggleStyle {
         boxShadow: boxShadow ?? this.boxShadow,
       );
 }
+// coverage:ignore-end
 
 class ToggleStyle extends _BaseToggleStyle {
   @override
