@@ -1073,7 +1073,9 @@ class AnimatedToggleSwitch<T extends Object?>
       indicatorBorder: null,
       indicatorBoxShadow: null,
       boxShadow: null,
-    )._merge(this.style, _indicatorBorderRadiusDifference);
+    )
+        ._merge(Theme.of(context).toggleStyle, _indicatorBorderRadiusDifference)
+        ._merge(this.style, _indicatorBorderRadiusDifference);
 
     return CustomAnimatedToggleSwitch<T>(
         animationCurve: animationCurve,

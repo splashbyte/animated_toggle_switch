@@ -52,7 +52,8 @@ class _LoadSwitchState extends State<LoadSwitch> {
               padding: const EdgeInsets.all(borderWidth / 2),
               child: CircularProgressIndicator(
                 strokeWidth: borderWidth,
-                color: Colors.blue.withOpacity(global.loadingAnimationValue),
+                color:
+                    Colors.blue.withValues(alpha: global.loadingAnimationValue),
               ),
             ),
           ],

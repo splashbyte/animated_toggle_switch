@@ -81,6 +81,7 @@ AnimatedToggleSwitch<int>.rolling(
 ```
 
 ### Styling
+#### Styling with constructor
 `style`, `styleBuilder`, `customStyleBuilder` and `styleList` can be used to style an `AnimatedToggleSwitch`.  
 For the general look of the switch, you can use `style`.  
 For parameters that should change with the selection, you can use `styleBuilder` or `styleList`.  
@@ -92,6 +93,26 @@ AnimatedToggleSwitch<int>.rolling(
   styleBuilder: (value) => ToggleStyle(indicatorColor: value.isEven ? Colors.yellow : Colors.green)), // indicatorColor changes and animates its value with the selection
   ...
 )
+```
+
+#### Styling with Theme
+You can also add `ToggleStyle` to `ThemeData`.
+This overwrites the default `ToggleStyle` values in all `AnimatedToggleSwitch` widgets in your `MaterialApp`.
+
+```dart
+MaterialApp(
+  theme: ThemeData(..., extensions: [ToggleStyle(...)]),
+  ...
+)
+```
+
+After that, you can access this `ToggleStyle` anywhere in your `MaterialApp`:
+
+```dart
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+...
+
+Theme.of(context).toggleStyle
 ```
 
 ### Loading animation
@@ -134,7 +155,7 @@ AnimatedToggleSwitch<int?>.rolling(
 You can get a vertical version of any switch by calling `vertical()` on it.
 
 ```dart
-AnimatedToggleSwitch<int?>.rolling(...).vertical()
+AnimatedToggleSwitch<int>.rolling(...).vertical()
 ```
 
 ### Fully customizable toggle switch with `CustomAnimatedToggleSwitch`

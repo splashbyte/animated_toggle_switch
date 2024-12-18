@@ -373,7 +373,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return VerticalDivider(
                       indent: 10.0,
                       endIndent: 10.0,
-                      color: Colors.white38.withOpacity(opacity));
+                      color: Colors.white38.withValues(alpha: opacity));
                 },
                 customIconBuilder: (context, local, global) {
                   final text = const ['not', 'only', 'icons'][local.index];
@@ -676,7 +676,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 styleBuilder: (i) {
                   final color = colorBuilder(i);
                   return ToggleStyle(
-                    backgroundColor: color.withOpacity(0.3),
+                    backgroundColor: color.withValues(alpha: 0.3),
                     indicatorColor: color,
                   );
                 },

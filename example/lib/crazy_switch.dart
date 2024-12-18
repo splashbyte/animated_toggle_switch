@@ -60,7 +60,7 @@ class _CrazySwitchState extends State<CrazySwitch> {
             borderRadius: BorderRadius.circular(50.0),
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.7),
+                color: color.withValues(alpha: 0.7),
                 blurRadius: 12.0,
                 offset: const Offset(0.0, 8.0),
               ),

@@ -1,7 +1,7 @@
 part of 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 /// The base class for all toggle styles.
-abstract class _BaseToggleStyle {
+abstract class _BaseToggleStyle extends ThemeExtension<_BaseToggleStyle> {
   const _BaseToggleStyle._();
 
   ToggleStyleProperty<Color>? get _indicatorColor;
@@ -55,6 +55,10 @@ abstract class _BaseToggleStyle {
       _BaseToggleStyle style1, _BaseToggleStyle style2, double t) _lerpFunction(
           AnimationType animationType) =>
       (style1, style2, t) => _lerp(style1, style2, t, animationType);
+
+  @override
+  _BaseToggleStyle lerp(_BaseToggleStyle other, double t) =>
+      _lerp(this, other, t, AnimationType.none);
 
   static _BaseToggleStyle _lerp(_BaseToggleStyle style1,
           _BaseToggleStyle style2, double t, AnimationType animationType) =>
@@ -116,6 +120,9 @@ abstract class _BaseToggleStyle {
 
 /// Currently not supported.
 class _CustomToggleStyle extends _BaseToggleStyle {
+  @override
+  Object get type => _CustomToggleStyle;
+
   @override
   final ToggleStyleProperty<Color>? _indicatorColor;
   @override
@@ -186,9 +193,61 @@ class _CustomToggleStyle extends _BaseToggleStyle {
         _indicatorBoxShadow = indicatorBoxShadow,
         _boxShadow = boxShadow,
         super._();
+
+  ToggleStyleProperty<Color>? get indicatorColor => _indicatorColor;
+
+  ToggleStyleProperty<Gradient>? get indicatorGradient => _indicatorGradient;
+
+  ToggleStyleProperty<Color>? get backgroundColor => _backgroundColor;
+
+  ToggleStyleProperty<Gradient>? get backgroundGradient => _backgroundGradient;
+
+  ToggleStyleProperty<Color>? get borderColor => _borderColor;
+
+  ToggleStyleProperty<BorderRadiusGeometry>? get borderRadius => _borderRadius;
+
+  ToggleStyleProperty<BorderRadiusGeometry>? get indicatorBorderRadius =>
+      _indicatorBorderRadius;
+
+  ToggleStyleProperty<BoxBorder>? get indicatorBorder => _indicatorBorder;
+
+  ToggleStyleProperty<List<BoxShadow>>? get indicatorBoxShadow =>
+      _indicatorBoxShadow;
+
+  ToggleStyleProperty<List<BoxShadow>>? get boxShadow => _boxShadow;
+
+  @override
+  _CustomToggleStyle copyWith({
+    ToggleStyleProperty<Color>? indicatorColor,
+    ToggleStyleProperty<Gradient>? indicatorGradient,
+    ToggleStyleProperty<Color>? backgroundColor,
+    ToggleStyleProperty<Gradient>? backgroundGradient,
+    ToggleStyleProperty<Color>? borderColor,
+    ToggleStyleProperty<BorderRadiusGeometry>? borderRadius,
+    ToggleStyleProperty<BorderRadiusGeometry>? indicatorBorderRadius,
+    ToggleStyleProperty<BoxBorder>? indicatorBorder,
+    ToggleStyleProperty<List<BoxShadow>>? indicatorBoxShadow,
+    ToggleStyleProperty<List<BoxShadow>>? boxShadow,
+  }) =>
+      _CustomToggleStyle._(
+        indicatorColor: indicatorColor ?? this.indicatorColor,
+        indicatorGradient: indicatorGradient ?? this.indicatorGradient,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        backgroundGradient: backgroundGradient ?? this.backgroundGradient,
+        borderColor: borderColor ?? this.borderColor,
+        borderRadius: borderRadius ?? this.borderRadius,
+        indicatorBorderRadius:
+            indicatorBorderRadius ?? this.indicatorBorderRadius,
+        indicatorBorder: indicatorBorder ?? this.indicatorBorder,
+        indicatorBoxShadow: indicatorBoxShadow ?? this.indicatorBoxShadow,
+        boxShadow: boxShadow ?? this.boxShadow,
+      );
 }
 
 class ToggleStyle extends _BaseToggleStyle {
+  @override
+  Object get type => ToggleStyle;
+
   /// Background color of the indicator.
   ///
   /// Defaults to [ThemeData.colorScheme.secondary].
@@ -230,9 +289,6 @@ class ToggleStyle extends _BaseToggleStyle {
   final List<BoxShadow>? boxShadow;
 
   /// Default constructor for [ToggleStyle].
-  ///
-  /// If you want to disable the animation of single properties,
-  /// you can use [_CustomToggleStyle] for this purpose.
   const ToggleStyle({
     this.indicatorColor,
     this.indicatorGradient,
@@ -330,6 +386,50 @@ class ToggleStyle extends _BaseToggleStyle {
       indicatorBoxShadow.hashCode ^
       boxShadow.hashCode;
 
+  @override
+  ToggleStyle copyWith({
+    Color? indicatorColor,
+    Gradient? indicatorGradient,
+    Color? backgroundColor,
+    Gradient? backgroundGradient,
+    Color? borderColor,
+    BorderRadiusGeometry? borderRadius,
+    BorderRadiusGeometry? indicatorBorderRadius,
+    BoxBorder? indicatorBorder,
+    List<BoxShadow>? indicatorBoxShadow,
+    List<BoxShadow>? boxShadow,
+  }) =>
+      ToggleStyle._(
+        indicatorColor: indicatorColor ?? this.indicatorColor,
+        indicatorGradient: indicatorGradient ?? this.indicatorGradient,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        backgroundGradient: backgroundGradient ?? this.backgroundGradient,
+        borderColor: borderColor ?? this.borderColor,
+        borderRadius: borderRadius ?? this.borderRadius,
+        indicatorBorderRadius:
+            indicatorBorderRadius ?? this.indicatorBorderRadius,
+        indicatorBorder: indicatorBorder ?? this.indicatorBorder,
+        indicatorBoxShadow: indicatorBoxShadow ?? this.indicatorBoxShadow,
+        boxShadow: boxShadow ?? this.boxShadow,
+      );
+
+  @override
+  ToggleStyle lerp(ToggleStyle other, double t) {
+    final result = super.lerp(other, t);
+    return ToggleStyle._(
+      indicatorColor: result._indicatorColor?.value,
+      indicatorGradient: result._indicatorGradient?.value,
+      backgroundColor: result._backgroundColor?.value,
+      backgroundGradient: result._backgroundGradient?.value,
+      borderColor: result._borderColor?.value,
+      borderRadius: result._borderRadius?.value,
+      indicatorBorderRadius: result._indicatorBorderRadius?.value,
+      indicatorBorder: result._indicatorBorder?.value,
+      indicatorBoxShadow: result._indicatorBoxShadow?.value,
+      boxShadow: result._boxShadow?.value,
+    );
+  }
+
 // coverage:ignore-end
 }
 
@@ -374,4 +474,9 @@ class ToggleStyleProperty<T> {
       animationEnabled: true,
     );
   }
+}
+
+extension XThemeDataToggleStyle on ThemeData {
+  ToggleStyle get toggleStyle =>
+      extension<ToggleStyle>() ?? const ToggleStyle();
 }
