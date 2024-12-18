@@ -1,6 +1,6 @@
 ## 0.8.4 (2024-12-18)
 
-- adds possibility to add `ToggleStyle` to `ThemeData` as `ThemeExtension`
+- adds option to add `ToggleStyle` to `ThemeData` as `ThemeExtension`
 - removes usage of deprecated members
 
 ## 0.8.3 (2024-08-12)
