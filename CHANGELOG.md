@@ -1,3 +1,7 @@
+## 0.8.5 (2025-04-28)
+
+- adds `padding` to `AnimatedToggleSwitch` ([#65](https://github.com/splashbyte/animated_toggle_switch/issues/65))
+
 ## 0.8.4 (2024-12-18)
 
 - adds option to add `ToggleStyle` to `ThemeData` as `ThemeExtension`

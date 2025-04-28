@@ -131,6 +131,11 @@ class AnimatedToggleSwitch<T extends Object?>
   /// Size of the indicator.
   final Size indicatorSize;
 
+  /// Padding of the switch around the indicator and the icons.
+  ///
+  /// Defaults to [EdgeInsets.all(borderWidth)].
+  final EdgeInsetsGeometry? padding;
+
   /// Callback for selecting a new value. The new [current] should be set here.
   final ChangeCallback<T>? onChanged;
 
@@ -335,6 +340,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
     this.clipBehavior = Clip.antiAlias,
+    this.padding,
   })  : _iconArrangement = IconArrangement.row,
         super(
           values: values,
@@ -399,6 +405,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
     this.clipBehavior = Clip.antiAlias,
+    this.padding,
   })  : spacing = spacing * (height - 2 * borderWidth),
         indicatorSize = indicatorSize * (height - 2 * borderWidth),
         _iconArrangement = IconArrangement.row,
@@ -465,6 +472,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
     this.clipBehavior = Clip.antiAlias,
+    this.padding,
   })  : animatedIconBuilder = _iconSizeBuilder<T>(
             iconBuilder, customIconBuilder, iconList, selectedIconScale),
         _iconArrangement = IconArrangement.row,
@@ -534,6 +542,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
     this.clipBehavior = Clip.antiAlias,
+    this.padding,
   })  : indicatorSize = indicatorSize * (height - 2 * borderWidth),
         spacing = spacing * (height - 2 * borderWidth),
         animatedIconBuilder = _iconSizeBuilder<T>(
@@ -631,6 +640,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.positionListener,
     this.clipBehavior = Clip.antiAlias,
     double indicatorIconScale = 1.0,
+    this.padding,
   })  : iconAnimationCurve = Curves.linear,
         iconAnimationDuration = Duration.zero,
         selectedIconOpacity = iconOpacity,
@@ -714,6 +724,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.positionListener,
     this.clipBehavior = Clip.antiAlias,
     double indicatorIconScale = 1.0,
+    this.padding,
   })  : iconAnimationCurve = Curves.linear,
         spacing = spacing * (height - 2 * borderWidth),
         iconAnimationDuration = Duration.zero,
@@ -912,6 +923,7 @@ class AnimatedToggleSwitch<T extends Object?>
     this.inactiveOpacityDuration = const Duration(milliseconds: 350),
     this.positionListener,
     this.clipBehavior = Clip.antiAlias,
+    this.padding,
   })  : assert(clipAnimation || opacityAnimation),
         iconOpacity = 1.0,
         selectedIconOpacity = 1.0,
@@ -1115,7 +1127,7 @@ class AnimatedToggleSwitch<T extends Object?>
                 _indicatorBuilder(context, properties, style),
         iconBuilder: (context, local, global) => _animatedOpacityIcon(
             _animatedSizeIcon(context, local, global), local.value == current),
-        padding: EdgeInsets.all(borderWidth),
+        padding: padding ?? EdgeInsets.all(borderWidth),
         active: active,
         wrapperBuilder: (context, global, child) {
           return AnimatedOpacity(
