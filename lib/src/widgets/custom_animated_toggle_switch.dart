@@ -976,7 +976,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   /// Cancels drag because of loading or inactivity
   void _cancelDrag() {
-    _setAnimationInfo(_animationInfo.none());
+    _setAnimationInfo(_animationInfo.none(current: _positionValue));
     _checkValuePosition();
   }
 }
