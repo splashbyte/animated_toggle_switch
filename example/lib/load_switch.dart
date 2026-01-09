@@ -17,7 +17,7 @@ class _LoadSwitchState extends State<LoadSwitch> {
   Widget build(BuildContext context) {
     const height = 50.0;
     const borderWidth = 5.0;
-    return CustomAnimatedToggleSwitch(
+    return CustomAnimatedToggleSwitch<bool>(
       height: height,
       indicatorSize: const Size.square(height),
       current: value,

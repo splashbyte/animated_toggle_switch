@@ -836,12 +836,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Color colorBuilder(int value) => switch (value) {
-        0 => Colors.blueAccent,
-        1 => Colors.green,
-        2 => Colors.orangeAccent,
-        _ => Colors.red,
-      };
+  Color colorBuilder(int value) {
+    switch (value) {
+      case 0:
+        return Colors.blueAccent;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.orangeAccent;
+      default:
+        return Colors.red;
+    }
+  }
 
   Widget coloredRollingIconBuilder(int value, bool foreground) {
     final color = foreground ? colorBuilder(value) : null;
@@ -859,12 +865,18 @@ class _MyHomePageState extends State<MyHomePage> {
     return Icon(iconDataByValue(value));
   }
 
-  IconData iconDataByValue(int? value) => switch (value) {
-        0 => Icons.access_time_rounded,
-        1 => Icons.check_circle_outline_rounded,
-        2 => Icons.power_settings_new_rounded,
-        _ => Icons.lightbulb_outline_rounded,
-      };
+  IconData iconDataByValue(int? value) {
+    switch (value) {
+      case 0:
+        return Icons.access_time_rounded;
+      case 1:
+        return Icons.check_circle_outline_rounded;
+      case 2:
+        return Icons.power_settings_new_rounded;
+      default:
+        return Icons.lightbulb_outline_rounded;
+    }
+  }
 
   Widget sizeIconBuilder(BuildContext context,
       AnimatedToggleProperties<int> local, GlobalToggleProperties<int> global) {
