@@ -1,3 +1,7 @@
+## 0.8.7 (2026-01-09)
+
+- fixes [#69](https://github.com/splashbyte/animated_toggle_switch/issues/69)
+
 ## 0.8.6 (2026-01-09)
 
 - fixes [#67](https://github.com/splashbyte/animated_toggle_switch/issues/67)
