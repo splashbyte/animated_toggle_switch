@@ -21,7 +21,7 @@ class _CrazySwitchState extends State<CrazySwitch> {
     const height = 58.0;
     const innerIndicatorSize = height - 4 * borderWidth;
 
-    return CustomAnimatedToggleSwitch(
+    return CustomAnimatedToggleSwitch<bool>(
       current: current,
       spacing: 36.0,
       values: const [false, true],
