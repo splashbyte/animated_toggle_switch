@@ -6,11 +6,10 @@ class _HoverRegion extends StatefulWidget {
   final MouseCursor defaultCursor;
 
   const _HoverRegion({
-    Key? key,
     required this.child,
     required this.cursorByOffset,
     this.defaultCursor = MouseCursor.defer,
-  }) : super(key: key);
+  });
 
   @override
   State<_HoverRegion> createState() => _HoverRegionState();

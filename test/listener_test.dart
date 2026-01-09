@@ -15,14 +15,14 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        positionListener: positionListener,
+        positionListener: positionListener.call,
       ),
     ));
     await tester.pumpWidget(TestWrapper(
       child: buildSwitch(
         current: next,
         iconBuilder: iconBuilder,
-        positionListener: positionListener,
+        positionListener: positionListener.call,
       ),
     ));
     await tester.pump(const Duration(seconds: 1));

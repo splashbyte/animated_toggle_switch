@@ -15,11 +15,11 @@ class TestWrapper extends StatelessWidget {
   final TargetPlatform platform;
 
   const TestWrapper({
-    Key? key,
+    super.key,
     required this.child,
     this.textDirection = TextDirection.ltr,
     this.platform = TargetPlatform.android,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

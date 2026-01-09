@@ -17,8 +17,8 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        onTap: tapFunction,
-        onChanged: changedFunction,
+        onTap: tapFunction.call,
+        onChanged: changedFunction.call,
       ),
     ));
     verifyNever(() => tapFunction.call(any()));
@@ -60,7 +60,7 @@ void main() {
         first: values.first,
         second: values.last,
         iconBuilder: (value) => iconBuilder(value, true),
-        onChanged: changedFunction,
+        onChanged: changedFunction.call,
       ),
     ));
     final currentFinder = find.byKey(iconKey(current, foreground: true));
@@ -83,8 +83,8 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        onTap: tapFunction,
-        onChanged: changedFunction,
+        onTap: tapFunction.call,
+        onChanged: changedFunction.call,
         // Necessary for AnimatedToggleSwitch.dual
         spacing: 5.0,
       ),
@@ -116,8 +116,8 @@ void main() {
       child: buildSwitch(
         current: current,
         iconBuilder: iconBuilder,
-        onTap: tapFunction,
-        onChanged: changedFunction,
+        onTap: tapFunction.call,
+        onChanged: changedFunction.call,
         iconsTappable: false,
       ),
     ));

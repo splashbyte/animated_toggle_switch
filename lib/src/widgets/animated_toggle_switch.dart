@@ -428,7 +428,7 @@ class AnimatedToggleSwitch<T extends Object?>
     required this.values,
     SimpleIconBuilder<T>? iconBuilder,
     AnimatedIconBuilder<T>? customIconBuilder,
-    List<Widget>? iconList,
+    super.iconList,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
     this.indicatorSize = const Size.fromWidth(48.0),
@@ -481,7 +481,6 @@ class AnimatedToggleSwitch<T extends Object?>
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
-          iconList: iconList,
         );
 
   /// Special version of [AnimatedToggleSwitch.size].
@@ -502,7 +501,7 @@ class AnimatedToggleSwitch<T extends Object?>
     Size indicatorSize = const Size.square(1.0),
     SimpleIconBuilder<T>? iconBuilder,
     AnimatedIconBuilder<T>? customIconBuilder,
-    List<Widget>? iconList,
+    super.iconList,
     this.onChanged,
     this.borderWidth = 2.0,
     this.style = const ToggleStyle(),
@@ -553,7 +552,6 @@ class AnimatedToggleSwitch<T extends Object?>
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
-          iconList: iconList,
         );
 
   static AnimatedIconBuilder<T>? _iconSizeBuilder<T>(
@@ -599,7 +597,7 @@ class AnimatedToggleSwitch<T extends Object?>
     required this.values,
     SimpleRollingIconBuilder<T>? iconBuilder,
     RollingIconBuilder<T>? customIconBuilder,
-    List<Widget>? iconList,
+    super.iconList,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
     this.indicatorSize = const Size.fromWidth(46.0),
@@ -663,7 +661,6 @@ class AnimatedToggleSwitch<T extends Object?>
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
-          iconList: iconList,
         );
 
   /// Special version of [AnimatedToggleSwitch.rolling].
@@ -684,7 +681,7 @@ class AnimatedToggleSwitch<T extends Object?>
     required this.values,
     SimpleRollingIconBuilder<T>? iconBuilder,
     RollingIconBuilder<T>? customIconBuilder,
-    List<Widget>? iconList,
+    super.iconList,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationCurve = Curves.easeInOutCirc,
     Size indicatorSize = const Size.square(1.0),
@@ -749,7 +746,6 @@ class AnimatedToggleSwitch<T extends Object?>
           styleBuilder: styleBuilder,
           customStyleBuilder: customStyleBuilder,
           styleList: styleList,
-          iconList: iconList,
         );
 
   static CustomIndicatorBuilder<T> _rollingForegroundIndicatorIconBuilder<T>(
@@ -1334,7 +1330,7 @@ class AnimatedToggleSwitch<T extends Object?>
 }
 
 class _MyLoading extends StatelessWidget {
-  const _MyLoading({Key? key}) : super(key: key);
+  const _MyLoading();
 
   @override
   Widget build(BuildContext context) {

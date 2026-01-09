@@ -196,7 +196,7 @@ class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
   final bool _vertical;
 
   const CustomAnimatedToggleSwitch({
-    Key? key,
+    super.key,
     required this.current,
     required this.values,
     required this.iconBuilder,
@@ -234,8 +234,7 @@ class CustomAnimatedToggleSwitch<T extends Object?> extends StatefulWidget {
         assert(foregroundIndicatorBuilder != null ||
             backgroundIndicatorBuilder != null),
         assert(separatorBuilder == null ||
-            (spacing > 0 && iconArrangement == IconArrangement.row)),
-        super(key: key);
+            (spacing > 0 && iconArrangement == IconArrangement.row));
 
   const CustomAnimatedToggleSwitch._({
     required this.current,
@@ -976,7 +975,7 @@ class _CustomAnimatedToggleSwitchState<T>
 
   /// Cancels drag because of loading or inactivity
   void _cancelDrag() {
-    _setAnimationInfo(_animationInfo.none());
+    _setAnimationInfo(_animationInfo.none(current: _positionValue));
     _checkValuePosition();
   }
 }
@@ -1031,12 +1030,11 @@ class _WidgetPart extends StatelessWidget {
   final Widget child;
 
   const _WidgetPart({
-    Key? key,
     this.width = double.infinity,
     this.height = double.infinity,
     required this.left,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
